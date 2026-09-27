@@ -75,3 +75,16 @@ Si debe revertir inmediatamente el despliegue, restaure juntos el código, los s
 Pruebas de SQLite/API para aplicación única, previa sin escrituras, preservación de otros datos, rechazo de paquete modificado, campos editables, preguntas del cliente y actualización de precios/horarios. Recorridos por voz/texto ES/EN/FR verifican que los horarios informativos no abren agenda ni llaman a Google o IA. Pruebas de navegador comprueban formulario administrativo y regresión de reserva práctica por voz con calendario/correo simulados.
 
 Los cupos reales del curso y sus requisitos específicos de participación siguen requiriendo confirmación de la escuela. Ninguna prueba automatizada equivale a haber inscrito un alumno o entregado una cita real del DMV.
+
+## Sitio web y simulador · v0.34.1
+
+Los enlaces proporcionados por el usuario están en **Ayuda y opciones**. La ficha del libro también los muestra. Se abren en otra pestaña y no llevan nombres, correos, tokens ni datos de la atención. El simulador es una herramienta de práctica; no es el examen oficial del DMV. Nexo no inicia sesión ni compra accesos en esos sitios.
+
+- Sitio web: https://www.metodomogollon.com/
+- Simulador: https://test.metodomogollon.com/home
+
+**Mantenimiento:** Administración → Configuración → Negocio → **Sitio web** y **Simulador / recurso de práctica**. Los enlaces activos se guardan en SQLite. Dejar un campo vacío oculta su botón. Solo se admiten enlaces HTTPS sin credenciales.
+
+Los temas `escuela-sitio-web` y `escuela-simulador` se editan en Respuestas frecuentes. Usan `{{centro.web}}` y `{{centro.simulador}}`: cambiar la URL no requiere editar cada respuesta. Hay variantes locales en español, inglés y francés. Si se elimina una URL, la respuesta indica que el enlace debe confirmarse.
+
+La entrega `conocimiento/actualizaciones/recursos-20260927.json` utiliza la misma carga versionada del apartado anterior. Solo cambia los dos enlaces públicos y dos FAQ; conserva catálogo, calendario, citas y claves. Incrementa también la revisión de configuración para renovar las sesiones que estaban usando información anterior.

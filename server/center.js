@@ -90,7 +90,7 @@ export function validateService(input, prior, currency) {
 export function centerRepository(repository, center, config={}) {
   if (!center) return repository;
   repository.ensureCenterSettings({ profile: {name:center.name,weeklyHours:defaultHours}, services: isSchool(center) ? schoolServices.map(s => ({...s,modality:null,requirements:null})) : [], configuration:settingsDefaults(center,config), configurationRevision:0 });
-  const state = () => {const saved=repository.readCenterSettings();return {...saved,configuration:saved.configuration?{...saved.configuration,experience:{touchKeyboard:false,...saved.configuration.experience}}:settingsDefaults(center,config),configurationRevision:saved.configurationRevision||0};};
+  const state = () => {const saved=repository.readCenterSettings();return {...saved,configuration:saved.configuration?{...saved.configuration,business:{practiceUrl:'',...saved.configuration.business},experience:{touchKeyboard:false,...saved.configuration.experience}}:settingsDefaults(center,config),configurationRevision:saved.configurationRevision||0};};
   const getCenter = () => {
     const {profile,services,configuration:settings,configurationRevision} = state();
     const groups = [];
@@ -100,7 +100,7 @@ export function centerRepository(repository, center, config={}) {
       else groups.push({...row,end:row.day});
     }
     const hours = groups.map(g => (g.day === g.end ? dayNames[g.day] : dayNames[g.day] + ' a ' + dayNames[g.end]) + (g.open ? ', de ' + g.open + ' a ' + g.close : ': cerrado')).join('; ') + (settings.business.timezone==='America/New_York'?' (hora de Nueva York)':' ('+settings.business.timezone+')');
-    const result={...center,...profile,hours,configurationRevision,businessType:settings.business.type,businessDescription:settings.business.description,timezone:settings.business.timezone,currency:settings.business.currency,assistantName:settings.assistant.name,addressStyle:settings.assistant.addressStyle,assistantScope:settings.assistant.scope,topics:settings.assistant.topics,contact:{address:settings.business.address,phone:settings.business.phone,email:settings.business.email,website:settings.business.website},experience:settings.experience,
+    const result={...center,...profile,hours,configurationRevision,businessType:settings.business.type,businessDescription:settings.business.description,timezone:settings.business.timezone,currency:settings.business.currency,assistantName:settings.assistant.name,addressStyle:settings.assistant.addressStyle,assistantScope:settings.assistant.scope,topics:settings.assistant.topics,contact:{address:settings.business.address,phone:settings.business.phone,email:settings.business.email,website:settings.business.website,practiceUrl:settings.business.practiceUrl},experience:settings.experience,
       booking:{provider:settings.booking.url?'external-link':'manual',status:settings.booking.url?'external':'pending',enabled:false,url:settings.booking.url,message:settings.booking.message},
       pending:[...(services.some(s=>s.active&&s.priceCents===null)?['Precios de algunos servicios']:[]),...(services.some(s=>s.active&&!s.requirements)?['Requisitos de algunos servicios']:[])]};
     result.greeting=businessText(fillTemplate(settings.assistant.welcome,result),result);result.offTopicMessage=fillTemplate(settings.assistant.offTopic,result);result.handoff=fillTemplate(settings.assistant.handoff,result);result.booking.message=fillTemplate(settings.booking.message,result);
@@ -116,7 +116,7 @@ export function centerRepository(repository, center, config={}) {
      */
     saveConfiguration(revision,input){
       if(!input||Object.keys(input).some(k=>!['profile','configuration'].includes(k)))throw new HttpError(400,'Campos no permitidos.');
-      const profile=validateProfile(input.profile),configuration=validateSettings(input.configuration);
+      const profile=validateProfile(input.profile),configuration=validateSettings({...input.configuration,business:{practiceUrl:state().configuration.business.practiceUrl,...input.configuration?.business}});
       if(configuration.assistant.knowledgeMode==='custom'){
         try{parseFaq(configuration.assistant.knowledgeText);}catch(error){throw new HttpError(400,'Respuestas propias: '+error.message);}
       }

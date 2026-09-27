@@ -74,4 +74,6 @@ Repositorio `dafermen/nexo` y primera ejecución de Actions verificados el 27/09
 
 ## Contenido comercial v0.34.0
 
+Actualización v0.34.1: sitio web y simulador editables en Configuración → Negocio, accesos en Ayuda y opciones y ficha del libro, respuestas parametrizadas y pruebas responsive. Véase [mantenimiento del contenido y recursos](56-curso-libro-contenido.md).
+
 Curso de cinco horas y libro actualizados con el paquete aprobado del cliente. Nuevos campos schedule/inclusions/conditions, FAQ parametrizadas y protección contra repetir la carga sobre cambios posteriores. Manual 56 con operación y despliegue. Las reservas de clases prácticas continúan separadas.

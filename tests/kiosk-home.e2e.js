@@ -21,10 +21,10 @@ import {calendarFixture} from './calendar-fixture.js';
 const {chromium}=createRequire(import.meta.url)(process.env.PLAYWRIGHT_MODULE||'playwright');
 const f=calendarFixture();await f.authorize();await f.service.select(f.calendars[1].id);
 const repo=centerRepository(f.repo,schoolCenter);await new BookingService({repository:repo,calendar:f.service}).configure({...repo.bookingSettings(),enabled:true,serviceIds:['cinco-horas']});
-const settings=repo.getCenterSettings();settings.configuration.experience.touchKeyboard=true;repo.saveConfiguration(settings.revision,{profile:settings.profile,configuration:settings.configuration});
+const settings=repo.getCenterSettings();settings.configuration.experience.touchKeyboard=true;Object.assign(settings.configuration.business,{website:'https://www.metodomogollon.com/',practiceUrl:'https://test.metodomogollon.com/home'});repo.saveConfiguration(settings.revision,{profile:settings.profile,configuration:settings.configuration});
 const app=createApp({repository:f.repo,calendar:f.service,config:{provider:'demo',center:schoolCenter,sessionTtlMs:300000},ai:{reply:async()=>({text:'Respuesta de prueba.'})},localTts:{status:()=>({available:false}),stop(){},close(){}},liveAvatar:{status:()=>({configured:false}),stop:async()=>{},close:async()=>{}}});
 app.listen(0,'127.0.0.1');await once(app,'listening');const base='http://127.0.0.1:'+app.address().port;
-const browser=await chromium.launch({headless:true,channel:'msedge'}),errors=[];
+const browser=await chromium.launch({headless:true,...(process.env.BROWSER_CHANNEL?{channel:process.env.BROWSER_CHANNEL}:{})}),errors=[];
 try{
  const page=await browser.newPage({reducedMotion:'reduce'});page.on('pageerror',e=>errors.push(e.message));mkdirSync('.local/kiosk-qa',{recursive:true});
  const sizes=[[390,844],[320,568],[768,1024],[820,1180],[1080,1920],[1920,1080],[1366,768],[1024,600],[844,390]];
@@ -45,7 +45,14 @@ try{
  await page.locator('#message').fill('¿Qué servicios ofrecen?');await page.setViewportSize({width:1024,height:768});assert.equal(await page.locator('#message').inputValue(),'¿Qué servicios ofrecen?');await page.locator('#send').click();await page.locator('#accept-session').click();await page.waitForSelector('.message.assistant');assert.match(await page.locator('.message.assistant').innerText(),/servicios/);
  await page.locator('#home-panel-close').click();await page.locator('#new-conversation').click();assert.equal(await page.locator('.message').count(),0);assert.equal(await page.locator('#home-panel').evaluate(e=>e.open),false);
  await page.locator('#home-options').click();assert.ok(await page.getByRole('button',{name:'Privacidad y uso'}).isVisible());await page.locator('.home-management summary').click();assert.ok(await page.getByRole('link',{name:'Administración',exact:true}).isVisible());await page.locator('#privacy').click();assert.equal(await page.locator('#privacy-dialog').evaluate(e=>e.open),true);await page.keyboard.press('Escape');await page.keyboard.press('Escape');
- assert.equal(f.events.size,0);assert.deepEqual(errors,[]);console.log('Inicio en 9 tamaños, acciones táctiles, servicios, citas, texto, foco, limpieza y menú: aprobado. Sin proveedores de pago.');
+ await page.locator('#home-options').click();
+ for(const [label,url] of [['Sitio web de la escuela','https://www.metodomogollon.com/'],['Practicar examen teórico','https://test.metodomogollon.com/home']]){
+  const link=page.getByRole('link',{name:label+' ↗',exact:true});assert.equal(await link.getAttribute('href'),url);assert.equal(await link.getAttribute('target'),'_blank');assert.equal(await link.getAttribute('rel'),'noopener noreferrer');assert.ok((await link.boundingBox()).height>=44);
+ }
+ await page.keyboard.press('Escape');
+ const updated=repo.getCenterSettings();updated.configuration.business.practiceUrl='';updated.configuration.business.website='';repo.saveConfiguration(updated.revision,{profile:updated.profile,configuration:updated.configuration});
+ await page.reload();await page.waitForSelector('.service-card',{state:'attached'});await page.locator('#home-options').click();assert.equal(await page.locator('#school-resources').isVisible(),false);
+ assert.equal(f.events.size,0);assert.deepEqual(errors,[]);console.log('Inicio responsive, acciones táctiles y enlaces externos opcionales: aprobado. Sin proveedores de pago.');
 }finally{await browser.close();await new Promise(r=>app.close(r));f.repo.close();}
 
 

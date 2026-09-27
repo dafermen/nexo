@@ -77,3 +77,6 @@ body:not(.video-first) .header{height:auto;min-height:54px;flex-wrap:wrap;gap:10
 /* El selector de profesor mantiene el tamaño táctil del formulario de reserva. */
 #booking-instructor{display:block;width:100%;min-width:0;min-height:48px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font:inherit;padding:12px;margin-top:8px;}
 #booking-instructor:focus-visible{outline:2px solid #718a4c;outline-offset:2px;}
+
+/* Recursos opcionales: controles táctiles dentro de los paneles, sin ocupar el inicio. */
+.resource-link{display:flex;align-items:center;min-height:48px;padding:12px 16px;border:1px solid #a4b48b;border-radius:14px;margin:10px 0;text-decoration:none;color:inherit;background:#edf4df;font-weight:600;overflow-wrap:anywhere}.resource-link:focus-visible{outline:3px solid #68834b;outline-offset:2px}#school-resources{margin:20px 0}#school-resources small{display:block}

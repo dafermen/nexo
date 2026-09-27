@@ -8,6 +8,7 @@ import {createHash} from 'node:crypto';
 import {parseFaq} from './faq.js';
 import {serializeFaq} from './faq-editor.js';
 import {validateService} from './center.js';
+import {validateSettings} from './business-settings.js';
 export function applyContentUpdate(db,bundle,{apply=false}={}){
  if(bundle.businessId!=='metodomogollon'||!/^[a-z0-9-]{1,100}$/.test(bundle.id))throw Error('Paquete comercial inválido.');
  const hash=createHash('sha256').update(JSON.stringify(bundle)).digest('hex');
@@ -19,6 +20,13 @@ export function applyContentUpdate(db,bundle,{apply=false}={}){
   const row=db.prepare('SELECT * FROM center_settings WHERE id=1').get(),knowledge=db.prepare("SELECT * FROM knowledge_bases WHERE id='school'").get();
   if(!row||!knowledge)throw Error('Inicialice primero el catálogo y las FAQ escolares.');
   const document=JSON.parse(row.document);
+  // Las URLs son configuración editable. Esta carga solo permite estos dos campos públicos.
+  if(bundle.businessLinks){
+   if(!bundle.businessLinks||Array.isArray(bundle.businessLinks)||Object.keys(bundle.businessLinks).some(k=>!['website','practiceUrl'].includes(k)))throw Error('Enlace no permitido.');
+   const validated=validateSettings({...document.configuration,business:{...document.configuration.business,...bundle.businessLinks}});
+   document.configuration={...document.configuration,business:validated.business};
+   document.configurationRevision=(document.configurationRevision||0)+1;
+  }
   if(document.configuration?.assistant.knowledgeMode!=='file')throw Error('La base escolar no está activa.');
   const services=document.services.map(s=>({...s})),entries=parseFaq(knowledge.source);
   for(const change of bundle.services){const target=services.find(s=>s.id===change.id);if(!target)throw Error('Servicio inexistente: '+change.id);

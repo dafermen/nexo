@@ -1,0 +1,42 @@
+{
+  "id": "mogollon-recursos-20260927-v1",
+  "businessId": "metodomogollon",
+  "approvedAt": "2026-09-27",
+  "source": "Enlaces proporcionados por el usuario",
+  "businessLinks": {
+    "website": "https://www.metodomogollon.com/",
+    "practiceUrl": "https://test.metodomogollon.com/home"
+  },
+  "services": [],
+  "faqs": [
+    {
+      "id": "escuela-sitio-web",
+      "active": true,
+      "category": "Recursos de estudio",
+      "serviceId": null,
+      "questions": [
+        "¿Cuál es la página web?",
+        "Sitio web de la escuela",
+        "¿Tienen página web?",
+        "¿Dónde encuentro su sitio web?"
+      ],
+      "answer": "Nuestro sitio web es {{centro.web}}. Puede abrirlo desde Ayuda y opciones → Sitio web de la escuela."
+    },
+    {
+      "id": "escuela-simulador",
+      "active": true,
+      "category": "Recursos de estudio",
+      "serviceId": null,
+      "questions": [
+        "¿Tienen simulador?",
+        "Simulador del examen teórico",
+        "¿Dónde puedo practicar el examen teórico?",
+        "Quiero practicar el test learner",
+        "¿Dónde está el simulador?",
+        "¿Cómo entro al simulador?",
+        "Quiero practicar el examen escrito"
+      ],
+      "answer": "Puede acceder al simulador de práctica en {{centro.simulador}}. Abra Ayuda y opciones → Practicar examen teórico. Es una herramienta de estudio, no el examen oficial del DMV."
+    }
+  ]
+}

@@ -405,6 +405,12 @@ Puedo ayudarle únicamente con los servicios y turnos de {0}. {1}|I can only hel
 ¿Desea información sobre clases, cursos o turnos de la escuela?|Would you like information about the school’s lessons, courses or appointments?|Souhaitez-vous des informations sur les leçons, les cours ou les rendez-vous de l’école ?
 Puede continuar con el catálogo: {0}. Consulte las fichas o pregunte por precio, requisitos, duración y modalidad.|You can continue with the catalog: {0}. View the service cards or ask about price, requirements, duration and format.|Vous pouvez continuer avec le catalogue : {0}. Consultez les fiches ou renseignez-vous sur le tarif, les conditions, la durée et la formule.
 Podemos guardar y reutilizar audios genéricos de respuestas aprobadas para responder más rápido. No grabamos su voz para esta biblioteca.|We may save and reuse generic audio of approved responses to reply faster. We do not record your voice for this library.|Nous pouvons enregistrer et réutiliser des fichiers audio génériques de réponses approuvées pour répondre plus vite. Nous n’enregistrons pas votre voix pour cette bibliothèque.
+Sitio web de la escuela|School website|Site web de l’école
+Practicar examen teórico|Practice the written test|S’entraîner à l’examen théorique
+Se abre en otra pestaña. Puede regresar a Nexo al cerrarla.|Opens in another tab. Close it to return to Nexo.|S’ouvre dans un autre onglet. Fermez-le pour revenir à Nexo.
+Nuestro sitio web es {0}. Puede abrirlo desde Ayuda y opciones → Sitio web de la escuela.|Our website is {0}. Open Help and options → School website.|Notre site web est {0}. Ouvrez Aide et options → Site web de l’école.
+Puede acceder al simulador de práctica en {0}. Abra Ayuda y opciones → Practicar examen teórico. Es una herramienta de estudio, no el examen oficial del DMV.|Access the practice simulator at {0}. Open Help and options → Practice the written test. It is a study tool, not the official DMV test.|Accédez au simulateur d’entraînement sur {0}. Ouvrez Aide et options → S’entraîner à l’examen théorique. C’est un outil d’étude, pas l’examen officiel du DMV.
+Enlace pendiente de confirmar con el personal.|Please confirm the link with staff.|Veuillez confirmer le lien auprès du personnel.
 `;
 export const translations=rows.trim().split('\n').map(row=>row.split('|'));
 const exact=new Map(translations.map(([es,en,fr])=>[es,{en,fr}]));

@@ -19,6 +19,8 @@ export function visitorMessage(source,locale){
  const q=normalize(source);
  if(/\b(ignore|disregard|oublie|ignorez|ignorer)\b.*\b(instructions|rules|regles|system)\b|\b(write|ecris|ecrivez|donne|donnez)\b.*\b(recipe|recette|poem|poeme|code|joke|blague)\b/.test(q))return 'Escriba una receta de pizza';
  const pairs=[
+ ['^(what is your website|do you have a website|quel est votre site web|avez vous un site web)$','¿Cuál es la página web?'],
+ ['^(do you have a simulator|where can i practice the (written|learner) test|avez vous un simulateur|ou puis je (pratiquer|preparer) l examen theorique)$','¿Tienen simulador?'],
  ['^(i (do not|don t) have (a |my )?(learner )?permit( can i take the course)?|je n ai pas (de |mon )?(learner )?permis( puis je suivre le cours)?)$','No tengo permiso, ¿puedo hacer el curso?'],
  ['^(i (already )?have my (learner )?permit what (is next|should i do now)|j ai deja mon permis (que faire maintenant|quelle est la suite))$','Ya tengo mi permiso, ¿qué hago ahora?'],
  ['^(i (have )?(finished|completed) (the )?(5|five) hours? (course )?what (is )?next|j ai termine (le cours de |les )?5 heures (quelle est la suite|et maintenant))$','Ya terminé las 5 horas, ¿qué sigue?'],

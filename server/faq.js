@@ -13,7 +13,7 @@
 import {stat,readFile} from 'node:fs/promises';
 import {normalize} from './school-filter.js';
 
-const fields=new Set(['centro.nombre','centro.horario','centro.saludo','centro.turnos','centro.servicios','servicio.nombre','servicio.descripcion','servicio.precio','servicio.duracion','servicio.modalidad','servicio.requisitos','servicio.horarios','servicio.incluye','servicio.condiciones']);
+const fields=new Set(['centro.web','centro.simulador','centro.nombre','centro.horario','centro.saludo','centro.turnos','centro.servicios','servicio.nombre','servicio.descripcion','servicio.precio','servicio.duracion','servicio.modalidad','servicio.requisitos','servicio.horarios','servicio.incluye','servicio.condiciones']);
 const cleanQuery=text=>normalize(text).replace(/^(por favor |me puede decir |puede decirme |quisiera saber |quiero saber )/,'').replace(/ (por favor|gracias)$/,'').trim();
 const noise=new Set('a al con cual cuales cuando cuanto de del el en es esta este la las lo los me mi para por que se su un una y saber puede decirme tienen tiene'.split(' '));
 const tokens=q=>[...new Set(cleanQuery(q).split(' ').filter(w=>!noise.has(w)).map(w=>w==='5'?'cinco':w==='route'?'road':w))];
@@ -102,6 +102,8 @@ lookup({query,services,center,state,matchedServiceIds=[]}){
   if(ranked[1]&&ranked[0].score-ranked[1].score<0.12)return {ambiguous:true};
   const {entry}=ranked[0],service=services.find(s=>s.id===entry.serviceId);
   const values={
+   'centro.web':center.contact?.website||'Enlace pendiente de confirmar con el personal.',
+   'centro.simulador':center.contact?.practiceUrl||'Enlace pendiente de confirmar con el personal.',
    'centro.nombre':center.name,'centro.horario':center.hours,'centro.saludo':center.greeting,'centro.turnos':center.booking.message,
    'centro.servicios':services.map(s=>s.name).join('; '),
    'servicio.horarios':service?.schedule||'Horarios del servicio pendientes de confirmar con el personal.',

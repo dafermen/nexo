@@ -334,6 +334,7 @@ async function openBooking(service, {availabilityOnly=false,preferredSlot=null}=
       element('p', 'muted', (service.duration == null ? 'Duración por confirmar' : service.duration + ' minutos') + ' · ' + (service.modality || 'Modalidad por confirmar')),
       element('p', '', config.center.hours),
       element('p', '', config.center.booking.message), close);
+    if(service.id==='cuaderno-preguntas'){const resources=element('section','');renderResources(resources);$('booking-content').insertBefore(resources,close);}
     if(config.center.booking.url){const a=element('a','primary full-width','Abrir agenda externa ↗');a.href=config.center.booking.url;a.target='_blank';a.rel='noopener noreferrer';$('booking-content').insertBefore(a,close);}
     $('booking-dialog').showModal();
     return;
@@ -729,12 +730,25 @@ function renderRelease(release){
  $('home-release').hidden=!valid;if(!valid)return;
  $('home-release-version').textContent=release.version;$('home-release-date').dateTime=release.updatedAt;$('home-release-date').textContent=release.updatedAt;
 }
+/** Muestra solo enlaces HTTPS configurados; no envía datos del visitante a otros sitios. */
+function renderResources(container){
+ container.replaceChildren();
+ for(const [key,label] of [['website','Sitio web de la escuela'],['practiceUrl','Practicar examen teórico']]){
+  const value=config?.center?.contact?.[key];if(!value)continue;
+  let url;try{url=new URL(value);}catch{continue;}
+  if(url.protocol!=='https:'||url.username||url.password)continue;
+  const a=element('a','resource-link',label+' ↗');a.href=url.href;a.target='_blank';a.rel='noopener noreferrer';container.append(a);
+ }
+ container.hidden=!container.childElementCount;
+ if(!container.hidden)container.append(element('small','muted','Se abre en otra pestaña. Puede regresar a Nexo al cerrarla.'));
+}
 function renderCenter(){
  $('home-agenda').disabled=!config?.center?.booking.enabled;
  $('home-agenda').title=config?.center?.booking.enabled?'Reservar, consultar su cita y ver disponibilidad':'Las citas en línea aún no están habilitadas';
  touchKeyboard.setEnabled(config?.center?.experience?.touchKeyboard===true);
  if(!config?.center)return;
  const c=config.center,e=c.experience||{};
+ renderResources($('school-resources'));
  document.body.dataset.accent=e.accent||'lime';
  $('agent-heading').replaceChildren(document.createTextNode('Hola, soy '+(c.assistantName||'Nexo')),element('span','','.'));
  $('avatar').setAttribute('aria-label',(c.assistantName||'Nexo')+', asistente virtual');
