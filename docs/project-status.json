@@ -1,7 +1,7 @@
 {
   "updatedAt": "2026-09-27",
-  "version": "0.33.0",
-  "summary": "Editor visual de respuestas con categorías y vista previa, control de versiones y flujo de pruebas automáticas preparado para GitHub.",
+  "version": "0.33.1",
+  "summary": "Editor visual de preguntas frecuentes y documentación ilustrada. Código publicado en dafermen/nexo con pruebas automáticas verificadas en GitHub.",
   "phases": [
     {
       "id": "base",
@@ -290,9 +290,9 @@
       "id": "NEXO-19",
       "phaseId": "piloto",
       "title": "Crear repositorio y revisión en GitHub",
-      "status": "partial",
+      "status": "completed",
       "priority": "P2",
-      "description": "Repositorio público dafermen/nexo seleccionado por el usuario, con historial local auditado y permiso de administración. Verificar publicación y ejecución en Actions.",
+      "description": "Historial publicado en el repositorio público dafermen/nexo solicitado por el usuario, sin claves ni bases de clientes. Manual de clonación y trabajo con ramas actualizado.",
       "acceptance": "Código revisado sin secretos publicado en el repositorio solicitado; permisos y revisión documentados.",
       "evidence": {
         "path": "docs/55-editor-visual-github.md",
@@ -303,9 +303,9 @@
       "id": "NEXO-20",
       "phaseId": "piloto",
       "title": "Automatizar validaciones",
-      "status": "partial",
+      "status": "completed",
       "priority": "P2",
-      "description": "Flujo de GitHub Actions: Node 24, sintaxis, documentación, pruebas Windows/Linux y navegador con servicios simulados. Resultado de ejecución pendiente de verificar en el repositorio dafermen/nexo.",
+      "description": "GitHub Actions ejecutado y aprobado: 301 pruebas en Windows y Linux, validación de código/documentación y tres recorridos de navegador. Sin proveedores de pago. Protección obligatoria de main configurable por el propietario.",
       "acceptance": "Las revisiones ejecutan pruebas sin claves ni llamadas pagadas.",
       "evidence": {
         "path": "docs/55-editor-visual-github.md",

@@ -16,39 +16,23 @@ Repositorio vigente: **https://github.com/dafermen/nexo** (público), propiedad 
 | Issue | Una necesidad, error o tarea con un resultado esperado |
 | Actions | Automatizaciones de GitHub; prepararlas no significa haberlas ejecutado |
 
-## Primera preparación local
+## Obtener el proyecto en otra computadora
 
-Después de decidir que esta carpeta será el repositorio:
-
-```powershell
-Set-Location C:\Projects\Nexo
-git init -b main
-git status
-```
-
-Revise `.gitignore`. Nexo excluye `.env`, bases de datos locales, `.local`, `runtime`, dependencias y cobertura. El archivo de ejemplo de configuración puede versionarse cuando solo contenga ejemplos, nunca valores reales.
-
-Seleccione archivos concretos para el primer commit. Un ejemplo inicial es:
+La carpeta C:\Projects\Nexo ya tiene Git y el remoto correcto. No la reinicialice ni clone encima de ella. En una computadora nueva, elija una carpeta vacía:
 
 ```powershell
-git add README.md package.json .gitignore public server scripts tests docs conocimiento
-git diff --cached --stat
-git diff --cached
-git commit -m "chore: registrar base local de Nexo"
+git clone https://github.com/dafermen/nexo.git
+Set-Location nexo
+npm ci --ignore-scripts
+Copy-Item .env.example .env
+npm run check
+npm run docs:check
+npm test
 ```
 
-Incluya también los archivos de arranque revisados que se quieran mantener. Antes del commit, compruebe licencias de imágenes, modelos y librerías vendorizadas. Los scripts no deben contener claves.
+Complete su configuración privada según el [manual de instalación](31-sqlite-acceso-correo.md). No copie la base de producción para desarrollar. Node 24 aporta SQLite; voces locales y credenciales se configuran aparte.
 
-GitHub permite importar un proyecto local mediante Git, GitHub CLI o GitHub Desktop. Para una primera publicación desde Git, cree un repositorio vacío y use su URL real; no adivine una dirección. [Guía oficial de importación](https://docs.github.com/en/migrations/importing-source-code/using-the-command-line-to-import-source-code/adding-locally-hosted-code-to-github).
-
-```powershell
-# Sustituya el texto de ejemplo por la URL del repositorio elegido.
-git remote add origin URL_REAL_DEL_REPOSITORIO
-git remote -v
-git push -u origin main
-```
-
-El último comando publica el historial en el remoto configurado. Se documenta aquí; no se ha ejecutado como parte de este portal.
+`.gitignore` excluye `.env`, bases, instalación real, `.local`, `runtime`, dependencias y cobertura. Los archivos de ejemplo contienen valores ilustrativos. Git guarda código e historial; el respaldo cifrado conserva los datos del negocio.
 
 ## Trabajo cotidiano
 
@@ -101,3 +85,7 @@ Primero revise `git status` y `git diff`. Corrija cambios locales editando los a
 ## SQLite y correo desde v0.13
 
 Incluya package.json, package-lock.json, el código y config/installation.example.json. Excluya .env, config/installation.json, data, .local, respaldos y node_modules. No publique su correo privado de administración ni credenciales SMTP. En un clon nuevo ejecute npm ci. [Instalación](31-sqlite-acceso-correo.md).
+
+## Primera publicación verificada — v0.33.1
+
+El 27/09/2026 se publicó el historial en `dafermen/nexo`. La [primera ejecución de GitHub Actions](https://github.com/dafermen/nexo/actions/runs/36341650322) aprobó las 301 pruebas en cada sistema (Windows y Linux), comprobaciones de código/documentación y los tres recorridos de navegador: acceso por correo simulado, editor visual y portal. No se usaron claves ni APIs de pago. Las acciones se fijan por commit de su versión 6 y los sistemas de prueba son Ubuntu 24.04 y Windows 2025. El flujo valida; no despliega automáticamente ni impide por sí solo integrar una revisión fallida.

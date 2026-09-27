@@ -1,6 +1,6 @@
 # Nexo · Kiosco conversacional para un centro de atención
 
-## Versión actual: 0.33.0
+## Versión actual: 0.33.1
 
 Editor visual de preguntas frecuentes con categorías, búsqueda, vista previa y precios del catálogo. Piloto web con voz, video, agenda por profesor y administración protegida.
 
@@ -8,7 +8,7 @@ Editor visual de preguntas frecuentes con categorías, búsqueda, vista previa y
 
 ![Flujo de edición y publicación de respuestas](docs/assets/flujo-faq.png)
 
-Repositorio: https://github.com/dafermen/nexo. GitHub Actions comprueba el código, la documentación y las pruebas; consulte la pestaña Actions para el resultado de cada cambio. Las secciones por versión siguientes conservan antecedentes del proyecto.
+Repositorio: https://github.com/dafermen/nexo. GitHub Actions comprueba código, documentación y pruebas. [Primera ejecución aprobada](https://github.com/dafermen/nexo/actions/runs/36341650322): 301 pruebas por sistema y recorridos de navegador. Consulte Actions para el resultado de cada cambio. Las secciones por versión siguientes conservan antecedentes del proyecto.
 
 ## Historial de versiones anteriores
 

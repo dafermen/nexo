@@ -67,3 +67,7 @@ Piloto activado en la base vigente para el servicio Clase práctica de 60 minuto
 ## Continuidad v0.33.0
 
 Editor visual probado y manual ilustrado incorporado. Repositorio vigente: https://github.com/dafermen/nexo (público), por elección del usuario. No subir bases reales, instalación, logs ni archivos .env. El flujo de GitHub Actions comprueba cada propuesta y subida a main. Revisar el resultado de Actions antes de desplegar.
+
+### Publicación GitHub completada
+
+Repositorio `dafermen/nexo` y primera ejecución de Actions verificados el 27/09/2026. NEXO-19 y NEXO-20 terminados. Se mantienen pendientes las pruebas físicas del kiosco, políticas comerciales y respaldo externo automático. La protección de main es una configuración opcional adicional del propietario.

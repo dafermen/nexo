@@ -99,3 +99,7 @@ Los casos nuevos cubren categorías, compatibilidad del texto, precios vigentes,
 Git conserva código, pruebas, dependencias declaradas, documentación e imágenes didácticas. `.gitignore` excluye `.env`, instalación real, bases, audios generados, conversaciones, logs, respaldos y claves. Un clon nuevo necesita su configuración privada y su propia base; el historial de Git no sustituye el respaldo cifrado de SQLite.
 
 Pendientes fuera de esta entrega: importación masiva con conciliación de temas, editor visual para respuestas propias de negocios genéricos, revisión formal de traducciones y prueba física en kiosco. Consulte [fases y tareas](25-fases-y-tareas.md) y [manual de GitHub](24-manual-github.md).
+
+## Primera publicación verificada — v0.33.1
+
+El 27/09/2026 se publicó el historial en `dafermen/nexo`. La [primera ejecución de GitHub Actions](https://github.com/dafermen/nexo/actions/runs/36341650322) aprobó las 301 pruebas en cada sistema (Windows y Linux), comprobaciones de código/documentación y los tres recorridos de navegador: acceso por correo simulado, editor visual y portal. No se usaron claves ni APIs de pago. Las acciones se fijan por commit de su versión 6 y los sistemas de prueba son Ubuntu 24.04 y Windows 2025. El flujo valida; no despliega automáticamente ni impide por sí solo integrar una revisión fallida.
