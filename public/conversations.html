@@ -1,0 +1,18 @@
+<!doctype html>
+<!--
+NEXO · GUÍA DEL MÓDULO: public/conversations.html
+Historial y métricas privadas: estructura HTML.
+Entrada: CSS, módulo JavaScript asociado y eventos del visitante.
+Salida: Árbol DOM con regiones, controles, etiquetas y diálogos.
+Estado importante: Los id son contratos con JavaScript; hidden/open/aria-* expresan visibilidad y accesibilidad.
+Efectos y límites: El HTML no valida permisos del servidor. Mantener labels, foco y type de botones al editar formularios.
+Ruta de aprendizaje: docs/23-manual-desarrollador-junior.md y docs/41-mapa-codigo-fuente.md.
+-->
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nexo · Conversaciones</title><link rel="icon" href="/assets/mark.svg"><link rel="stylesheet" href="/base.css"><link rel="stylesheet" href="/settings.css"><link rel="stylesheet" href="/admin-access.css"><link rel="stylesheet" href="/conversations.css"><script type="module" src="/conversations.js"></script></head>
+<body><header class="settings-header"><a class="brand" href="/">N <strong>nexo.</strong></a><nav aria-label="Aplicación"><a href="/admin">Administración</a><a href="/reviews">Mejorar respuestas</a><a href="/settings">Configuración</a><a href="/docs">Documentación</a><button id="logout" hidden>Cerrar sesión</button></nav></header>
+<main><div class="intro"><p class="eyebrow">SEGUIMIENTO DE LA ATENCIÓN</p><h1>Conversaciones.</h1><p>Revise las consultas, las respuestas y la actividad del asistente.</p></div>
+<form id="login" class="login"><label>Clave de administración<input id="token" type="password" required minlength="24" autocomplete="off"></label><button class="primary">Entrar</button></form>
+<p id="error" class="notice" role="alert" hidden></p>
+<section id="dashboard" hidden><div id="metrics" class="metrics"></div><p id="retention" class="muted"></p><p class="muted">Solo se registra texto enviado y respuestas generadas desde la activación. No hay grabaciones de audio o video. Los tokens son los informados por la IA; no representan una factura ni incluyen LiveAvatar.</p>
+<div class="history-actions"><button id="refresh" class="secondary">Actualizar</button><button id="previous" class="secondary">Más recientes</button><button id="next" class="secondary">Más antiguas</button></div>
+<div class="history-layout"><section><h2>Atenciones</h2><div id="conversations"></div></section><section class="transcript"><div class="history-actions"><h2 id="detail-title">Seleccione una conversación</h2><button id="download" class="secondary" hidden>Descargar .txt</button></div><p id="detail-info"></p><div id="turns"></div><button id="more-turns" class="secondary" hidden>Ver más mensajes</button></section></div></section></main></body></html>

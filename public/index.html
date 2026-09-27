@@ -1,0 +1,99 @@
+<!doctype html>
+<!--
+NEXO · GUÍA DEL MÓDULO: public/index.html
+Pantalla pública del kiosco: estructura HTML.
+Entrada: CSS, módulo JavaScript asociado y eventos del visitante.
+Salida: Árbol DOM con regiones, controles, etiquetas y diálogos.
+Estado importante: Los id son contratos con JavaScript; hidden/open/aria-* expresan visibilidad y accesibilidad.
+Efectos y límites: El HTML no valida permisos del servidor. Mantener labels, foco y type de botones al editar formularios.
+Ruta de aprendizaje: docs/23-manual-desarrollador-junior.md y docs/41-mapa-codigo-fuente.md.
+-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f5ef"><title>Nexo · Su punto de atención</title>
+  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/call-view.css"><link rel="stylesheet" href="/theme.css"><link rel="stylesheet" href="/kiosk-home.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <div class="kiosk">
+    <header class="header">
+      <a class="brand" href="/" aria-label="Nexo, inicio"><img src="/assets/mark.svg" alt="" width="36" height="36">nexo<span class="brand-dot">.</span></a>
+      <span class="center-label"><span class="tiny-dot"></span> Su punto de atención</span>
+      <div class="header-actions"><span class="mode-badge" id="mode">Conectando…</span><button class="icon-button" id="fullscreen" aria-label="Activar pantalla completa" title="Pantalla completa">⛶</button></div>
+    </header>
+    <main class="main-grid">
+      <section class="agent-panel" aria-labelledby="agent-heading">
+        <div class="agent-top"><span class="light-label">ASISTENTE VIRTUAL</span><span class="online-pill"><span></span><span id="agent-state">A su disposición</span></span></div>
+        <div class="agent-intro"><nav class="language-picker" aria-label="Idioma / Language / Langue"><button type="button" data-language="es" lang="es" aria-pressed="true">Español</button><button type="button" data-language="en" lang="en" aria-pressed="false">English</button><button type="button" data-language="fr" lang="fr" aria-pressed="false">Français</button></nav><h1 id="agent-heading">Hola, soy Nexo<span>.</span></h1><p>Una conversación.<br>El siguiente paso, más fácil.</p></div>
+        <div class="avatar-stage" id="avatar" data-state="idle" role="img" aria-label="Nexo, recepcionista virtual">
+          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+          <img class="avatar-photo" src="/assets/recepcionista-v1.png" alt="" width="1254" height="1254" fetchpriority="high">
+          <video id="avatar-video" class="avatar-video" autoplay playsinline muted aria-hidden="true"></video>
+          <audio id="avatar-audio" autoplay></audio>
+          <div class="avatar-caption"><span class="sparkle">✦</span> Tecnología que le acompaña</div>
+        </div>
+        <div class="agent-controls">
+          <div class="waveform" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <p class="home-prompt">¿Cómo podemos ayudarle hoy?</p>
+          <div class="call-choices" role="group" aria-label="Opciones de atención">
+            <button class="primary start-button" id="start" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 10v2a6 6 0 0 0 12 0v-2M12 18v3m-4 0h8"/></svg><span>Llamada por voz</span></button>
+            <button class="start-button video-choice" id="start-video" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2" y="5" width="14" height="14" rx="3"/><path d="m16 10 6-4v12l-6-4"/></svg><span>Videollamada</span></button>
+            <button class="start-button new-conversation" id="new-conversation" type="button" title="Limpiar la atención actual y volver al inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></svg><span>Nueva conversación</span></button>
+          </div>
+          <nav class="home-shortcuts" aria-label="Servicios del kiosco">
+            <button id="home-services" type="button" aria-haspopup="dialog" aria-controls="home-panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span>Servicios</span></button>
+            <button id="home-agenda" type="button" aria-haspopup="dialog" aria-controls="booking-dialog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18m-12 4h3m3 0h3m-9 3h3"/></svg><span>Mi cita y horarios</span></button>
+            <button id="home-chat" type="button" aria-haspopup="dialog" aria-controls="home-panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20 15a3 3 0 0 1-3 3H9l-6 4V6a3 3 0 0 1 3-3h11a3 3 0 0 1 3 3zM7 8h9M7 12h6"/></svg><span>Escribir consulta</span></button>
+          </nav>
+          <p id="home-notice" class="home-notice" role="status" hidden></p>
+          <div class="home-utilities"><span>Atención a su ritmo</span><button id="home-options" type="button" aria-haspopup="dialog" aria-controls="home-menu">Ayuda y opciones <span aria-hidden="true">···</span></button></div>
+          <p id="channel-hint">Elija voz con imagen o video en directo.</p>
+          <p id="local-voice-status">Preparando atención…</p><div class="live-controls"><button id="avatar-local" hidden class="live-button" type="button">Ver imagen</button><button id="avatar-live" class="live-button" type="button">Opciones de video</button><button id="avatar-audio-enable" class="live-button" type="button" hidden>Activar sonido</button></div>
+        </div>
+      </section>
+      <dialog id="home-panel" class="home-panel" aria-label="Servicios y conversación"><button id="home-panel-close" type="button" class="home-panel-close" aria-label="Cerrar y volver al inicio">×</button>
+      <section class="workspace" aria-label="Servicios y conversación">
+        <div class="workspace-top"><nav class="tabs" aria-label="Contenido"><button id="services-tab" class="tab active" aria-pressed="true">Servicios</button><button id="chat-tab" class="tab" aria-pressed="false">Conversación<span id="chat-dot" hidden>•</span></button></nav><button id="end-session" class="text-button" hidden>Finalizar <span>↗</span></button></div>
+        <div id="services-view" class="services-view">
+          <span class="eyebrow">ESTAMOS PARA AYUDARLE</span><h2>¿Qué necesita<br>hacer hoy?</h2><p class="section-description">Elija un servicio o conversemos para<br class="desktop-break"> encontrar la mejor opción para usted.</p>
+          <div id="services" class="service-list"><p>Cargando servicios…</p></div>
+          <div class="assistance-note"><span>✳</span><div><strong>A su ritmo, paso a paso.</strong><p>Consulte, elija su horario y confirme su turno.</p></div></div>
+        </div>
+        <div id="chat-view" class="chat-view" hidden>
+          <div class="chat-title"><span class="eyebrow">LE ESCUCHAMOS</span><h2>Conversemos.</h2><p>Evite compartir documentos o información sensible.</p></div>
+          <div id="messages" class="messages" role="log" aria-live="polite" aria-label="Conversación con Nexo"><div class="empty-chat"><span>✳</span><p>Su siguiente paso empieza<br>con una pregunta.</p></div></div>
+        </div>
+        <div class="composer-area">
+          <div class="suggestions"><button data-prompt="¿Cómo reservo un turno?">Reservar un turno <span>↗</span></button><button data-prompt="¿Qué servicios ofrecen?">Ver opciones <span>↗</span></button></div>
+          <form id="chat-form" class="composer"><button type="button" class="mic-button" id="mic" aria-label="Activar micrófono" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 10v2a6 6 0 0 0 12 0v-2M12 18v4m-4 0h8"/></svg></button><input id="message" maxlength="1000" autocomplete="off" placeholder="Escriba su consulta aquí…" aria-label="Su consulta"><button type="submit" id="send" class="send-button" aria-label="Enviar consulta">↑</button></form>
+          <div class="composer-foot"><span id="input-status" role="status">Toque el micrófono para hablar</span><button class="text-button" id="sound" aria-pressed="true">Voz activada</button></div>
+          <p class="notice" id="notice" role="alert" hidden></p>
+        </div>
+      </section>
+      </dialog>
+    </main>
+    <footer class="footer"><span><span class="tiny-dot"></span> Centro de atención <span class="footer-divider">/</span> Demo local</span><span>Precios de ejemplo · Sin cobros</span><button id="privacy" class="text-button">Privacidad y uso <span>↗</span></button></footer>
+  </div>
+  <dialog id="home-menu" class="modal small-modal" aria-labelledby="home-menu-title"><form method="dialog"><button class="close-button" aria-label="Cerrar">×</button></form><span class="eyebrow">A SU DISPOSICIÓN</span><h2 id="home-menu-title">Ayuda y opciones</h2><p>Puede hablar con la asesora, escribir o consultar los servicios y citas desde el inicio.</p><div id="home-menu-tools"></div><p id="home-release" class="home-release" hidden><span><span>Versión</span> <strong id="home-release-version" data-no-translate></strong></span><span><span>Última actualización</span>: <time id="home-release-date" data-no-translate></time></span></p><details class="home-management"><summary>Acceso del personal</summary><a href="/admin" aria-describedby="admin-entry-description">Administración</a><small id="admin-entry-description">Citas, servicios, reportes, configuración y documentación.</small><a id="pilot-access-link" href="/pilot" hidden>Acceso del piloto</a></details></dialog>
+  <dialog id="welcome-dialog" class="modal small-modal" aria-labelledby="welcome-title"><form method="dialog"><button class="close-button" aria-label="Cerrar">×</button></form><span class="eyebrow">ANTES DE EMPEZAR</span><h2 id="welcome-title">Un espacio para ayudarle.</h2><p id="welcome-detail"></p><p><span id="session-retention-copy">El inicio se limpia después de un minuto sin actividad. También puede pulsar Nueva conversación.</span> No escriba datos sensibles.</p><p class="muted">Los turnos confirmados se guardan por separado. Esta demo usa servicios y precios de ejemplo.</p><button id="accept-session" class="primary full-width">Entendido, continuar <span>↗</span></button></dialog>
+  <dialog id="voice-dialog" class="modal small-modal" aria-labelledby="voice-title"><form method="dialog"><button class="close-button" aria-label="Cerrar">×</button></form><span class="eyebrow">CONVERSACIÓN POR VOZ</span><h2 id="voice-title">Active su micrófono.</h2><p>El navegador puede enviar su audio a su proveedor de reconocimiento de voz. Puede necesitar internet. Esta aplicación no guarda grabaciones.</p><p id="voice-send-detail">Revise la transcripción antes de enviarla. También puede escribir su consulta.</p><button id="accept-voice" class="primary full-width">Continuar con micrófono <span>↗</span></button></dialog>
+  <dialog id="privacy-dialog" class="modal small-modal" aria-labelledby="privacy-title"><form method="dialog"><button class="close-button" aria-label="Cerrar">×</button></form><span class="eyebrow">PRIVACIDAD Y USO</span><h2 id="privacy-title">Usted decide qué compartir.</h2><p>Nexo es un asistente virtual. En modo de prueba usa respuestas preparadas. En modo IA envía el texto de la conversación y el catálogo a OpenAI.</p><p>La voz de respuesta se genera en el servidor del centro. El reconocimiento del micrófono utiliza los servicios del navegador y puede enviar audio fuera de la PC. No guardamos grabaciones de audio o video. Conservamos en la base de datos el texto enviado y las respuestas generadas, con fecha, canal y datos de funcionamiento, para seguimiento y estadísticas. Solo Administración puede consultar y descargar ese historial.</p><p>Si activa el video, LiveAvatar recibe la voz sintetizada de las respuestas para animar el video; en el modo alternativo FULL recibe el texto. Su tratamiento de datos depende de las políticas de ese proveedor.</p><p>Los datos del turno se guardan en el servidor del centro, separados de la IA. El personal autorizado puede consultarlos y cancelar reservas. La limpieza los elimina a partir de 7 días después de la cita: al iniciar el servidor o durante su revisión horaria. Si está apagado, la eliminación queda pendiente. No se envían correos ni se realizan cobros.</p><p class="muted">Terminar la atención limpia la pantalla; el historial privado permanece para seguimiento. Evite escribir información sensible. El uso público requiere adaptar los avisos y las políticas al centro.</p><p>Podemos guardar y reutilizar audios genéricos de respuestas aprobadas para responder más rápido. No grabamos su voz para esta biblioteca.</p><p class="muted">Créditos del personaje: cabello «Hazel» de <a href="https://static.makehumancommunity.org/assets/assetpacks/hair02.html" target="_blank" rel="noopener noreferrer">Elvaerwyn (CC-BY)</a>, adaptado en longitud, tono y ajuste. Traje de <a href="https://static.makehumancommunity.org/assets/assetpacks/suits01.html" target="_blank" rel="noopener noreferrer">Margaret Toigo (CC0)</a>, adaptado al cuerpo.</p></dialog>
+  <dialog id="booking-dialog" class="modal booking-modal" aria-labelledby="booking-title"><form method="dialog"><button class="close-button" aria-label="Cerrar">×</button></form><span class="eyebrow">SU PRÓXIMO PASO</span><h2 id="booking-title">Reserve su turno.</h2><div id="booking-content"></div></dialog>
+  <dialog id="idle-dialog" class="modal small-modal" aria-labelledby="idle-title"><h2 id="idle-title">¿Sigue aquí?</h2><p>¿Desea continuar esta conversación? Si usted es otra persona, inicie una nueva para limpiar la pantalla.</p><div class="idle-actions"><button id="continue-session" type="button" class="primary full-width">Sí, continuar</button><button id="idle-new-conversation" type="button" class="secondary full-width">No, nueva conversación</button></div></dialog>
+  <dialog id="avatar-dialog" class="modal avatar-modal" aria-labelledby="avatar-title">
+    <form method="dialog"><button class="close-button" aria-label="Cerrar">×</button></form>
+    <span class="eyebrow">ETAPA 1 · LIVEAVATAR</span><h2 id="avatar-title">Una recepcionista<br>en movimiento.</h2>
+    <p>Pruebe labios sincronizados, expresiones y movimientos de cabeza. El video pronunciará las mismas respuestas que ve en el chat.</p>
+    <p id="avatar-config-status" class="notice" role="status">Comprobando configuración…</p>
+    <form id="avatar-start-form">
+      <label class="avatar-option"><input type="radio" name="avatar-mode" value="receptionist" checked><span><strong>Recepcionista configurada</strong><small>Usa el avatar de su cuenta · Consume créditos</small></span></label>
+      <label class="avatar-option"><input type="radio" name="avatar-mode" value="sandbox"><span><strong>Prueba técnica gratuita</strong><small>El proveedor utiliza Wayne, un avatar masculino de muestra</small></span></label>
+      <label class="avatar-consent"><input id="avatar-data-consent" type="checkbox" required><span>Acepto enviar la voz sintetizada de las respuestas a LiveAvatar para animar el video (en modo FULL se envía el texto). Se aplican las políticas de ese proveedor. Los datos del formulario de turnos quedan separados.</span></label>
+      <button id="avatar-connect" type="submit" class="primary full-width" disabled>Conectar recepcionista ↗</button>
+    </form>
+    <details id="avatar-setup"><summary>Configuración del piloto</summary><ol><li>Cree una cuenta en <a href="https://app.liveavatar.com" target="_blank" rel="noreferrer">LiveAvatar</a> y obtenga su clave de API.</li><li>Elija una recepcionista de su catálogo. En modo LITE usamos nuestra voz del servidor. Para conservar nuestro rostro, cree un avatar personalizado desde la imagen; es una opción de pago.</li><li>Abra <strong>CONFIGURAR-AVATAR.cmd</strong> en la carpeta del proyecto. Guarde allí la clave y el ID de avatar; habilite el consumo solo cuando desee probar con créditos. No los pegue en el chat.</li><li>Reinicie Nexo y vuelva a abrir esta prueba.</li></ol></details>
+    <p class="muted">La imagen de Nexo permanece mientras no haya video conectado. El resultado real de movimiento y latencia se comprobará al conectar su cuenta.</p>
+  </dialog>
+</body>
+</html>

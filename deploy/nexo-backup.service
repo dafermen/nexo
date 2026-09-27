@@ -1,0 +1,13 @@
+[Unit]
+Description=Nexo encrypted SQLite backup
+[Service]
+Type=oneshot
+User=root
+EnvironmentFile=/etc/nexo/backup.env
+ExecStart=/bin/bash /opt/nexo/current/deploy/backup.sh ${NEXO_BACKUP_RECIPIENT} /var/backups/nexo
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/nexo /var/backups/nexo

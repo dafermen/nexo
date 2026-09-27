@@ -1,0 +1,13 @@
+/**
+ * NEXO · GUÍA DEL MÓDULO: public/conversations.css
+ * Listado y detalle del historial.
+ * Entrada: Selectores del HTML, atributos/clases de JavaScript y tamaño de pantalla.
+ * Salida: Reglas visuales aplicadas por la cascada CSS; no devuelve datos JavaScript.
+ * Estado importante: Variables --* son parámetros visuales; @media adapta presentación;
+ * orden/especificidad deciden qué regla prevalece.
+ * Efectos y límites: Cambiar estilos no cambia permisos ni estado de reserva. Probar foco visible,
+ * contraste, desbordamiento y orientación.
+ * Ruta de aprendizaje: docs/23-manual-desarrollador-junior.md y docs/41-mapa-codigo-fuente.md.
+ */
+
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px}.metric,.transcript{background:white;border:1px solid #dce3d9;border-radius:18px;padding:22px}.metric strong{display:block;font-size:28px}.metric span{font-size:12px;color:#61725e}.history-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:20px 0}.history-layout{display:grid;grid-template-columns:minmax(220px,1fr) minmax(0,2fr);gap:24px}.history-item{display:block;width:100%;text-align:left;padding:16px;margin:10px 0;background:#fff;border:1px solid #cad6bf;border-radius:12px;min-height:58px;font:inherit}.history-item[aria-pressed=true]{background:#eaf4d8;border-color:#718d55}.history-item small{display:block;margin-top:8px;color:#63735d}.turn{border-bottom:1px solid #e0e5da;padding:15px 0}.turn p{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6}.turn small,#detail-info{font-size:12px;color:#67745f}.turn h3{font-size:13px;margin-bottom:6px}.turn-error{color:#9b5435}.muted{line-height:1.6;font-size:13px}@media(max-width:760px){.history-layout{grid-template-columns:1fr}.transcript{padding:18px}}

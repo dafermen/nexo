@@ -1,0 +1,55 @@
+name: Validaciones de Nexo
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: nexo-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pruebas:
+    name: Código, documentación y pruebas (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run check
+      - run: npm run docs:check
+      - run: npm test
+  navegador:
+    name: Navegador sin servicios externos
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Instalar navegador de pruebas en directorio temporal
+        run: |
+          npm install --prefix "$RUNNER_TEMP/nexo-qa" --ignore-scripts --no-audit --no-fund playwright@1.62.1
+          "$RUNNER_TEMP/nexo-qa/node_modules/.bin/playwright" install --with-deps chromium
+          echo "PLAYWRIGHT_MODULE=$RUNNER_TEMP/nexo-qa/node_modules/playwright" >> "$GITHUB_ENV"
+      - run: node tests/admin-access.e2e.js
+      - run: node tests/faq-editor.e2e.js
+      - run: node tests/docs.e2e.js

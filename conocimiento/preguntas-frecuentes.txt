@@ -1,0 +1,176 @@
+# PREGUNTAS FRECUENTES DE NEXO
+# Edite este archivo en UTF-8. Guarde y pruebe su pregunta; no hace falta reiniciar.
+# Cada bloque tiene un identificador distinto, preguntas y una respuesta.
+# Puede añadir hasta 20 variantes por tema. Para desactivar: activo: no
+# Los parámetros entre {{ }} toman datos actuales del catálogo.
+# Precios, requisitos y detalles todavía no confirmados deben quedar pendientes.
+# Guía completa: docs/21-preguntas-frecuentes.md
+
+[saludo-general]
+activo: sí
+pregunta: Hola
+pregunta: Hola Nexo
+pregunta: ¿Cómo está?
+pregunta: ¿Qué tal?
+respuesta: Hola. ¿Qué desea consultar?
+
+[saludo-manana]
+activo: sí
+pregunta: Buenos días
+pregunta: Buen día
+respuesta: Buenos días. ¿Qué desea consultar?
+
+[saludo-tarde]
+activo: sí
+pregunta: Buenas tardes
+respuesta: Buenas tardes. ¿Qué desea consultar?
+
+[saludo-noche]
+activo: sí
+pregunta: Buenas noches
+respuesta: Buenas noches. ¿En qué puedo ayudarle?
+
+[horario-centro]
+activo: sí
+pregunta: ¿Cuál es el horario de atención?
+pregunta: ¿Qué horario tienen?
+pregunta: ¿A qué hora atienden?
+respuesta: Nuestro horario de atención es {{centro.horario}}. Los horarios de clases y cupos deben confirmarse con el personal.
+
+[servicios-disponibles]
+activo: sí
+pregunta: ¿Qué servicios ofrecen?
+pregunta: ¿Qué puedo estudiar con ustedes?
+pregunta: ¿Qué cursos tienen?
+respuesta: Nuestros servicios publicados son: {{centro.servicios}}. ¿Sobre cuál desea más información?
+
+[reservar-turno]
+activo: sí
+pregunta: Quiero reservar un turno
+pregunta: ¿Cómo puedo agendar una cita?
+pregunta: ¿Tienen enlace para reservar?
+respuesta: {{centro.turnos}}
+
+[cancelaciones]
+activo: sí
+pregunta: ¿Cuál es la política de cancelación?
+pregunta: ¿Cómo cancelo mi cita?
+respuesta: Las condiciones para cancelar o cambiar un turno deben confirmarse con el personal de la escuela. Este kiosco todavía no modifica reservas.
+
+[pagos]
+activo: sí
+pregunta: ¿Puedo pagar aquí?
+pregunta: ¿Aceptan tarjetas?
+pregunta: ¿Qué formas de pago aceptan?
+respuesta: Este kiosco no procesa pagos. Consulte con el personal los medios de pago disponibles.
+
+[contacto]
+activo: sí
+pregunta: ¿Cuál es el teléfono?
+pregunta: ¿Cómo los contacto?
+respuesta: El teléfono y los medios de contacto están pendientes de incorporar. Consulte con el personal de la escuela.
+
+[direccion]
+activo: sí
+pregunta: ¿Dónde están ubicados?
+pregunta: ¿Cuál es la dirección?
+pregunta: ¿Cómo llego a la escuela?
+respuesta: La dirección está pendiente de incorporar. Consulte con el personal de la escuela.
+
+[clases-modalidad]
+activo: sí
+servicio: clases
+pregunta: ¿Tienen clases virtuales?
+pregunta: ¿Las clases son presenciales?
+respuesta: {{servicio.descripcion}} Modalidad publicada para este servicio: {{servicio.modalidad}}.
+
+[examen-teorico]
+activo: sí
+pregunta: ¿Preparan para el examen teórico?
+pregunta: ¿Dan clases para el examen escrito?
+respuesta: La preparación para el examen teórico debe confirmarse con el personal. La información publicada incluye clases, preparación para el road test y el curso de las 5 horas.
+
+[licencia-garantizada]
+activo: sí
+pregunta: ¿Garantizan que voy a aprobar?
+pregunta: ¿Voy a aprobar seguro el road test?
+respuesta: No puedo garantizar el resultado de un examen. La escuela ofrece preparación para el road test; consulte con el personal cómo puede ayudarle a prepararse.
+
+[asistencia-humana]
+activo: sí
+pregunta: Quiero hablar con una persona
+pregunta: Necesito una asesora humana
+pregunta: ¿Puedo hablar con el personal?
+respuesta: Con gusto. Acérquese al personal de la escuela para recibir atención. Este kiosco no transfiere llamadas a una persona.
+
+[cinco-horas-precio]
+activo: sí
+servicio: cinco-horas
+pregunta: ¿Cuánto cuesta el curso de las 5 horas?
+pregunta: ¿Cuál es el precio del curso de las 5 horas?
+pregunta: Precio curso de las 5 horas
+respuesta: {{servicio.nombre}}. {{servicio.precio}}
+
+[cinco-horas-requisitos]
+activo: sí
+servicio: cinco-horas
+pregunta: ¿Cuáles son los requisitos del curso de las 5 horas?
+pregunta: Documentos para el curso de las 5 horas
+respuesta: {{servicio.nombre}}. {{servicio.requisitos}}
+
+[cinco-horas-detalles]
+activo: sí
+servicio: cinco-horas
+pregunta: Detalles del curso de las 5 horas
+pregunta: Información sobre el curso de las 5 horas
+pregunta: Curso de las 5 horas
+pregunta: Estoy interesado en el curso de las 5 horas
+pregunta: Estoy interesada en el curso de las 5 horas
+pregunta: Me interesa el curso de las 5 horas
+pregunta: Quiero información del curso de las 5 horas
+respuesta: Con gusto, puedo orientarle sobre {{servicio.nombre}}. Duración: {{servicio.duracion}}. ¿Desea conocer el precio, los requisitos o la modalidad?
+
+[road-test-precio]
+activo: sí
+servicio: road-test
+pregunta: ¿Cuánto cuesta el road test?
+pregunta: ¿Cuál es el precio del road test?
+pregunta: Precio road test
+respuesta: {{servicio.nombre}}. {{servicio.precio}}
+
+[road-test-requisitos]
+activo: sí
+servicio: road-test
+pregunta: ¿Cuáles son los requisitos del road test?
+pregunta: Documentos para el road test
+respuesta: {{servicio.nombre}}. {{servicio.requisitos}}
+
+[road-test-detalles]
+activo: sí
+servicio: road-test
+pregunta: Detalles del road test
+pregunta: Información sobre el road test
+respuesta: {{servicio.nombre}}: {{servicio.descripcion}} Duración: {{servicio.duracion}}. Modalidad: {{servicio.modalidad}}.
+
+[clases-precio]
+activo: sí
+servicio: clases
+pregunta: ¿Cuánto cuesta el clases?
+pregunta: ¿Cuál es el precio del clases?
+pregunta: Precio clases
+respuesta: {{servicio.nombre}}. {{servicio.precio}}
+
+[clases-requisitos]
+activo: sí
+servicio: clases
+pregunta: ¿Cuáles son los requisitos del clases?
+pregunta: Documentos para el clases
+respuesta: {{servicio.nombre}}. {{servicio.requisitos}}
+
+[clases-detalles]
+activo: sí
+servicio: clases
+pregunta: Detalles del clases
+pregunta: Información sobre el clases
+respuesta: {{servicio.nombre}}: {{servicio.descripcion}} Duración: {{servicio.duracion}}. Modalidad: {{servicio.modalidad}}.
+

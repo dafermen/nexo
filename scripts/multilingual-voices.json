@@ -1,0 +1,22 @@
+[
+  {
+    "file": "en_US-ljspeech-high.onnx",
+    "url": "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/ljspeech/high/en_US-ljspeech-high.onnx",
+    "sha256": "5d4f08ba6a2a48c44592eed3ce56bf85e9de3dd4e20df90541ae68a8310c029a"
+  },
+  {
+    "file": "en_US-ljspeech-high.onnx.json",
+    "url": "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/ljspeech/high/en_US-ljspeech-high.onnx.json",
+    "sha256": "7e1f4634af596d83cca997fb7a931ba80b70f8a316a2655ee69c55365e0ace14"
+  },
+  {
+    "file": "fr_FR-siwis-medium.onnx",
+    "url": "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/siwis/medium/fr_FR-siwis-medium.onnx",
+    "sha256": "641d1ab097da2b81128c076810edb052b385decc8be3381814802a64a73baf99"
+  },
+  {
+    "file": "fr_FR-siwis-medium.onnx.json",
+    "url": "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/siwis/medium/fr_FR-siwis-medium.onnx.json",
+    "sha256": "39479916c2db192b5ac9764daddd0c744d83e023ad890c6976c0633ae4df8959"
+  }
+]

@@ -1,0 +1,707 @@
+{
+  "updatedAt": "2026-09-27",
+  "version": "0.33.0",
+  "summary": "Editor visual de respuestas con categorías y vista previa, control de versiones y flujo de pruebas automáticas preparado para GitHub.",
+  "phases": [
+    {
+      "id": "base",
+      "title": "Base del proyecto",
+      "status": "completed",
+      "summary": "Arquitectura modular, API local, SQLite y catálogo."
+    },
+    {
+      "id": "interfaz",
+      "title": "Kiosco y administración",
+      "status": "completed",
+      "summary": "Interfaz táctil, panel de servicios y llamadas a pantalla completa."
+    },
+    {
+      "id": "voz",
+      "title": "Conversación por voz",
+      "status": "completed",
+      "summary": "Transcripción, envío automático y reproducción de respuestas."
+    },
+    {
+      "id": "video",
+      "title": "Video con LiveAvatar",
+      "status": "completed",
+      "summary": "Integración disponible y sesiones limitadas a 60 segundos."
+    },
+    {
+      "id": "conocimiento",
+      "title": "Conocimiento y filtro",
+      "status": "completed",
+      "summary": "FAQ editable, respuestas locales e interpretación de consultas ambiguas."
+    },
+    {
+      "id": "documentacion",
+      "title": "Documentación",
+      "status": "completed",
+      "summary": "Portal, manuales, fases y tareas del proyecto."
+    },
+    {
+      "id": "agenda",
+      "title": "Agenda y operación real",
+      "status": "partial",
+      "summary": "Calendar conectado y piloto de clases prácticas de 60 minutos habilitado. Pendientes información comercial definitiva y operación con alumnos."
+    },
+    {
+      "id": "piloto",
+      "title": "Piloto y publicación",
+      "status": "partial",
+      "summary": "Piloto Linux HTTPS activo y respaldo cifrado probado. Pendientes validación física del cliente y copia externa automática de futuros respaldos."
+    },
+    {
+      "id": "futuro",
+      "title": "MetaHuman y pagos",
+      "status": "pending",
+      "summary": "Segunda etapa sujeta a decisiones, hardware y pruebas."
+    },
+    {
+      "id": "configuration",
+      "title": "Configuración por negocio",
+      "status": "completed",
+      "summary": "Identidad, asistente, canales, IA y respuestas configurables por instalación."
+    }
+  ],
+  "tasks": [
+    {
+      "id": "NEXO-01",
+      "phaseId": "base",
+      "title": "Estructura modular y API",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Interfaz, proveedores y persistencia separados.",
+      "evidence": {
+        "path": "docs/03-arquitectura.md",
+        "label": "Consultar documentación →"
+      }
+    },
+    {
+      "id": "NEXO-02",
+      "phaseId": "base",
+      "title": "Persistencia local",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Base SQLite y catálogo de servicios.",
+      "evidence": {
+        "path": "docs/04-modelo-datos.md",
+        "label": "Consultar documentación →"
+      }
+    },
+    {
+      "id": "NEXO-03",
+      "phaseId": "interfaz",
+      "title": "Kiosco y flujo de atención",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Inicio visual y acceso a los servicios.",
+      "evidence": {
+        "path": "docs/05-flujos-usuario.md",
+        "label": "Consultar documentación →"
+      }
+    },
+    {
+      "id": "NEXO-04",
+      "phaseId": "interfaz",
+      "title": "Llamada en pantalla completa",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Al cerrar la llamada se vuelve al inicio.",
+      "evidence": {
+        "path": "docs/15-vista-llamada.md",
+        "label": "Consultar documentación →"
+      }
+    },
+    {
+      "id": "NEXO-05",
+      "phaseId": "interfaz",
+      "title": "Administración de la escuela",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Edición de servicios, información y horarios desde el panel.",
+      "evidence": {
+        "path": "docs/17-administracion.md",
+        "label": "Consultar documentación →"
+      }
+    },
+    {
+      "id": "NEXO-06",
+      "phaseId": "voz",
+      "title": "Separar llamadas de voz y video",
+      "status": "completed",
+      "priority": "P1",
+      "description": "La llamada por voz evita iniciar LiveAvatar.",
+      "evidence": {
+        "path": "docs/18-voz-y-video.md",
+        "label": "Consultar documentación →"
+      }
+    },
+    {
+      "id": "NEXO-07",
+      "phaseId": "voz",
+      "title": "Conversación automática",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Escucha por turnos, transcripción y envío automático.",
+      "evidence": {
+        "path": "docs/20-conversacion-automatica.md",
+        "label": "Consultar documentación →"
+      }
+    },
+    {
+      "id": "NEXO-08",
+      "phaseId": "video",
+      "title": "Integrar LiveAvatar",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Proveedor de video y cierre de sesión a los 60 segundos.",
+      "evidence": {
+        "path": "docs/14-etapas-liveavatar-metahuman.md",
+        "label": "Consultar documentación →"
+      }
+    },
+    {
+      "id": "NEXO-09",
+      "phaseId": "conocimiento",
+      "title": "Filtro de consultas y cuotas",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Respuestas locales y límites compartidos para consultas de IA.",
+      "evidence": {
+        "path": "docs/19-filtro-y-consumo.md",
+        "label": "Consultar documentación →"
+      }
+    },
+    {
+      "id": "NEXO-10",
+      "phaseId": "conocimiento",
+      "title": "Preguntas frecuentes editables",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Respuestas escolares en SQLite, editor visual y texto avanzado; semilla solo al inicializar.",
+      "evidence": {
+        "path": "docs/55-editor-visual-github.md",
+        "label": "Editor, flujo y validación"
+      }
+    },
+    {
+      "id": "NEXO-11",
+      "phaseId": "conocimiento",
+      "title": "Interpretar expresiones ambiguas",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Interpretación acotada con IA y respuesta basada en el catálogo.",
+      "evidence": {
+        "path": "docs/22-interpretacion-intencion.md",
+        "label": "Consultar documentación →"
+      }
+    },
+    {
+      "id": "NEXO-12",
+      "phaseId": "documentacion",
+      "title": "Portal y manuales de Nexo",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Biblioteca consultable, buscador y guías para continuar el proyecto.",
+      "evidence": {
+        "path": "docs/00-inicio.md",
+        "label": "Consultar documentación →"
+      }
+    },
+    {
+      "id": "NEXO-13",
+      "phaseId": "agenda",
+      "title": "Confirmar información comercial",
+      "status": "pending",
+      "priority": "P1",
+      "description": "Precios, requisitos y modalidades definitivas de cada servicio.",
+      "acceptance": "Todos los servicios activos revisados y aprobados por la escuela.",
+      "evidence": {
+        "path": "docs/16-metodomogollon.md",
+        "label": "Consultar documentación →"
+      }
+    },
+    {
+      "id": "NEXO-14",
+      "phaseId": "agenda",
+      "title": "Habilitar reservas de visitantes con Google Calendar",
+      "status": "partial",
+      "priority": "P1",
+      "description": "Agenda única y varios profesores implementados y probados con Google simulado. Disponibilidad real verificada en agenda única; faltan piloto con alumnos/profesores reales y evaluación de cambios externos.",
+      "acceptance": "El alumno consulta disponibilidad real y recibe una confirmación verificable, sin duplicados.",
+      "evidence": {
+        "path": "docs/25-fases-y-tareas.md",
+        "label": "Consultar documentación →"
+      }
+    },
+    {
+      "id": "NEXO-15",
+      "phaseId": "piloto",
+      "title": "Validar iPad y micrófono real",
+      "status": "pending",
+      "priority": "P1",
+      "description": "Probar Safari, permisos, ruido y orientación en el dispositivo del kiosco.",
+      "acceptance": "Conversación completa por voz y video, recuperación de errores y cierre correctos en el equipo real.",
+      "evidence": {
+        "path": "docs/26-manual-operacion.md",
+        "label": "Consultar documentación →"
+      }
+    },
+    {
+      "id": "NEXO-16",
+      "phaseId": "piloto",
+      "title": "Preparar despliegue con HTTPS",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Piloto Linux publicado en https://nexo.metodomogollon.com con certificado válido, acceso privado y comprobaciones HTTPS aprobadas. Pruebas físicas de iPad se siguen en NEXO-15.",
+      "evidence": {
+        "path": "docs/47-piloto-metodomogollon.md",
+        "label": "Despliegue y verificación HTTPS"
+      }
+    },
+    {
+      "id": "NEXO-17",
+      "phaseId": "piloto",
+      "title": "Accesos y privacidad para producción",
+      "status": "partial",
+      "priority": "P1",
+      "description": "Acceso privado y controles del VPS verificados. Pendientes política definitiva de retención/eliminación y aceptación operativa del cliente.",
+      "acceptance": "Accesos y retención acordados, probados y documentados.",
+      "evidence": {
+        "path": "docs/45-despliegue-piloto-linux.md",
+        "label": "Guía del piloto Linux"
+      }
+    },
+    {
+      "id": "NEXO-18",
+      "phaseId": "piloto",
+      "title": "Respaldos y restauración",
+      "status": "partial",
+      "priority": "P1",
+      "description": "Respaldo diario cifrado activo en VPS, copias manuales a la PC y restauración del respaldo completo verificadas. Pendientes copia externa automática y política de retención.",
+      "acceptance": "Copia externa automática cifrada y retención acordadas; restauración periódica verificada.",
+      "evidence": {
+        "path": "docs/49-reportes-avisos-respaldos.md",
+        "label": "Respaldos y recuperación"
+      }
+    },
+    {
+      "id": "NEXO-19",
+      "phaseId": "piloto",
+      "title": "Crear repositorio y revisión en GitHub",
+      "status": "partial",
+      "priority": "P2",
+      "description": "Repositorio local preparado y remoto metodomogollondev/nexo identificado. Publicación pendiente de permiso de escritura para dafermen; el remoto es público.",
+      "acceptance": "Código revisado sin secretos publicado en el repositorio solicitado; permisos y revisión documentados.",
+      "evidence": {
+        "path": "docs/55-editor-visual-github.md",
+        "label": "Editor, flujo y validación"
+      }
+    },
+    {
+      "id": "NEXO-20",
+      "phaseId": "piloto",
+      "title": "Automatizar validaciones",
+      "status": "partial",
+      "priority": "P2",
+      "description": "GitHub Actions preparado: Node 24, sintaxis, documentación, pruebas Windows/Linux y navegador con servicios simulados. Primera ejecución remota pendiente de publicación.",
+      "acceptance": "Las revisiones ejecutan pruebas sin claves ni llamadas pagadas.",
+      "evidence": {
+        "path": "docs/55-editor-visual-github.md",
+        "label": "Editor, flujo y validación"
+      }
+    },
+    {
+      "id": "NEXO-21",
+      "phaseId": "conocimiento",
+      "title": "Editor visual de preguntas frecuentes",
+      "status": "completed",
+      "priority": "P2",
+      "description": "Formularios por tema, categorías, filtros, paginación, activación, parámetros del catálogo y vista previa. Validación y conflicto de edición; conserva texto avanzado. Importación masiva adicional fuera de esta entrega.",
+      "acceptance": "Crear, revisar y publicar respuestas desde el panel con validación.",
+      "evidence": {
+        "path": "docs/55-editor-visual-github.md",
+        "label": "Editor, flujo y validación"
+      }
+    },
+    {
+      "id": "NEXO-22",
+      "phaseId": "piloto",
+      "title": "Evaluar lenguaje y ruido del piloto",
+      "status": "pending",
+      "priority": "P2",
+      "description": "Ampliar consultas reales de usuarios y formas regionales de preguntar.",
+      "acceptance": "Conjunto de casos revisado con la escuela y métricas de fallos y consumo.",
+      "evidence": {
+        "path": "docs/22-interpretacion-intencion.md",
+        "label": "Consultar documentación →"
+      }
+    },
+    {
+      "id": "NEXO-23",
+      "phaseId": "futuro",
+      "title": "Evaluar MetaHuman",
+      "status": "pending",
+      "priority": "P3",
+      "description": "Segunda etapa de avatar, posterior al piloto con LiveAvatar.",
+      "acceptance": "Prueba de calidad, latencia y costo con arquitectura y equipo definidos.",
+      "evidence": {
+        "path": "docs/14-etapas-liveavatar-metahuman.md",
+        "label": "Consultar documentación →"
+      }
+    },
+    {
+      "id": "NEXO-24",
+      "phaseId": "futuro",
+      "title": "Integrar pagos",
+      "status": "pending",
+      "priority": "P3",
+      "description": "No hay cobros reales integrados.",
+      "acceptance": "Proveedor y flujo acordados, pruebas de confirmación, cancelación y conciliación.",
+      "evidence": {
+        "path": "docs/25-fases-y-tareas.md",
+        "label": "Consultar documentación →"
+      }
+    },
+    {
+      "id": "NEXO-25",
+      "phaseId": "configuration",
+      "title": "Módulo de configuración por negocio",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Formulario protegido, catálogo aislado por instalación, parámetros de atención y pruebas con otro negocio.",
+      "evidence": {
+        "path": "docs/30-configuracion-negocio.md",
+        "label": "Consultar documentación →"
+      }
+    },
+    {
+      "id": "NEXO-26",
+      "phaseId": "configuration",
+      "title": "SQLite y acceso por código de correo",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Persistencia de respuestas y accesos; editor protegido y código temporal probado con correo simulado.",
+      "evidence": {
+        "path": "docs/31-sqlite-acceso-correo.md",
+        "label": "Consultar documentación →"
+      }
+    },
+    {
+      "id": "NEXO-27",
+      "phaseId": "configuration",
+      "title": "Activar envío de correo real",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Gmail configurado localmente, servidor reiniciado, autenticación SMTP verificada y primer envío aceptado e ingreso administrativo por código registrados el 19/09/2026.",
+      "acceptance": "Configurar credencial, reiniciar, recibir un código en la bandeja del administrador y entrar.",
+      "evidence": {
+        "path": "docs/31-sqlite-acceso-correo.md",
+        "label": "Consultar documentación →"
+      }
+    },
+    {
+      "id": "NEXO-28",
+      "phaseId": "interfaz",
+      "title": "Historial privado de conversaciones y métricas",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Registro de preguntas y respuestas en SQLite, canales, resultados y consumo reportado. Consulta protegida y descarga por atención en texto.",
+      "evidence": {
+        "path": "docs/32-historial-conversaciones.md",
+        "label": "Consultar documentación →"
+      }
+    },
+    {
+      "id": "NEXO-29",
+      "phaseId": "configuration",
+      "title": "Conectar y seleccionar Google Calendar",
+      "status": "completed",
+      "priority": "P1",
+      "description": "OAuth, selección por ID, credenciales cifradas, pruebas de lectura y evento temporal con recuperación; validado con Google simulado.",
+      "evidence": {
+        "path": "docs/33-google-calendar.md",
+        "label": "Consultar guía →"
+      }
+    },
+    {
+      "id": "NEXO-30",
+      "phaseId": "agenda",
+      "title": "Autorizar y verificar Mogollon Method real",
+      "status": "completed",
+      "priority": "P1",
+      "description": "El 26/09/2026 se autorizó Google y se guardó Mogollon Method (America/New_York). Lectura y creación, lectura y eliminación de un evento temporal verificadas contra la cuenta real.",
+      "acceptance": "Autorizar la cuenta, seleccionar el ID correcto de Mogollon Method, comprobar lectura y creación/eliminación real sin afectar otras citas.",
+      "evidence": {
+        "path": "docs/33-google-calendar.md",
+        "label": "Ver pasos de activación →"
+      }
+    },
+    {
+      "id": "NEXO-31",
+      "phaseId": "agenda",
+      "title": "Reservas de clases prácticas de 60 minutos",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Reglas configurables, disponibilidad de Google, confirmación explícita, persistencia e idempotencia, estados inciertos y cancelación administrativa. Habilitado para lunes a viernes 08:00–18:00, Nueva York; capacidad de una cita.",
+      "evidence": {
+        "path": "docs/34-reservas-calendar.md",
+        "label": "Ver guía de reservas →"
+      }
+    },
+    {
+      "id": "NEXO-32",
+      "phaseId": "agenda",
+      "title": "Reserva con formulario dentro de la llamada por voz",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Botón Reservar cita, selector de día/hora, nombre y correo escritos con revisión y confirmación. Pausa del micrófono al completar y retorno a la llamada. Pruebas con Google y voz simulados.",
+      "evidence": {
+        "path": "docs/34-reservas-calendar.md",
+        "label": "Ver reserva durante la llamada →"
+      }
+    },
+    {
+      "id": "NEXO-33",
+      "phaseId": "agenda",
+      "title": "Agenda durante la llamada y confirmación por correo",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Menú y peticiones por voz para reservar, consultar por correo/código completo y ver disponibilidad. SMTP de confirmación con estados independientes, sin reenvíos automáticos inciertos. Verificación de la reserva existente en Google; entrega del correo real pendiente de autorización.",
+      "evidence": {
+        "path": "docs/34-reservas-calendar.md",
+        "label": "Ver manual de agenda y correo →"
+      }
+    },
+    {
+      "id": "NEXO-34",
+      "phaseId": "agenda",
+      "title": "Códigos de reserva breves y legibles",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Ocho letras mayúsculas agrupadas, consulta tolerante a minúsculas/guiones/espacios, unicidad en SQLite y migración de reservas existentes. UUID anteriores compatibles; sin modificar Google ni reenviar correos.",
+      "evidence": {
+        "path": "docs/34-reservas-calendar.md",
+        "label": "Ver códigos de reserva →"
+      }
+    },
+    {
+      "id": "NEXO-35",
+      "phaseId": "interfaz",
+      "title": "Teclado en pantalla opcional",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Opción en Experiencia para chat y reservas; letras, acentos, números y símbolos, validación original, pausa de escucha y limpieza al terminar. Pruebas de navegador; pendiente equipo táctil físico.",
+      "evidence": {
+        "path": "docs/35-teclado-pantalla.md",
+        "label": "Ver manual del teclado →"
+      }
+    },
+    {
+      "id": "NEXO-36",
+      "phaseId": "agenda",
+      "title": "Teclado manual y horarios con estados visibles",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Iconos para desplegar y ocultar teclado; agenda accesible desde voz y video. Disponibles verdes, ocupados rosas y tiempos no reservables grises. Conserva formulario al terminar el video; pruebas con proveedores simulados.",
+      "evidence": {
+        "path": "docs/34-reservas-calendar.md",
+        "label": "Ver guía →"
+      }
+    },
+    {
+      "id": "NEXO-37",
+      "phaseId": "agenda",
+      "title": "Menú de citas desde la tarjeta del servicio",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Inicio y llamada comparten opciones de reserva, consulta y disponibilidad. Desde la tarjeta se conserva el servicio y se consulta con sesión, correo y código sin iniciar video.",
+      "evidence": {
+        "path": "docs/34-reservas-calendar.md",
+        "label": "Ver guía →"
+      }
+    },
+    {
+      "id": "NEXO-38",
+      "phaseId": "agenda",
+      "title": "Agenda conversacional y memoria por atención",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Consulta real de horarios con servicio, fecha y franja; cambios de preferencia y selección ordinal revalidados; formulario escrito y confirmación explícita. Interpretación semántica dentro de los cupos existentes.",
+      "evidence": {
+        "path": "docs/36-agenda-conversacional.md",
+        "label": "Ver agenda conversacional →"
+      }
+    },
+    {
+      "id": "NEXO-39",
+      "phaseId": "conocimiento",
+      "title": "Orientación de servicios y revisión supervisada",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Orientación local con catálogo activo; panel privado de dudas y aclaraciones, borradores y publicación aprobada en SQLite. Sin aprendizaje automático.",
+      "evidence": {
+        "path": "docs/37-orientacion-revision.md",
+        "label": "Ver orientación y revisión →"
+      }
+    },
+    {
+      "id": "NEXO-40",
+      "phaseId": "interfaz",
+      "title": "Inicio responsive dentro de una sola pantalla",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Tarjeta única adaptable a vertical y horizontal; accesos a voz, video, servicios, citas y texto, paneles con desplazamiento interno y ayuda secundaria.",
+      "evidence": {
+        "path": "docs/38-kiosco-responsive.md",
+        "label": "Ver diseño del kiosco →"
+      }
+    },
+    {
+      "id": "NEXO-41",
+      "phaseId": "interfaz",
+      "title": "Atención en español, inglés y francés",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Selector de un toque, idioma por sesión, interfaz del visitante, voz local, conversación y confirmaciones de citas. Contenidos nuevos requieren traducciones revisadas.",
+      "evidence": {
+        "path": "docs/39-idiomas.md",
+        "label": "Ver idiomas →"
+      }
+    },
+    {
+      "id": "NEXO-42",
+      "phaseId": "voz",
+      "title": "Biblioteca de audios aprobados por idioma y voz",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Audio reutilizable con metadatos SQLite, límite y caducidad, identidad de modelo/voz y revisión comercial, exclusión de IA libre y agenda dinámica, estadísticas y vaciado protegido.",
+      "evidence": {
+        "path": "docs/40-biblioteca-audio.md",
+        "label": "Ver biblioteca de audio →"
+      }
+    },
+    {
+      "id": "NEXO-43",
+      "phaseId": "documentacion",
+      "title": "Código explicado y ruta de aprendizaje junior",
+      "status": "completed",
+      "priority": "Alta",
+      "description": "Contratos y cabeceras del código propio, referencia por archivo, recorridos, datos/API, ejercicios y comprobación documental integrados en el portal.",
+      "evidence": {
+        "path": "docs/41-mapa-codigo-fuente.md",
+        "label": "Mapa de código y ruta educativa"
+      }
+    },
+    {
+      "id": "NEXO-44",
+      "phaseId": "piloto",
+      "title": "Preparación local del piloto Linux",
+      "status": "completed",
+      "priority": "Alta",
+      "description": "Acceso privado, cuotas, voz Linux, pruebas y paquete sin credenciales. No implica despliegue público.",
+      "evidence": {
+        "path": "docs/46-seguridad-piloto.md",
+        "label": "Evidencia de seguridad"
+      }
+    },
+    {
+      "id": "NEXO-45",
+      "phaseId": "futuro",
+      "title": "Aplicación Android con Capacitor",
+      "status": "pending",
+      "priority": "P2",
+      "description": "Posterior al piloto web. Validar permisos nativos, micrófono y navegación; claves solo en el servidor.",
+      "evidence": {
+        "path": "docs/45-despliegue-piloto-linux.md",
+        "label": "Fases de despliegue"
+      },
+      "acceptance": "APK validada en dispositivo Android con permisos, voz y navegación segura; APIs y claves permanecen en el servidor."
+    },
+    {
+      "id": "NEXO-46",
+      "phaseId": "agenda",
+      "title": "Agenda administrativa y cancelación con motivo",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Listado paginado, día/semana, búsqueda, detalle, disponibilidad, historial, actor administrativo y cancelación condicional de Google. Sin borrado definitivo ni pagos.",
+      "evidence": {
+        "path": "docs/48-agenda-administrativa.md",
+        "label": "Manual de agenda y validación"
+      }
+    },
+    {
+      "id": "NEXO-47",
+      "title": "Estadísticas, avisos administrativos y respaldos descargables",
+      "status": "completed",
+      "priority": "P2",
+      "phaseId": "agenda",
+      "description": "Panel, CSV filtrado, avisos persistentes por destinatario y snapshot SQLite cifrado con recuperación verificada. Entrega real al buzón por validar con una nueva cita autorizada.",
+      "evidence": {
+        "path": "docs/49-reportes-avisos-respaldos.md",
+        "label": "Reportes, avisos y recuperación"
+      }
+    },
+    {
+      "id": "NEXO-48",
+      "phaseId": "agenda",
+      "title": "Elección de profesor y cupos por calendario",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Agenda única compatible, hasta diez profesores, elección explícita, disponibilidad agregada, protección por calendario y acceso único de Administración. Activación real pendiente de configurar profesores.",
+      "evidence": {
+        "path": "docs/50-calendarios-por-profesor.md",
+        "label": "Manual de profesores, arquitectura y validación"
+      }
+    },
+    {
+      "id": "NEXO-49",
+      "phaseId": "agenda",
+      "title": "Nombres desde Calendar y filtro administrativo por profesor",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Sugerencia editable que respeta correcciones; filtro por profesor, disponibilidad individual, paginación e historial de profesores retirados. Tablero actualizado con pendientes reales.",
+      "evidence": {
+        "path": "docs/51-operacion-profesores-y-pendientes.md",
+        "label": "Operación, desarrollo y pruebas"
+      }
+    },
+    {
+      "id": "NEXO-50",
+      "phaseId": "agenda",
+      "title": "Deshabilitar profesor y reasignar citas con seguimiento",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Vista previa, elección de citas futuras, disponibilidad de destino, movimiento sin recreación, diario durable y reconciliación de incertidumbre. Calendarios de Héctor y Darío verificados; eventos técnicos limpiados.",
+      "evidence": {
+        "path": "docs/52-deshabilitar-y-reasignar-profesores.md",
+        "label": "Manual de reasignación, API y pruebas"
+      }
+    },
+    {
+      "id": "NEXO-51",
+      "phaseId": "interfaz",
+      "title": "Acceso privado y clave del piloto configurables",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Opciones de entorno para abrir/cerrar el kiosco y rotar su clave, conservando HTTPS, administración privada y cuotas. Compatibilidad con el hash existente.",
+      "evidence": {
+        "path": "docs/53-configurar-acceso-piloto.md",
+        "label": "Configuración, claves y protecciones del VPS"
+      }
+    },
+    {
+      "id": "NEXO-52",
+      "phaseId": "agenda",
+      "title": "Catálogo comercial aprobado, regreso móvil y agenda por hora exacta",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Nueve servicios y paquetes del afiche, precios parametrizados, pausa y retorno del micrófono, consulta real por día/hora con formulario y profesor. Validación física del teléfono sigue pendiente del cliente.",
+      "evidence": {
+        "path": "docs/54-catalogo-voz-agenda.md",
+        "label": "Contenido comercial, uso y validación"
+      }
+    }
+  ]
+}

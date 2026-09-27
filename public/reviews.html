@@ -1,0 +1,22 @@
+<!doctype html>
+<!--
+NEXO · GUÍA DEL MÓDULO: public/reviews.html
+Revisión humana de consultas: estructura HTML.
+Entrada: CSS, módulo JavaScript asociado y eventos del visitante.
+Salida: Árbol DOM con regiones, controles, etiquetas y diálogos.
+Estado importante: Los id son contratos con JavaScript; hidden/open/aria-* expresan visibilidad y accesibilidad.
+Efectos y límites: El HTML no valida permisos del servidor. Mantener labels, foco y type de botones al editar formularios.
+Ruta de aprendizaje: docs/23-manual-desarrollador-junior.md y docs/41-mapa-codigo-fuente.md.
+-->
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nexo · Mejorar respuestas</title><link rel="icon" href="/assets/mark.svg"><link rel="stylesheet" href="/base.css"><link rel="stylesheet" href="/settings.css"><link rel="stylesheet" href="/admin-access.css"><link rel="stylesheet" href="/reviews.css"><script type="module" src="/reviews.js"></script></head>
+<body><header class="settings-header"><a class="brand" href="/">N <strong>nexo.</strong></a><nav aria-label="Aplicación"><a href="/admin">Administración</a><a href="/knowledge">Respuestas frecuentes</a><a href="/conversations">Conversaciones</a><a href="/docs">Documentación</a><button id="logout" hidden>Cerrar sesión</button></nav></header>
+<main><div class="intro"><p class="eyebrow">APRENDER CON SU SUPERVISIÓN</p><h1>Mejorar respuestas.</h1><p>Revise las dudas de los visitantes y publique únicamente información confirmada.</p></div>
+<form id="login" class="login"><label>Clave de administración<input id="token" type="password" required minlength="24" autocomplete="off"></label><button class="primary">Entrar</button></form>
+<p id="error" class="notice" role="alert" hidden></p><p id="saved" role="status" hidden></p>
+<section id="dashboard" hidden>
+<section class="review-summary"><h2 id="pending"></h2><p>Son señales para revisar, no errores confirmados. Una aclaración puede ser necesaria. Los borradores no se usan en las conversaciones.</p><h3>Temas más consultados</h3><p id="topics"></p><p>Conteos del historial conservado, agrupados por servicio identificado; no son visitantes únicos.</p></section>
+<div class="review-actions"><label>Mostrar<select id="status"><option value="pending">Pendientes y borradores</option><option value="closed">Publicadas y descartadas</option><option value="all">Todas</option></select></label><button id="refresh">Actualizar</button><button id="previous">Más recientes</button><button id="next">Más antiguas</button></div>
+<div class="review-layout"><section><h2>Consultas para revisar</h2><div id="items"></div></section>
+<section id="editor" hidden><h2>Revisar consulta</h2><p id="context"></p><h3>Visitante</h3><p id="visitor" class="original"></p><h3>Respuesta de Nexo</h3><p id="assistant" class="original"></p><a href="/conversations">Ver historial de conversaciones</a><p id="state"></p>
+<form id="review-form"><label>Pregunta general, sin datos personales<input id="question" maxlength="250" required placeholder="Por ejemplo: ¿Dónde puedo estacionar?"></label><label>Respuesta aprobada por el negocio<textarea id="answer" maxlength="1500" rows="6" required></textarea></label><p>Escriba solo información confirmada. No copie nombres, correos ni datos de citas. Puede usar parámetros como {{centro.horario}}. Para corregir una pregunta ya publicada, abra <a href="/knowledge">Respuestas frecuentes</a>.</p><label class="approval"><input id="approved" type="checkbox">Revisé los datos, retiré información personal y autorizo publicar esta respuesta.</label><p id="publication-note"></p><div class="review-actions"><button id="draft" type="submit">Guardar borrador</button><button id="publish" type="button" class="primary">Aprobar y publicar</button><button id="dismiss" type="button">Descartar revisión</button></div></form></section></div>
+</section></main></body></html>

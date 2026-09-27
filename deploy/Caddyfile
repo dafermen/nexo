@@ -1,0 +1,32 @@
+# Sustituir piloto.example.com por el dominio definitivo antes de validar.
+# No activar access logs: pueden incluir códigos OAuth en la URL de retorno.
+{
+    admin localhost:2019
+    servers {
+        timeouts {
+            read_header 10s
+            read_body 30s
+            idle 60s
+        }
+    }
+}
+piloto.example.com {
+    encode zstd gzip
+    header {
+        -Server
+        Strict-Transport-Security "max-age=31536000"
+        X-Robots-Tag "noindex, nofollow"
+    }
+    request_body {
+        max_size 9MB
+    }
+    reverse_proxy 127.0.0.1:3000 {
+        # Sobrescribir: nunca aceptar la IP/protocolo afirmados por el navegador.
+        header_up X-Nexo-Proto https
+        header_up X-Nexo-Client-IP {remote_host}
+        transport http {
+            dial_timeout 5s
+            response_header_timeout 45s
+        }
+    }
+}

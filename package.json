@@ -1,0 +1,47 @@
+{
+  "name": "kiosco-nexo",
+  "version": "0.33.0",
+  "private": true,
+  "type": "module",
+  "description": "Kiosco conversacional modular para centros de atenciÃ³n",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server/index.js",
+    "dev": "node --watch --env-file-if-exists=.env server/index.js",
+    "test": "node --test tests/*.test.js",
+    "test:browser": "node tests/browser.e2e.js",
+    "check": "node scripts/check.js",
+    "purge": "node --env-file-if-exists=.env scripts/purge.js",
+    "test:avatar": "node tests/live-avatar.e2e.js",
+    "test:admin": "node tests/admin.e2e.js",
+    "test:voice": "node tests/voice-call.e2e.js",
+    "test:filter": "node tests/filter.e2e.js",
+    "test:filter:live": "node tests/filter-live.e2e.js",
+    "test:auto": "node tests/auto-call.e2e.js",
+    "faq:check": "node scripts/validate-faq.js",
+    "test:intent": "node tests/intent.e2e.js",
+    "test:intent:live": "node tests/intent-live.e2e.js",
+    "test:docs": "node tests/docs.e2e.js",
+    "test:settings": "node tests/settings.e2e.js",
+    "test:access": "node tests/admin-access.e2e.js",
+    "test:history": "node tests/conversations.e2e.js",
+    "test:calendar": "node tests/calendar.e2e.js",
+    "test:booking": "node tests/booking.e2e.js",
+    "test:kiosk": "node tests/kiosk-home.e2e.js",
+    "test:languages": "node tests/languages.e2e.js",
+    "test:audio-library": "node tests/audio-library.e2e.js",
+    "docs:check": "node scripts/check-docs.js",
+    "test:agenda": "node tests/admin-agenda.e2e.js",
+    "test:reports": "node tests/admin-reports.e2e.js",
+    "test:instructors": "node tests/instructors.e2e.js",
+    "test:transfers": "node tests/booking-transfers.e2e.js",
+    "test:agenda:voice": "node tests/agenda-voice.e2e.js",
+    "test:faq-editor": "node tests/faq-editor.e2e.js"
+  },
+  "dependencies": {
+    "nodemailer": "10.0.10"
+  },
+  "releaseDate": "2026-09-27"
+}

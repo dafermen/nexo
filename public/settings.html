@@ -1,0 +1,18 @@
+<!doctype html>
+<!--
+NEXO · GUÍA DEL MÓDULO: public/settings.html
+Parámetros e integraciones: estructura HTML.
+Entrada: CSS, módulo JavaScript asociado y eventos del visitante.
+Salida: Árbol DOM con regiones, controles, etiquetas y diálogos.
+Estado importante: Los id son contratos con JavaScript; hidden/open/aria-* expresan visibilidad y accesibilidad.
+Efectos y límites: El HTML no valida permisos del servidor. Mantener labels, foco y type de botones al editar formularios.
+Ruta de aprendizaje: docs/23-manual-desarrollador-junior.md y docs/41-mapa-codigo-fuente.md.
+-->
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nexo · Configuración</title><link rel="icon" href="/assets/mark.svg"><link rel="stylesheet" href="/base.css"><link rel="stylesheet" href="/settings.css"><script type="module" src="/settings.js"></script><link rel="stylesheet" href="/admin-access.css"></head>
+<body><header class="settings-header"><a class="brand" href="/">N <strong>nexo.</strong></a><nav aria-label="Aplicación"><a href="/admin">← Administración</a><a href="/docs" target="_blank" rel="noopener noreferrer">Documentación ↗</a><button id="logout" hidden>Cerrar sesión</button></nav></header>
+<main><div class="intro"><p class="eyebrow">SU NEGOCIO, SU FORMA DE ATENDER</p><h1>Configuración de Nexo.</h1><p>Identidad, conversación y canales de atención, desde un solo lugar.</p></div>
+<form id="login" class="login"><label>Clave de administración<input id="token" type="password" required minlength="24" autocomplete="off"></label><button class="primary">Entrar →</button><p>Use la misma clave de Administración. Puede copiarla con ABRIR-ADMIN.cmd en la PC del negocio.</p></form>
+<p id="error" class="notice" role="alert" hidden></p><p id="saved" class="saved" role="status" hidden></p>
+<section id="dashboard" hidden><div class="settings-layout"><aside><nav id="sections" aria-label="Secciones de configuración"></nav><div class="side-note"><strong>Una instalación, un negocio.</strong><p>Configure otra copia de Nexo para un cliente distinto. Este módulo no mezcla bases de datos de varios clientes.</p></div><a href="/admin" class="catalog-link">Administrar servicios ↗</a></aside>
+<form id="settings-form"><div id="fields"></div><div class="save-bar"><p id="save-hint">Los cambios se aplican al guardar y cierran las atenciones abiertas.</p><div><button id="reload" type="button" class="secondary">Descartar / actualizar</button><button id="save" class="primary">Guardar configuración</button></div></div></form>
+<aside class="preview"><p class="eyebrow">VISTA PREVIA DEL SALUDO</p><div id="preview-card"><span>ASISTENTE VIRTUAL</span><h2 id="preview-assistant"></h2><p id="preview-business"></p><div class="preview-orb">✦</div><p id="preview-greeting"></p><small id="preview-channels"></small></div><p class="preview-note">Vista previa de textos y canales. El catálogo se administra por separado.</p><p id="revision" class="preview-note"></p></aside></div></section></main></body></html>

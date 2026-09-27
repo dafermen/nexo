@@ -1,0 +1,84 @@
+<!doctype html>
+<!--
+NEXO · GUÍA DEL MÓDULO: public/admin.html
+Administración de negocio y servicios: estructura HTML.
+Entrada: CSS, módulo JavaScript asociado y eventos del visitante.
+Salida: Árbol DOM con regiones, controles, etiquetas y diálogos.
+Estado importante: Los id son contratos con JavaScript; hidden/open/aria-* expresan visibilidad y accesibilidad.
+Efectos y límites: El HTML no valida permisos del servidor. Mantener labels, foco y type de botones al editar formularios.
+Ruta de aprendizaje: docs/23-manual-desarrollador-junior.md y docs/41-mapa-codigo-fuente.md.
+-->
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nexo · Administración</title><link rel="icon" href="/assets/mark.svg"><link rel="stylesheet" href="/base.css"><link rel="stylesheet" href="/admin.css"><script type="module" src="/admin.js"></script><link rel="stylesheet" href="/admin-access.css"></head>
+<body><main class="admin">
+<header><a href="/">← Volver al kiosco</a><a href="#admin-reports">Estadísticas y reportes</a><a href="#admin-agenda">Agenda y citas</a><a href="/conversations">Conversaciones</a><a href="/reviews">Mejorar respuestas</a><a href="/knowledge">Respuestas frecuentes</a><a href="/settings" id="settings-link">Configuración ⚙</a><a id="documentation-link" href="/docs" target="_blank" rel="noopener noreferrer">Documentación ↗</a><button id="logout" class="secondary" hidden>Cerrar sesión</button></header>
+<span class="eyebrow">NEXO · ADMINISTRACIÓN</span><h1>Su negocio, al día.</h1><p class="muted">Los datos guardados se utilizan en el kiosco y en las próximas respuestas de la asesora.</p>
+<form id="login"><label>Clave de administración<input id="token" type="password" required autocomplete="off" minlength="24"></label><button class="primary">Entrar →</button><p class="muted">En la PC del centro, abra <strong>ABRIR-ADMIN.cmd</strong> y pegue aquí la clave copiada.</p></form>
+<p id="error" class="notice" role="alert" hidden></p><p id="saved" class="saved" role="status" hidden></p>
+<section id="dashboard" hidden>
+<section id="admin-reports" aria-labelledby="reports-heading">
+<span class="eyebrow">CONOZCA SU ATENCIÓN</span><h2 id="reports-heading">Estadísticas y reportes</h2>
+<p id="report-period" class="muted"></p><div id="report-cards" class="report-cards"></div>
+<p id="report-channels" class="muted"></p><p id="report-topics" class="muted"></p><p id="report-mail" class="muted"></p>
+<p class="muted">Las preguntas por revisar son señales de aclaración o información pendiente, no errores confirmados. Revise su contexto antes de publicar respuestas. Los tokens registrados no incluyen todo el consumo de voz o video; no representan un importe facturado.</p>
+<form id="report-filters" class="agenda-filters">
+<label>Reporte<select name="type"><option value="appointments">Citas</option><option value="questions">Preguntas por revisar</option><option value="notifications">Avisos a administradores</option></select></label>
+<label>Desde<input type="date" name="from"></label><label>Hasta<input type="date" name="to"></label>
+<label>Buscar<input type="search" name="q" maxlength="100" placeholder="Nombre, correo, código o pregunta"></label>
+<label>Estado<select name="status"></select></label><label>Servicio<select name="serviceId"><option value="">Todos los servicios</option></select></label>
+<label>Canal<select name="channel"><option value="">Todos los canales</option><option value="text">Texto</option><option value="voice">Voz</option><option value="video">Video</option></select></label>
+<label>Ordenar por<select name="sort"></select></label><label>Orden<select name="direction"><option value="desc">Descendente</option><option value="asc">Ascendente</option></select></label>
+<label>Filas por página<select name="limit"><option>25</option><option>50</option><option>100</option></select></label>
+<button type="submit" class="primary">Consultar reporte</button><button id="report-reset" type="button" class="secondary">Restablecer reporte</button>
+</form>
+<div class="agenda-toolbar"><button id="report-export" type="button" class="secondary">Descargar CSV filtrado</button><a href="/reviews">Mejorar respuestas →</a></div>
+<p id="report-notice" role="status"></p><div class="table-scroll" tabindex="0" role="region" aria-label="Resultados del reporte"><table><caption class="muted">Resultados · Fechas mostradas en la zona horaria del negocio; CSV en UTC</caption><thead id="report-head"></thead><tbody id="report-body"></tbody></table></div>
+<div class="agenda-toolbar"><button id="report-prev" type="button" class="secondary" disabled>Anterior</button><button id="report-next" type="button" class="secondary" disabled>Siguiente</button></div>
+<details id="database-backups"><summary>Respaldos y recuperación</summary><p class="muted">El CSV sirve para analizar datos. Para recuperarlos, descargue una copia completa de SQLite cifrada con una contraseña que usted elija. Contiene datos personales y configuración; guárdela en un lugar privado.</p>
+<p class="muted">Esta copia no incluye claves externas, archivo .env, código ni audios. Complementa el respaldo completo diario del servidor. La restauración la realiza un técnico siguiendo el manual, con la aplicación detenida.</p>
+<form id="backup-form" class="agenda-filters"><label>Contraseña del respaldo<input id="backup-password" type="password" autocomplete="new-password" minlength="12" maxlength="200" required></label><label>Repita la contraseña<input id="backup-confirm" type="password" autocomplete="new-password" minlength="12" maxlength="200" required></label><button id="backup-download" class="primary" type="submit">Descargar respaldo cifrado</button></form>
+<p class="muted">Mínimo 12 caracteres. Guarde la contraseña por separado: sin ella no podrá recuperar el archivo.</p><p id="backup-notice" role="status"></p></details>
+</section>
+
+<div class="section-heading"><h2 id="school-name">Escuela</h2><button id="refresh" class="secondary">Actualizar datos</button></div>
+<p id="last-saved" class="muted"></p><p id="knowledge-status" class="muted" role="status"></p><p id="ai-protection" class="muted" role="status"></p><div class="calendar-note"><strong>Google Calendar · Agenda del negocio</strong><p>Configure la conexión y los servicios reservables desde Configuración → Conexiones. El kiosco comprueba la disponibilidad al reservar; los horarios de atención por sí solos no garantizan cupos.</p></div>
+<details id="audio-library"><summary>Biblioteca de audio <span>Ver uso ↗</span></summary><p class="muted">Reutiliza audios de respuestas aprobadas por idioma y voz. La disponibilidad de citas siempre se consulta de nuevo. La voz actual se genera localmente; estas cifras no representan ahorro en dólares ni en sesiones de video.</p><p id="audio-library-status" role="status">Abra esta sección para consultar el uso.</p><button id="audio-library-refresh" type="button" class="secondary">Actualizar uso</button> <button id="audio-library-clear" type="button" class="secondary" disabled>Vaciar audios guardados</button><p class="muted">Al vaciar, se generan de nuevo cuando se necesiten. Las respuestas frecuentes, las citas y el historial permanecen guardados.</p></details>
+<details id="school-details"><summary>Negocio y horarios de atención <span>Editar ↗</span></summary><div id="school-settings"></div></details>
+<div class="section-heading"><h2>Servicios</h2><button id="new-service" class="primary" hidden>+ Añadir servicio</button></div>
+<p class="muted">Un precio vacío queda por confirmar. Use 0 solo si el servicio es gratuito. Los servicios pausados dejan de ofrecerse al visitante.</p>
+<div id="service-admin" class="admin-services"></div>
+<section id="admin-agenda" class="history" aria-labelledby="agenda-heading">
+<h2 id="agenda-heading">Agenda y citas</h2>
+<p id="agenda-connection" class="muted"></p>
+<p class="muted">Citas creadas en Nexo. Los eventos externos de Google bloquean disponibilidad, pero sus datos privados no aparecen aquí.</p>
+<button id="agenda-transfer" type="button" class="secondary">Deshabilitar profesor / reasignar citas</button>
+<form id="agenda-filters" class="agenda-filters">
+<label>Vista<select name="view"><option value="list">Listado</option><option value="day">Día</option><option value="week">Semana desde la fecha elegida</option></select></label>
+<label>Buscar nombre, correo o código<input name="q" maxlength="100" type="search"></label>
+<label>Estado<select name="status"><option value="all">Todos</option><option value="reserved">Reservados</option><option value="pending">En verificación</option><option value="cancelled">Cancelados</option></select></label>
+<label>Servicio<select name="serviceId"><option value="">Todos los servicios</option></select></label>
+<label>Profesor<select name="instructorId"><option value="">Todos los profesores</option><option value="unassigned">Sin profesor asignado · agenda única</option></select></label>
+<label>Desde<input name="from" type="date"></label><label>Hasta<input name="to" type="date"></label>
+<button type="submit" class="primary">Aplicar filtros</button><button type="button" id="agenda-reset" class="secondary">Limpiar filtros</button>
+</form>
+<div class="agenda-toolbar"><button id="agenda-back" type="button" class="secondary" aria-label="Período anterior">← Anterior</button><button id="agenda-today" type="button" class="secondary">Hoy</button><button id="agenda-forward" type="button" class="secondary" aria-label="Período siguiente">Siguiente →</button><button id="agenda-check-availability" type="button" class="secondary">Consultar horarios del servicio</button></div>
+<p id="agenda-notice" role="status"></p>
+<div id="agenda-cards" class="agenda-days" hidden></div>
+<div class="table-scroll"><table><thead><tr><th>Código</th><th>Servicio</th><th>Persona</th><th>Horario</th><th>Estado</th><th>Última comprobación</th><th>Acción</th></tr></thead><tbody id="appointments"></tbody></table></div>
+<p id="empty" hidden>No hay turnos registrados.</p>
+<div class="agenda-toolbar"><button id="agenda-prev" type="button" class="secondary" disabled>Página anterior</button><button id="agenda-next" type="button" class="secondary" disabled>Página siguiente</button></div>
+<div id="agenda-availability" aria-live="polite"></div>
+</section>
+</section></main>
+<dialog id="transfer-dialog" aria-labelledby="transfer-heading"><div class="section-heading"><h2 id="transfer-heading">Reasignar citas</h2><button type="button" id="transfer-close" class="secondary">Cerrar</button></div><div id="transfer-content"></div></dialog>
+<dialog id="appointment-dialog" aria-labelledby="appointment-heading"><div class="section-heading"><h2 id="appointment-heading">Detalle de la cita</h2><button type="button" id="close-appointment" class="secondary">Cerrar</button></div><div id="appointment-detail"></div></dialog>
+<dialog id="service-dialog" aria-labelledby="editor-title"><form id="service-form">
+<div class="section-heading"><h2 id="editor-title">Editar servicio</h2><button id="close-editor" type="button" class="secondary" aria-label="Cerrar editor">Cerrar</button></div>
+<label>Nombre<input name="name" required maxlength="100"></label>
+<label>Descripción<textarea name="description" required maxlength="1000" rows="3"></textarea></label>
+<div class="fields"><label><span id="price-currency-label">Precio (USD)</span><input name="price" type="number" min="0" max="1000000" step="0.01" placeholder="Por confirmar"><small>Vacío: pendiente · 0: gratuito</small></label><label>Duración (minutos)<input name="duration" type="number" min="1" max="1440" step="1" placeholder="Por confirmar"></label></div>
+<label>Modalidad<select name="modality"><option value="">Por confirmar</option><option>Presencial</option><option>Virtual</option><option>Presencial y virtual</option></select></label>
+<label>Requisitos<textarea name="requirements" maxlength="1500" rows="3" placeholder="Déjelo vacío si todavía debe confirmarlos."></textarea></label>
+<label class="check"><input name="active" type="checkbox">Mostrar este servicio en el kiosco</label>
+<p class="muted">Al guardar, se publica la información para los visitantes y la asesora.</p>
+<p id="editor-error" class="notice" role="alert" hidden></p><button id="save-service" class="primary full-width">Guardar servicio</button>
+</form></dialog></body></html>

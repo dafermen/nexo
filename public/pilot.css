@@ -1,0 +1,6 @@
+/* NEXO · GUÍA DEL MÓDULO: public/pilot.css
+Entrada: pantalla y estados del formulario privado. Salida: presentación responsive.
+Los estilos no otorgan permisos; la validación sucede en el servidor. */
+:root{font-family:system-ui,sans-serif;color:#263d33;background:#f5f7ef}*{box-sizing:border-box}body{margin:0;min-height:100dvh;display:grid;place-items:center;padding:24px}main{max-width:480px;padding:36px;background:white;border:1px solid #dce5d4;border-radius:24px;box-shadow:0 10px 40px #20362912}.brand{font-size:32px;font-weight:800;margin-top:0}h1{font-size:30px}p,small{line-height:1.6}label{display:block;font-weight:600}input,button{width:100%;min-height:50px;border-radius:12px;margin-top:10px;font:inherit;padding:12px;border:1px solid #79955e}button{background:#c8ee83;color:#203326;font-weight:700;cursor:pointer}button:disabled{opacity:.6}input:focus-visible,button:focus-visible{outline:3px solid #608837;outline-offset:3px}#notice{color:#9b3025}small{display:block;margin-top:20px;color:#596653}@media(max-width:430px){main{padding:24px}body{padding:16px}}
+
+#logout{background:transparent;font-weight:500}button[hidden]{display:none}

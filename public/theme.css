@@ -1,0 +1,13 @@
+/**
+ * NEXO · GUÍA DEL MÓDULO: public/theme.css
+ * Variables de tema reutilizadas en páginas.
+ * Entrada: Selectores del HTML, atributos/clases de JavaScript y tamaño de pantalla.
+ * Salida: Reglas visuales aplicadas por la cascada CSS; no devuelve datos JavaScript.
+ * Estado importante: Variables --* son parámetros visuales; @media adapta presentación;
+ * orden/especificidad deciden qué regla prevalece.
+ * Efectos y límites: Cambiar estilos no cambia permisos ni estado de reserva. Probar foco visible,
+ * contraste, desbordamiento y orientación.
+ * Ruta de aprendizaje: docs/23-manual-desarrollador-junior.md y docs/41-mapa-codigo-fuente.md.
+ */
+
+body[data-accent="blue"]{--lime:#b8dbff}body[data-accent="violet"]{--lime:#ddc7ff}body[data-accent="blue"] .agent-panel{background:#213d52}body[data-accent="violet"] .agent-panel{background:#40334f}

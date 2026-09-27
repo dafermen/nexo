@@ -1,0 +1,6 @@
+<!doctype html>
+<!-- NEXO · GUÍA DEL MÓDULO: public/pilot.html
+Entrada privada del piloto. El servidor valida la clave y emite cookie HttpOnly.
+No incluye credenciales ni desbloquea por sí misma las rutas de administración. -->
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Nexo · Acceso al piloto</title><link rel="stylesheet" href="/pilot.css"><script type="module" src="/pilot.js"></script></head>
+<body><main><p class="brand">nexo.</p><p>PILOTO PRIVADO</p><h1>Bienvenido a Nexo</h1><p>Ingrese la clave compartida con los participantes para probar la atención virtual.</p><form id="pilot-form"><label for="password">Clave del piloto</label><input id="password" name="password" type="password" minlength="16" maxlength="256" autocomplete="current-password" required><button>Entrar al piloto</button><p id="notice" role="status" aria-live="polite"></p></form><button id="logout" type="button" hidden>Cerrar acceso en este dispositivo</button><small>Para estas pruebas utilice datos ficticios. El acceso de administración se verifica por separado.</small></main></body></html>

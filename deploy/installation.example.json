@@ -1,0 +1,15 @@
+{
+  "administratorEmail": "administrador@example.com",
+  "administratorLogin": "email",
+  "mail": {
+    "host": "smtp.gmail.com",
+    "port": 465,
+    "secure": true,
+    "from": "administrador@example.com",
+    "user": "administrador@example.com"
+  },
+  "administratorEmails": [
+    "administrador@example.com",
+    "segundo@example.com"
+  ]
+}

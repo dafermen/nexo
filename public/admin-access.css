@@ -1,0 +1,13 @@
+/**
+ * NEXO · GUÍA DEL MÓDULO: public/admin-access.css
+ * Formulario de acceso y avisos de autenticación.
+ * Entrada: Selectores del HTML, atributos/clases de JavaScript y tamaño de pantalla.
+ * Salida: Reglas visuales aplicadas por la cascada CSS; no devuelve datos JavaScript.
+ * Estado importante: Variables --* son parámetros visuales; @media adapta presentación;
+ * orden/especificidad deciden qué regla prevalece.
+ * Efectos y límites: Cambiar estilos no cambia permisos ni estado de reserva. Probar foco visible,
+ * contraste, desbordamiento y orientación.
+ * Ruta de aprendizaje: docs/23-manual-desarrollador-junior.md y docs/41-mapa-codigo-fuente.md.
+ */
+
+.email-access{max-width:620px;border:1px solid #d7e2cc;border-radius:18px;background:#fff;padding:26px;margin:25px 0}.email-access h2{font-size:25px;margin:0 0 12px;font-weight:500}.email-access p{font-size:13px;line-height:1.7;color:#68795d}.email-access form{display:flex;gap:14px;align-items:end;flex-wrap:wrap;margin-top:22px}.email-access label{flex:1;min-width:190px;display:grid;gap:9px;font-size:13px}.email-access input{width:100%;min-height:48px;padding:12px;border:1px solid #bfceae;border-radius:9px;font:inherit;background:#fcfdf9}.email-access #admin-code{font-family:Consolas,monospace;font-size:22px;letter-spacing:5px}.email-access .primary{min-height:48px}#admin-code-status{padding-top:10px}@media(max-width:600px){.email-access{padding:20px}.email-access form{display:grid}.email-access label{min-width:0}}
