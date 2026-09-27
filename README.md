@@ -8,7 +8,7 @@ Editor visual de preguntas frecuentes con categorías, búsqueda, vista previa y
 
 ![Flujo de edición y publicación de respuestas](docs/assets/flujo-faq.png)
 
-GitHub de destino: https://github.com/metodomogollondev/nexo. Flujo automático preparado; publicación pendiente de permisos de escritura. Las secciones por versión siguientes conservan antecedentes del proyecto.
+Repositorio: https://github.com/dafermen/nexo. GitHub Actions comprueba el código, la documentación y las pruebas; consulte la pestaña Actions para el resultado de cada cambio. Las secciones por versión siguientes conservan antecedentes del proyecto.
 
 ## Historial de versiones anteriores
 

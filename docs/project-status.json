@@ -292,7 +292,7 @@
       "title": "Crear repositorio y revisión en GitHub",
       "status": "partial",
       "priority": "P2",
-      "description": "Repositorio local preparado y remoto metodomogollondev/nexo identificado. Publicación pendiente de permiso de escritura para dafermen; el remoto es público.",
+      "description": "Repositorio público dafermen/nexo seleccionado por el usuario, con historial local auditado y permiso de administración. Verificar publicación y ejecución en Actions.",
       "acceptance": "Código revisado sin secretos publicado en el repositorio solicitado; permisos y revisión documentados.",
       "evidence": {
         "path": "docs/55-editor-visual-github.md",
@@ -305,7 +305,7 @@
       "title": "Automatizar validaciones",
       "status": "partial",
       "priority": "P2",
-      "description": "GitHub Actions preparado: Node 24, sintaxis, documentación, pruebas Windows/Linux y navegador con servicios simulados. Primera ejecución remota pendiente de publicación.",
+      "description": "Flujo de GitHub Actions: Node 24, sintaxis, documentación, pruebas Windows/Linux y navegador con servicios simulados. Resultado de ejecución pendiente de verificar en el repositorio dafermen/nexo.",
       "acceptance": "Las revisiones ejecutan pruebas sin claves ni llamadas pagadas.",
       "evidence": {
         "path": "docs/55-editor-visual-github.md",

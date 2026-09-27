@@ -70,7 +70,7 @@ El backend rechaza bloques inyectados mediante saltos de línea, parámetros des
 
 ## GitHub y pruebas automáticas
 
-Repositorio solicitado: [metodomogollondev/nexo](https://github.com/metodomogollondev/nexo). Es público. La cuenta conectada tiene lectura; la publicación requiere que el propietario conceda escritura a `dafermen`. Esta guía distingue lo preparado de una ejecución remota efectivamente completada.
+Repositorio vigente: [dafermen/nexo](https://github.com/dafermen/nexo), público y propiedad del usuario. El repositorio del cliente no se utiliza. El historial conserva Nexo 0.33.0 y los cambios siguientes; los resultados de cada ejecución están en la pestaña Actions.
 
 ![Desarrollo, revisión, pruebas y publicación controlada](assets/flujo-github.png)
 

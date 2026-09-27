@@ -66,4 +66,4 @@ Piloto activado en la base vigente para el servicio Clase práctica de 60 minuto
 
 ## Continuidad v0.33.0
 
-Editor visual probado y manual ilustrado incorporado. GitHub de destino: metodomogollondev/nexo; público. La cuenta dafermen requiere permiso de escritura para la primera publicación. No subir bases reales, instalación, logs ni archivos .env. Estado y evidencia actualizados en la guía 55.
+Editor visual probado y manual ilustrado incorporado. Repositorio vigente: https://github.com/dafermen/nexo (público), por elección del usuario. No subir bases reales, instalación, logs ni archivos .env. El flujo de GitHub Actions comprueba cada propuesta y subida a main. Revisar el resultado de Actions antes de desplegar.

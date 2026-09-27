@@ -2,7 +2,7 @@
 
 ## Estado verificado
 
-Destino: **https://github.com/metodomogollondev/nexo** (público). Se prepara el historial local y el flujo de GitHub Actions. La cuenta conectada `dafermen` tiene permiso de lectura; el primer envío y la primera ejecución en Actions quedan pendientes hasta obtener escritura. No confundir preparación local con publicación completada.
+Repositorio vigente: **https://github.com/dafermen/nexo** (público), propiedad del usuario. El historial parte de Nexo 0.33.0. GitHub Actions ejecuta las comprobaciones al subir a main y al abrir propuestas de cambio. Consulte Actions para conocer el resultado de cada revisión. El repositorio del cliente no se utiliza.
 
 ## Conceptos básicos
 
