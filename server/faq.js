@@ -13,7 +13,7 @@
 import {stat,readFile} from 'node:fs/promises';
 import {normalize} from './school-filter.js';
 
-const fields=new Set(['centro.nombre','centro.horario','centro.saludo','centro.turnos','centro.servicios','servicio.nombre','servicio.descripcion','servicio.precio','servicio.duracion','servicio.modalidad','servicio.requisitos']);
+const fields=new Set(['centro.nombre','centro.horario','centro.saludo','centro.turnos','centro.servicios','servicio.nombre','servicio.descripcion','servicio.precio','servicio.duracion','servicio.modalidad','servicio.requisitos','servicio.horarios','servicio.incluye','servicio.condiciones']);
 const cleanQuery=text=>normalize(text).replace(/^(por favor |me puede decir |puede decirme |quisiera saber |quiero saber )/,'').replace(/ (por favor|gracias)$/,'').trim();
 const noise=new Set('a al con cual cuales cuando cuanto de del el en es esta este la las lo los me mi para por que se su un una y saber puede decirme tienen tiene'.split(' '));
 const tokens=q=>[...new Set(cleanQuery(q).split(' ').filter(w=>!noise.has(w)).map(w=>w==='5'?'cinco':w==='route'?'road':w))];
@@ -104,6 +104,9 @@ lookup({query,services,center,state,matchedServiceIds=[]}){
   const values={
    'centro.nombre':center.name,'centro.horario':center.hours,'centro.saludo':center.greeting,'centro.turnos':center.booking.message,
    'centro.servicios':services.map(s=>s.name).join('; '),
+   'servicio.horarios':service?.schedule||'Horarios del servicio pendientes de confirmar con el personal.',
+   'servicio.incluye':service?.inclusions||'Contenido del servicio pendiente de confirmar con el personal.',
+   'servicio.condiciones':service?.conditions||'Condiciones pendientes de confirmar con el personal.',
    'servicio.nombre':service?.name,'servicio.descripcion':service?.description,
    'servicio.precio':service?.priceCents==null?'Precio pendiente de confirmar con el personal.':service.priceCents===0?'Este servicio es sin costo.':`${(service.priceCents/100).toFixed(2)} ${service.currency}`,
    'servicio.duracion':service?.duration==null?'Duración pendiente de confirmar.':`${service.duration} minutos`,

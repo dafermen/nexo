@@ -14,7 +14,7 @@ import {createHash} from 'node:crypto';
 
 // These reasons are produced from approved business data or fixed local instructions,
 // never from free model prose, visitor names, lookup results or available slots.
-const reusableReasons=new Set(['greeting','courtesy','catalog','faq','hours','payment','service_guidance','guidance_question','guidance_unknown','intent_catalog','intent_faq','intent_hours','intent_payment','intent_greeting','intent_courtesy']);
+const reusableReasons=new Set(['approved_guidance','service_schedule','greeting','courtesy','catalog','faq','hours','payment','service_guidance','guidance_question','guidance_unknown','intent_catalog','intent_faq','intent_hours','intent_payment','intent_greeting','intent_courtesy']);
 export const audioScope=(center,services,knowledge)=>createHash('sha256').update(JSON.stringify({center,services,knowledge})).digest('hex');
 export const textDigest=text=>createHash('sha256').update(text).digest('hex');
 /**

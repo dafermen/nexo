@@ -266,3 +266,7 @@ Consulte la [guía de estadísticas, avisos y recuperación](49-reportes-avisos-
 ## Recorrido nuevo: editar una respuesta
 
 Consulte la [guía ilustrada del editor visual y GitHub](55-editor-visual-github.md). Explica desde el formulario hasta SQLite, cómo se resuelven los precios y cómo validar un cambio antes de publicarlo.
+
+## Actualizaciones comerciales
+
+La [guía del curso y libro](56-curso-libro-contenido.md) muestra cómo separar datos comerciales, FAQ y código. Evite constantes de precios/horarios en el agente: utilice campos del catálogo y parámetros. Los despliegues no deben volver a sembrar ni sobrescribir SQLite.

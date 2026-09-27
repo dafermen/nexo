@@ -912,3 +912,11 @@ Entrada, salida, propósito y límites en la cabecera del módulo. [Recorrido ex
 ## server/faq-editor.js
 
 Convierte borradores estructurados en el formato FAQ validado. `serializeFaq(entries)` rechaza campos multilínea y parámetros desconocidos. `previewFaq(entry, services, center)` resuelve parámetros con el catálogo vigente, avisa si la respuesta está pausada y no escribe SQLite ni llama IA. La categoría organiza el panel; no cambia la búsqueda conversacional.
+
+## server/school-journey.js
+
+Recibe consulta normalizada y contexto temporal. Reconoce etapas (sin permiso, con permiso, curso terminado), horarios del curso y alcance del libro. Solo devuelve texto de una FAQ aprobada con ID esperado y servicio activo. No contiene precios ni confirma cupos.
+
+## server/content-update.js
+
+Recibe SQLite y un paquete JSON autorizado. Previsualiza por defecto; con apply utiliza una transacción para catálogo, FAQ, auditoría y registro de versión. Conserva campos no incluidos, valida con el contrato del editor y rechaza repetir un ID con otro contenido. Repetir un paquete aplicado no reemplaza ediciones del administrador.

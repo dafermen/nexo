@@ -71,3 +71,7 @@ Editor visual probado y manual ilustrado incorporado. Repositorio vigente: https
 ### Publicación GitHub completada
 
 Repositorio `dafermen/nexo` y primera ejecución de Actions verificados el 27/09/2026. NEXO-19 y NEXO-20 terminados. Se mantienen pendientes las pruebas físicas del kiosco, políticas comerciales y respaldo externo automático. La protección de main es una configuración opcional adicional del propietario.
+
+## Contenido comercial v0.34.0
+
+Curso de cinco horas y libro actualizados con el paquete aprobado del cliente. Nuevos campos schedule/inclusions/conditions, FAQ parametrizadas y protección contra repetir la carga sobre cambios posteriores. Manual 56 con operación y despliegue. Las reservas de clases prácticas continúan separadas.

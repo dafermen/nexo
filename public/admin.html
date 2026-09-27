@@ -77,6 +77,9 @@ Ruta de aprendizaje: docs/23-manual-desarrollador-junior.md y docs/41-mapa-codig
 <label>Descripción<textarea name="description" required maxlength="1000" rows="3"></textarea></label>
 <div class="fields"><label><span id="price-currency-label">Precio (USD)</span><input name="price" type="number" min="0" max="1000000" step="0.01" placeholder="Por confirmar"><small>Vacío: pendiente · 0: gratuito</small></label><label>Duración (minutos)<input name="duration" type="number" min="1" max="1440" step="1" placeholder="Por confirmar"></label></div>
 <label>Modalidad<select name="modality"><option value="">Por confirmar</option><option>Presencial</option><option>Virtual</option><option>Presencial y virtual</option></select></label>
+<label>Horarios informativos del servicio<textarea name="schedule" maxlength="1500" rows="2" placeholder="Días, horas y zona horaria"></textarea><small>Informa cuándo se ofrece. No crea cupos ni cambia Google Calendar.</small></label>
+<label>Qué incluye<textarea name="inclusions" maxlength="1500" rows="3"></textarea></label>
+<label>Condiciones y alcance<textarea name="conditions" maxlength="1500" rows="3"></textarea></label>
 <label>Requisitos<textarea name="requirements" maxlength="1500" rows="3" placeholder="Déjelo vacío si todavía debe confirmarlos."></textarea></label>
 <label class="check"><input name="active" type="checkbox">Mostrar este servicio en el kiosco</label>
 <p class="muted">Al guardar, se publica la información para los visitantes y la asesora.</p>

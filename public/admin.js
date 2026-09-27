@@ -54,7 +54,7 @@ function renderSchool(settings){
 }
 function openEditor(service){
  if(saving||!discard())return;if(dirty)renderSchool(data.centerSettings);dirty=false;editor={id:service?.id||null,revision:data.centerSettings.revision};const f=$('service-form');f.reset();
- for(const key of ['name','description','requirements','duration','modality'])f.elements[key].value=service?.[key]??'';
+ for(const key of ['name','description','requirements','duration','modality','schedule','inclusions','conditions'])f.elements[key].value=service?.[key]??'';
  f.elements.price.value=service?.priceCents==null?'':(service.priceCents/100).toFixed(2);f.elements.active.checked=service?.active??true;
  $('editor-title').textContent=service?'Editar servicio':'Añadir servicio';message('editor-error');$('save-service').disabled=false;$('service-dialog').showModal();f.elements.name.focus();
 }
@@ -78,7 +78,7 @@ async function load(){
 $('service-form').addEventListener('input',()=>{dirty=true;});
 $('service-form').addEventListener('submit',async event=>{
  event.preventDefault();if(!editor||saving)return;saving=true;const epoch=generation;const editing={...editor};$('save-service').disabled=true;message('editor-error');
- const f=$('service-form').elements;const service={name:f.name.value.trim(),description:f.description.value.trim(),requirements:f.requirements.value.trim()||null,modality:f.modality.value||null,priceCents:f.price.value===''?null:Math.round(Number(f.price.value)*100),duration:f.duration.value===''?null:Number(f.duration.value),active:f.active.checked};
+ const f=$('service-form').elements;const service={name:f.name.value.trim(),description:f.description.value.trim(),requirements:f.requirements.value.trim()||null,schedule:f.schedule.value.trim()||null,inclusions:f.inclusions.value.trim()||null,conditions:f.conditions.value.trim()||null,modality:f.modality.value||null,priceCents:f.price.value===''?null:Math.round(Number(f.price.value)*100),duration:f.duration.value===''?null:Number(f.duration.value),active:f.active.checked};
  try{await request('/api/admin/services'+(editing.id?'/'+editing.id:''),{method:editing.id?'PUT':'POST',body:JSON.stringify({revision:editing.revision,service})});if(epoch!==generation)return;dirty=false;editor=null;$('service-dialog').close();f.name.value='';await load();message('saved','Servicio guardado. El kiosco se actualizará automáticamente; la asesora ya dispone de la nueva información.');}
  catch(e){if(epoch===generation)message('editor-error',e.message||'No se pudo confirmar el guardado. Actualice el panel antes de volver a intentarlo.');}
  finally{if(epoch===generation){saving=false;$('save-service').disabled=false;}}

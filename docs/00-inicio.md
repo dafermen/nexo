@@ -87,3 +87,5 @@ NEXO-42: audio generado reutilizable para respuestas aprobadas, con metadatos SQ
 ## Nuevas guías ilustradas
 
 [Editor visual de respuestas y pruebas automáticas](55-editor-visual-github.md): captura del editor, flujo de publicación de conocimiento y recorrido GitHub.
+
+[Contenido aprobado del curso y libro; cómo actualizarlo](56-curso-libro-contenido.md).

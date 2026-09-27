@@ -257,3 +257,7 @@ Utilidad offline con contraseña oculta. Descifra a SQLite nuevo, verifica integ
 ## scripts/apply-mogollon-offer.js
 
 Entrada, salida, propósito y límites en la cabecera del módulo. [Recorrido explicado, catálogo aprobado y validación](../54-catalogo-voz-agenda.md).
+
+## scripts/apply-school-content.js
+
+Lee el entorno sin imprimir claves y un JSON comercial. Comprueba el perfil MetodoMogollon y llama applyContentUpdate. Sin --apply solo propone. Requiere base ya inicializada; usar respaldo y detener el servidor antes de aplicar. No cambia calendarios ni alumnos.

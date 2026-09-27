@@ -52,4 +52,6 @@ jobs:
           echo "PLAYWRIGHT_MODULE=$RUNNER_TEMP/nexo-qa/node_modules/playwright" >> "$GITHUB_ENV"
       - run: node tests/admin-access.e2e.js
       - run: node tests/faq-editor.e2e.js
+      - run: node tests/admin.e2e.js
+      - run: node tests/agenda-voice.e2e.js
       - run: node tests/docs.e2e.js

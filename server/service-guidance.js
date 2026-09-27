@@ -14,13 +14,13 @@ import {normalize,requestTopicRisk} from './school-filter.js';
 import {isSchool} from './business-settings.js';
 
 // A bounded conversation, based only on the currently published catalog.
-export function guideService({message,center,services,state,decision}) {
+export function guideService({message,center,services,state,decision,faq}) {
  if(!center||!isSchool(center)||decision.catalogOnly||requestTopicRisk(message,center))return null;
  const q=normalize(message),g=state.guidance||{};
  const local=(text,reason='service_guidance')=>({kind:'local',reason,text});
  if(/^(no gracias|olvidelo|no quiero|cancelar orientacion|empezar de nuevo)$/.test(q)){delete state.guidance;return null;}
  // Explicit facts, bookings and greetings keep their normal handlers.
- if(['greeting','courtesy','faq','catalog','hours','booking','payment','contact','off_topic','restricted'].includes(decision.reason)&&!decision.interpret)return null;
+ if(['approved_guidance','service_schedule','greeting','courtesy','faq','catalog','hours','booking','payment','contact','off_topic','restricted'].includes(decision.reason)&&!decision.interpret)return null;
  const starting=/\b(licencia|licence|license|permiso)\b/.test(q)&&/\b(sacar|obtener|conseguir|empezar|comenzar|no se|primera vez)\b/.test(q);
  const help=/\b(no se (que|cual)|que me recomienda|orienteme|por donde empiezo|por donde empezar)\b/.test(q);
  const practice=/\b(aprender a (manejar|conducir)|practicar (manejo|para|conduccion)|nunca he manejado)\b/.test(q);
@@ -29,6 +29,8 @@ export function guideService({message,center,services,state,decision}) {
  if(g.step==='permit'){
   if(/^(no|todavia no|aun no|no tengo( el| mi)?( permiso)?( todavia| aun)?|no lo tengo)$/.test(q)){
    state.guidance={step:'goal',permit:false};
+   const approved=faq?.lookup({query:'No tengo permiso, ¿puedo hacer el curso?',services,center,state:{serviceId:'cinco-horas'}});
+   if(approved?.id==='curso-sin-permiso')return {...local(approved.text),knowledgeAnswer:true};
    return local('Gracias. Los requisitos para iniciar su trámite debe confirmarlos con el personal; no tengo esa información aprobada. ¿Desea información sobre clases o preparación para un examen?','guidance_unknown');
   }
   if(/^(si|si tengo|si lo tengo|ya lo tengo|(si )?(ya )?tengo( el| mi)? permiso( de aprendizaje)?)$/.test(q)){

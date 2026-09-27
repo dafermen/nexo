@@ -1,7 +1,7 @@
 {
   "updatedAt": "2026-09-27",
-  "version": "0.33.1",
-  "summary": "Editor visual de preguntas frecuentes y documentación ilustrada. Código publicado en dafermen/nexo con pruebas automáticas verificadas en GitHub.",
+  "version": "0.34.0",
+  "summary": "Contenido aprobado del curso de cinco horas y libro, campos comerciales editables, preguntas por etapas y carga versionada que conserva cambios posteriores.",
   "phases": [
     {
       "id": "base",
@@ -215,7 +215,7 @@
       "title": "Confirmar información comercial",
       "status": "pending",
       "priority": "P1",
-      "description": "Precios, requisitos y modalidades definitivas de cada servicio.",
+      "description": "Precios del afiche y contenido del curso/libro incorporados. Pendientes requisitos de otros servicios, políticas de cancelación/inasistencia y condiciones detalladas de paquetes.",
       "acceptance": "Todos los servicios activos revisados y aprobados por la escuela.",
       "evidence": {
         "path": "docs/16-metodomogollon.md",
@@ -701,6 +701,18 @@
       "evidence": {
         "path": "docs/54-catalogo-voz-agenda.md",
         "label": "Contenido comercial, uso y validación"
+      }
+    },
+    {
+      "id": "NEXO-53",
+      "phaseId": "conocimiento",
+      "title": "Curso y libro: contenido aprobado y mantenimiento sin sobrescritura",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Horario del curso independiente de agenda, requisitos Learner Permit, libro/App/asistencia y alcance DMV; catálogo editable, FAQ parametrizadas, ES/EN/FR, aplicación atómica y única.",
+      "evidence": {
+        "path": "docs/56-curso-libro-contenido.md",
+        "label": "Contenido, mantenimiento y pruebas"
       }
     }
   ]

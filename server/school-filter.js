@@ -10,6 +10,7 @@
  * Ruta de aprendizaje: docs/23-manual-desarrollador-junior.md y docs/41-mapa-codigo-fuente.md.
  */
 
+import {schoolJourney} from './school-journey.js';
 import {isSchool,businessText,fillTemplate} from './business-settings.js';
 // Local policy only: no network calls and no persistent visitor text.
 export const defaultAiLimits = { sessionCalls: 6, dailyCalls: 100, maxPromptBytes: 12000, outputTokens: 300 };
@@ -56,7 +57,7 @@ function selectedServices(q,services,school=true) {
     const name=normalize(s.name), id=normalize(s.id);
     if(q.includes(name)||q===id)return true;
     if(school&&/^clase practica/.test(name)&&/\bclases? practicas?\b/.test(q))return true;
-    if(school&&/^cuaderno/.test(name)&&/\bcuaderno\b/.test(q))return true;
+    if(school&&s.id==='cuaderno-preguntas'&&/\b(cuaderno|libro de preguntas|libro de preguntas y respuestas|libro)\b/.test(q)&&!/\bmanual\b/.test(q))return true;
     if(school&&/^manual practico/.test(name)&&/\bmanual(?: practico)?\b/.test(q))return true;
     if(school && s.id==='cinco-horas' && /\b(5|cinco) horas?\b/.test(q))return true;
     if(school && s.id==='road-test' && /\b(road test|route test|examen practico|examen de manejo)\b/.test(q))return true;
@@ -115,6 +116,8 @@ export function filterSchoolMessage({message,services,center,state,faq=null}) {
   if(matches.length>1)state.serviceId=null;
   const contextService=services.find(s=>s.id===state.serviceId);
   const service=matches.length===1?matches[0]:matches.length?null:(factContinuation(q)||followup.test(q))?contextService:null;
+  const journey=isSchool(center)?schoolJourney({q,services,center,state,faq}):null;
+  if(journey)return local(journey.text,'approved_guidance',{knowledgeAnswer:true});
   const facts=[];
   if(/\b(precio|precios|cuesta|cuestan|cuanto cuesta|cuanto sale|cuanto salen|costo|costos|vale|valor|price|cost)\b/.test(q))facts.push('price');
   if(/\b(requisitos|requisito|documentos|documentacion|llevar|que necesito|necesito llevar|requirements)\b/.test(q))facts.push('requirements');
@@ -124,11 +127,12 @@ export function filterSchoolMessage({message,services,center,state,faq=null}) {
   const known=faq?.lookup({query:q,services,center,state,matchedServiceIds:matches.map(s=>s.id)});
   // A FAQ tie must not discard a recognized service or block catalog facts.
   const awaitingFact=matches.length===1&&!facts.length&&(state.pendingFacts?.length||(/^y (el |la |los |las )?/.test(q)&&state.lastIntent));
-  if(known?.text&&!awaitingFact){if(known.serviceId)state.serviceId=known.serviceId;state.lastIntent=facts.at(-1)||null;state.pendingFacts=null;return local(known.text,'faq');}
+  if(known?.text&&!awaitingFact){if(known.serviceId)state.serviceId=known.serviceId;state.lastIntent=facts.at(-1)||null;state.pendingFacts=null;return local(known.text,'faq',{knowledgeAnswer:true});}
   const hours=/\b(horario|horarios|abren|abre|cierran|cierra|atienden|atencion|abierto|cerrado|opening hours)\b/.test(q);
   const booking=/\b(reservar|reserva|reservas|reservacion|turno|turnos|cita|citas|cancelar|cancelacion|disponibilidad|agendar|agenda)\b/.test(q);
   const payment=/\b(pagar|pago|pagos|tarjeta|cobrar|cobro|pagado)\b/.test(q);
   const extras=[];
+  if(hours&&contextService?.schedule&&(matches.length===1||/^(y )?(que dias|que horarios|horarios|cuando se ofrece|cuando es)( tienen| el curso)?$/.test(q)))return local(contextService.schedule+' Estos son horarios informativos; confirme cupos e inscripción con el personal.','service_schedule',{knowledgeAnswer:true});
   if(hours)extras.push(`Nuestro horario general de atención es: ${center.hours}. Las fechas de clases, feriados y cupos se confirman con el personal; este horario no indica disponibilidad de turnos.`);
   if(booking)extras.push(center.booking.message);
   if(payment)extras.push('Este kiosco no procesa pagos. Consulte con el personal las formas de pago disponibles.');

@@ -1742,3 +1742,7 @@ Casos de categorías, compatibilidad con texto, inyección de bloques, datos din
 ## tests/faq-editor.e2e.js
 
 Navegador con escuela ficticia: crear, buscar por categoría, previsualizar, guardar, pausar, alternar texto, conflicto entre administradores, XSS, ancho móvil y limpieza al cerrar. No correos, citas ni proveedores reales. SCREENSHOT_DIR opcional genera una captura didáctica.
+
+## tests/school-content.test.js
+
+SQLite temporal para carga atómica, previa, repetición, validación de servicios, preguntas del cliente, parámetros dinámicos y API de texto/voz ES/EN/FR. Los horarios informativos no consultan Calendar ni generan acciones de reserva; no hay llamadas de pago.

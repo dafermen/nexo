@@ -1,0 +1,203 @@
+{
+  "id": "mogollon-curso-libro-20260927-v1",
+  "businessId": "metodomogollon",
+  "approvedAt": "2026-09-27",
+  "source": "Contenido proporcionado por el cliente y autorizado por el usuario",
+  "services": [
+    {
+      "id": "cinco-horas",
+      "patch": {
+        "name": "Curso de Pre-Licencia de 5 Horas",
+        "description": "Conocimientos esenciales sobre conducción segura, normas de tránsito, prevención de accidentes, responsabilidades al volante y riesgos del alcohol o las drogas. Forma parte del proceso previo al Road Test en Nueva York.",
+        "priceCents": 8000,
+        "duration": 300,
+        "requirements": "Tener un Learner Permit válido del Estado de Nueva York, completar satisfactoriamente el curso y cumplir los requisitos de identificación y participación establecidos para la modalidad del curso.",
+        "schedule": "Miércoles a las 6:00 PM y sábados a las 10:00 AM, hora de Nueva York.",
+        "conditions": "Consulte con el personal los requisitos de identificación y participación de la modalidad, los cupos y la inscripción. No se garantiza la aprobación del Road Test."
+      }
+    },
+    {
+      "id": "cuaderno-preguntas",
+      "patch": {
+        "name": "Libro de Preguntas y Respuestas",
+        "priceCents": 3500,
+        "description": "Herramienta de estudio para preparar el examen escrito de conducir del Estado de Nueva York. Permite practicar, repasar e identificar temas por reforzar, a su propio ritmo. Disponible en español, inglés y francés.",
+        "inclusions": "Libro + acceso gratis a la App de Método Mogollón + asistencia gratis para agendar su cita a través de los canales oficiales correspondientes. Puede practicar desde celular, tablet o computador.",
+        "conditions": "La asistencia se limita al proceso de programación de la cita. La disponibilidad depende del DMV; no incluye tarifas del DMV ni garantiza una fecha específica o la aprobación del examen."
+      }
+    }
+  ],
+  "faqs": [
+    {
+      "id": "cinco-horas-detalles",
+      "serviceId": "cinco-horas",
+      "category": "Curso de 5 horas",
+      "active": true,
+      "questions": [
+        "Curso de las 5 horas",
+        "Información sobre el curso de las 5 horas",
+        "Me interesa el curso de las 5 horas",
+        "Estoy interesado en el curso de las 5 horas",
+        "¿Qué es el curso de pre-licencia?"
+      ],
+      "answer": "{{servicio.descripcion}} ¿Desea conocer los requisitos, el precio o los horarios?"
+    },
+    {
+      "id": "cinco-horas-precio",
+      "serviceId": "cinco-horas",
+      "category": "Curso de 5 horas",
+      "active": true,
+      "questions": [
+        "¿Cuánto cuesta el curso de las 5 horas?",
+        "Precio curso de las 5 horas"
+      ],
+      "answer": "El curso cuesta {{servicio.precio}}."
+    },
+    {
+      "id": "cinco-horas-requisitos",
+      "serviceId": "cinco-horas",
+      "category": "Curso de 5 horas",
+      "active": true,
+      "questions": [
+        "¿Qué necesito para tomar el curso?",
+        "Requisitos del curso de las 5 horas",
+        "Documentos para el curso de las 5 horas"
+      ],
+      "answer": "{{servicio.requisitos}}"
+    },
+    {
+      "id": "cinco-horas-horarios",
+      "serviceId": "cinco-horas",
+      "category": "Curso de 5 horas",
+      "active": true,
+      "questions": [
+        "¿Qué días tienen el curso?",
+        "¿Cuándo se ofrece el curso de las 5 horas?",
+        "Horarios del curso de las 5 horas"
+      ],
+      "answer": "{{servicio.horarios}} Consulte con el personal los cupos y la inscripción."
+    },
+    {
+      "id": "curso-sin-permiso",
+      "serviceId": "cinco-horas",
+      "category": "Proceso hacia la licencia",
+      "active": true,
+      "questions": [
+        "No tengo permiso, ¿puedo hacer el curso?",
+        "¿Puedo tomar las cinco horas sin permiso?"
+      ],
+      "answer": "Para tomar el curso necesita un Learner Permit válido de Nueva York. Si todavía no lo tiene, su primer paso es obtenerlo. Puede prepararse para el examen teórico; los requisitos actuales del DMV deben confirmarse por sus canales oficiales. ¿Desea información sobre el Libro de Preguntas y Respuestas?"
+    },
+    {
+      "id": "proceso-con-permiso",
+      "serviceId": null,
+      "category": "Proceso hacia la licencia",
+      "active": true,
+      "questions": [
+        "Ya tengo mi permiso, ¿qué hago ahora?"
+      ],
+      "answer": "Si ya tiene su Learner Permit, puede comenzar su preparación práctica de manejo y completar el Curso de Pre-Licencia de 5 Horas. ¿Desea información sobre clases prácticas o sobre el curso?"
+    },
+    {
+      "id": "proceso-curso-completo",
+      "serviceId": null,
+      "category": "Proceso hacia la licencia",
+      "active": true,
+      "questions": [
+        "Ya terminé las 5 horas, ¿qué sigue?"
+      ],
+      "answer": "El siguiente objetivo es prepararse para presentar su Road Test. Puede consultar nuestras clases prácticas y el servicio de carro y cita para el Road Test. No se garantiza la aprobación del examen."
+    },
+    {
+      "id": "proceso-licencia",
+      "serviceId": null,
+      "category": "Proceso hacia la licencia",
+      "active": true,
+      "questions": [
+        "¿Cuál es el proceso para obtener la licencia?",
+        "¿Para qué necesito el curso?"
+      ],
+      "answer": "El proceso general es obtener el Learner Permit, aprender y practicar manejo, completar el Curso de Pre-Licencia, presentar el Road Test y obtener la licencia al aprobar y cumplir los requisitos correspondientes. Los requisitos específicos vigentes deben confirmarse con el DMV."
+    },
+    {
+      "id": "proceso-ayuda",
+      "serviceId": null,
+      "category": "Proceso hacia la licencia",
+      "active": true,
+      "questions": [
+        "¿Método Mogollón puede ayudarme con todo el proceso?"
+      ],
+      "answer": "Podemos orientarle sobre las etapas del proceso y explicarle los servicios publicados de Método Mogollón para prepararse. No garantizamos la aprobación del examen teórico ni del Road Test."
+    },
+    {
+      "id": "cuaderno-preguntas-detalles",
+      "serviceId": "cuaderno-preguntas",
+      "category": "Libro y examen teórico",
+      "active": true,
+      "questions": [
+        "Libro de Preguntas y Respuestas",
+        "Información sobre el libro",
+        "Cuaderno",
+        "Me interesa el libro"
+      ],
+      "answer": "{{servicio.descripcion}} Precio: {{servicio.precio}}."
+    },
+    {
+      "id": "cuaderno-preguntas-precio",
+      "serviceId": "cuaderno-preguntas",
+      "category": "Libro y examen teórico",
+      "active": true,
+      "questions": [
+        "¿Cuánto cuesta el libro?",
+        "Precio del cuaderno"
+      ],
+      "answer": "El libro cuesta {{servicio.precio}} e incluye acceso a la App y asistencia para agendar su cita. {{servicio.condiciones}}"
+    },
+    {
+      "id": "libro-incluye",
+      "serviceId": "cuaderno-preguntas",
+      "category": "Libro y examen teórico",
+      "active": true,
+      "questions": [
+        "¿Qué incluye el libro?",
+        "¿La app es gratis?",
+        "¿Me ayudan con la cita del DMV?"
+      ],
+      "answer": "{{servicio.incluye}} {{servicio.condiciones}}"
+    },
+    {
+      "id": "libro-alcance",
+      "serviceId": "cuaderno-preguntas",
+      "category": "Libro y examen teórico",
+      "active": true,
+      "questions": [
+        "¿Me garantizan una fecha en el DMV?",
+        "¿El libro incluye las tarifas del DMV?",
+        "¿Qué cubre la asistencia para la cita?"
+      ],
+      "answer": "{{servicio.condiciones}}"
+    },
+    {
+      "id": "libro-idiomas",
+      "serviceId": "cuaderno-preguntas",
+      "category": "Libro y examen teórico",
+      "active": true,
+      "questions": [
+        "¿En qué idiomas está el libro?",
+        "Idiomas del cuaderno"
+      ],
+      "answer": "El Libro de Preguntas y Respuestas está disponible en español, inglés y francés."
+    },
+    {
+      "id": "examen-teorico",
+      "serviceId": "cuaderno-preguntas",
+      "category": "Libro y examen teórico",
+      "active": true,
+      "questions": [
+        "¿Tienen preparación para el examen teórico?",
+        "¿Cómo estudio para el examen escrito?"
+      ],
+      "answer": "El Libro de Preguntas y Respuestas le ayuda a preparar el examen escrito. {{servicio.incluye}} {{servicio.condiciones}}"
+    }
+  ]
+}

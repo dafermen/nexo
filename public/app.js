@@ -329,6 +329,7 @@ async function openBooking(service, {availabilityOnly=false,preferredSlot=null}=
     $('booking-content').replaceChildren(
       element('p', '', service.description),
       element('p', 'muted', service.requirements || 'Requisitos por confirmar con el personal.'),
+      ...[service.schedule,service.inclusions,service.conditions].filter(Boolean).map(text=>element('p','muted',text)),
       element('p', 'muted', price(service)),
       element('p', 'muted', (service.duration == null ? 'Duración por confirmar' : service.duration + ' minutos') + ' · ' + (service.modality || 'Modalidad por confirmar')),
       element('p', '', config.center.hours),

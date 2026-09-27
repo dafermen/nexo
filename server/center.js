@@ -69,16 +69,17 @@ function validateProfile(input) {
  * Entrada (firma real): input, prior, currency.
  * Salida: Servicio normalizado; null conserva explícitamente datos pendientes.
  */
-function validateService(input, prior, currency) {
-  exactKeys(input,['name','description','duration','priceCents','requirements','modality','active']);
+export function validateService(input, prior, currency) {
+  exactKeys(input,['name','description','duration','priceCents','requirements','modality','active','schedule','inclusions','conditions']);
   const name = clean(input.name, 'Nombre del servicio', 100);
   const description = clean(input.description, 'Descripción', 1000);
   const requirements = clean(input.requirements, 'Requisitos', 1500, true);
+  const extra=Object.fromEntries(['schedule','inclusions','conditions'].map(key=>[key,clean(Object.hasOwn(input,key)?input[key]:(prior?.[key]??null),key,1500,true)]));
   if (input.priceCents !== null && (!Number.isSafeInteger(input.priceCents) || input.priceCents < 0 || input.priceCents > 100000000)) throw new HttpError(400, 'Precio inválido.');
   if (input.duration !== null && (!Number.isInteger(input.duration) || input.duration < 1 || input.duration > 1440)) throw new HttpError(400, 'Duración inválida (1 a 1440 minutos).');
   if (![null,'Presencial','Virtual','Presencial y virtual'].includes(input.modality)) throw new HttpError(400, 'Modalidad inválida.');
   if (typeof input.active !== 'boolean') throw new HttpError(400, 'Estado inválido.');
-  return { id: prior?.id || randomUUID(), category: prior?.category || 'SERVICIOS', icon: prior?.icon || 'document', currency, name, description, requirements, priceCents: input.priceCents, duration: input.duration, modality: input.modality, active: input.active };
+  return { id: prior?.id || randomUUID(), category: prior?.category || 'SERVICIOS', icon: prior?.icon || 'document', currency, name, description, requirements, ...extra, priceCents: input.priceCents, duration: input.duration, modality: input.modality, active: input.active };
 }
 /**
  * centerRepository: Decora el repositorio con el perfil comercial persistente; sin center devuelve

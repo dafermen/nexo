@@ -350,7 +350,7 @@ export function createApp({ config, repository, ai, calendar = null, bookingMail
             // anterior si la primera coincidencia local no fue suficientemente fiable.
             const stateBefore=structuredClone(session.schoolState);
             let decision=center ? filterSchoolMessage({message,services,center,state:session.schoolState,faq:activeFaq}) : {kind:'ai'};
-            const guided=agendaCandidate(message,session.agendaState)?null:guideService({message,center,services,state:session.schoolState,decision});
+            const guided=agendaCandidate(message,session.agendaState)?null:guideService({message,center,services,state:session.schoolState,decision,faq:activeFaq});
             if(guided)decision=guided;
             const day=schoolDay(new Date(),center?.timezone);
             /**
@@ -369,7 +369,7 @@ export function createApp({ config, repository, ai, calendar = null, bookingMail
               return null;
             };
             let agendaInterpreted=false;
-            if(!guided&&center?.booking.enabled&&!decision.catalogOnly&&(stateBefore.deviations||0)<2&&!requestTopicRisk(message,center)&&!['greeting','courtesy','off_topic','restricted'].includes(decision.reason)&&agendaCandidate(message,session.agendaState)){
+            if(!guided&&!decision.knowledgeAnswer&&center?.booking.enabled&&!decision.catalogOnly&&(stateBefore.deviations||0)<2&&!requestTopicRisk(message,center)&&!['greeting','courtesy','off_topic','restricted'].includes(decision.reason)&&agendaCandidate(message,session.agendaState)){
               const agendaState=structuredClone(session.agendaState||{});
               if(!agendaState.serviceId&&stateBefore.serviceId&&center.booking.serviceIds.includes(stateBefore.serviceId))agendaState.serviceId=stateBefore.serviceId;
               let plan=parseAgenda(message,{services,center,state:agendaState});
