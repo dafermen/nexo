@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   pruebas:
-    name: CÃ³digo, documentaciÃ³n y pruebas (${{ matrix.os }})
+    name: Código, documentación y pruebas (${{ matrix.os }})
     strategy:
       fail-fast: false
       matrix:
