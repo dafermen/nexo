@@ -81,3 +81,7 @@ Curso de cinco horas y libro actualizados con el paquete aprobado del cliente. N
 ## DOC-STD-20261002 — Organización documental
 
 El [mapa documental](00-inicio.md) identifica fuentes canónicas y reglas de mantenimiento. Se conservan los hitos de implementación y la aceptación pendiente. Esta entrega documental registra validación y publicación por separado.
+
+## Validación documental y reloj de pruebas — 02/10/2026
+
+La revisión documental detectó dos pruebas de API dependientes de la fecha real: usaban reservas de septiembre con el reloj actual. Se alineó únicamente el reloj de esas pruebas con sus fixtures. Antes: 24/26 aprobadas en los dos archivos; después: 26/26. `npm run check`, `npm run docs:check` y `npm test`: aprobados, 306/306 pruebas. No se cambió código de ejecución ni se contactaron proveedores de calendario, correo o IA. La validación remota de Windows/Linux y navegador se registra por separado.

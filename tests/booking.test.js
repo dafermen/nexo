@@ -131,6 +131,8 @@ test('horarios visibles incluyen pasados y anticipación pero nunca se ofrecen p
  assert.equal(r.schedule.find(s=>s.slot==='2026-09-28T12:00:00.000Z').reason,'past');assert.equal(r.schedule.find(s=>s.slot==='2026-09-28T15:00:00.000Z').reason,'notice');assert.ok(!r.slots.includes('2026-09-28T15:00:00.000Z'));assert.ok(r.slots.includes('2026-09-28T16:00:00.000Z'));assert.ok(r.schedule.every(s=>s.slot>='2026-09-28T04:00:00Z'));
 });
 test('API agenda: texto/voz comparten preferencias, sesiones aisladas y no crea eventos por conversar',async t=>{
+ // Mantener el reloj de la API alineado con los datos de prueba, sin depender del día real.
+ t.mock.timers.enable({apis:['Date'],now:Date.parse('2026-09-28T11:00:00Z')});
  const f=await fixture(t),app=createApp({repository:f.repo,calendar:f.service,config:{provider:'demo',center:schoolCenter,sessionTtlMs:300000},ai:{reply:async()=>{throw Error('AI forbidden');}},localTts:{status:()=>({available:false}),stop(){},close(){}},liveAvatar:{status:()=>({configured:false}),stop:async()=>{},close:async()=>{}}});app.listen(0,'127.0.0.1');await once(app,'listening');
  const base='http://127.0.0.1:'+app.address().port;
  const request=async(path,data,token)=>{const r=await fetch(base+path,{method:data?'POST':'GET',headers:{'Content-Type':'application/json',...(token?{Authorization:'Bearer '+token}:{})},...(data?{body:JSON.stringify(data)}:{})});return {status:r.status,...await r.json()};};
