@@ -89,3 +89,34 @@ NEXO-42: audio generado reutilizable para respuestas aprobadas, con metadatos SQ
 [Editor visual de respuestas y pruebas automáticas](55-editor-visual-github.md): captura del editor, flujo de publicación de conocimiento y recorrido GitHub.
 
 [Contenido aprobado del curso y libro; cómo actualizarlo](56-curso-libro-contenido.md).
+
+## DOC-STD-20261002 — Fuentes canónicas
+
+Estándar documental v1.0 · revisión 2026-10-02. Idioma principal: español.
+
+Asistente y administración para un negocio con piloto protegido.
+
+Conservar la documentación numerada. El acceso inicial al piloto y el acceso administrativo por correo son controles diferentes. La configuración del negocio, agenda, respaldos y SQLite se documentan en sus capítulos propios; no trasladar credenciales ni datos del negocio a las guías públicas.
+
+| Necesidad | Fuente oficial |
+| --- | --- |
+| Presentación | [README.md](../README.md) |
+| Estado vigente | [docs/28-continuidad.md](28-continuidad.md) |
+| Desarrollo | [docs/23-manual-desarrollador-junior.md](23-manual-desarrollador-junior.md) |
+| Arquitectura | [docs/03-arquitectura.md](03-arquitectura.md) |
+| Uso | [docs/05-flujos-usuario.md](05-flujos-usuario.md) |
+| Pruebas | [docs/08-validacion.md](08-validacion.md) |
+| Seguridad | [docs/46-seguridad-piloto.md](46-seguridad-piloto.md) |
+| Despliegue | [docs/45-despliegue-piloto-linux.md](45-despliegue-piloto-linux.md) |
+| Operación | [docs/26-manual-operacion.md](26-manual-operacion.md) |
+| Acceso piloto | [docs/53-configurar-acceso-piloto.md](53-configurar-acceso-piloto.md) |
+| Datos | [docs/04-modelo-datos.md](04-modelo-datos.md) |
+| Portal | [docs/29-portal-documentacion.md](29-portal-documentacion.md) |
+
+Para probar el producto, comenzar por presentación, estado y uso. Para desarrollar, continuar con instalación, arquitectura y pruebas. Para operar, consultar despliegue, seguridad y recuperación. El índice detallado existente conserva su validez.
+
+### Evidencia y actualización
+
+Separar estado vigente, historia y decisiones. Los resultados de pruebas fechados conservan su valor histórico. Este mapa no vuelve a ejecutar todos los comandos documentados ni cierra la aceptación pendiente del producto. Registrar las comprobaciones realmente ejecutadas, su entorno y sus límites antes de publicar.
+
+Actualizar la guía de origen al cambiar comandos, configuración, comportamiento, permisos o despliegue. Mantener enlaces y rutas del portal. Usar capturas reales con datos sintéticos; nunca publicar valores de .env, claves, datos de usuarios ni logs operativos. Un commit local, un commit remoto y un artefacto desplegado son estados diferentes.

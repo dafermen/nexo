@@ -77,3 +77,7 @@ Repositorio `dafermen/nexo` y primera ejecución de Actions verificados el 27/09
 Actualización v0.34.1: sitio web y simulador editables en Configuración → Negocio, accesos en Ayuda y opciones y ficha del libro, respuestas parametrizadas y pruebas responsive. Véase [mantenimiento del contenido y recursos](56-curso-libro-contenido.md).
 
 Curso de cinco horas y libro actualizados con el paquete aprobado del cliente. Nuevos campos schedule/inclusions/conditions, FAQ parametrizadas y protección contra repetir la carga sobre cambios posteriores. Manual 56 con operación y despliegue. Las reservas de clases prácticas continúan separadas.
+
+## DOC-STD-20261002 — Organización documental
+
+El [mapa documental](00-inicio.md) identifica fuentes canónicas y reglas de mantenimiento. Se conservan los hitos de implementación y la aceptación pendiente. Esta entrega documental registra validación y publicación por separado.

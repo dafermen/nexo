@@ -252,3 +252,7 @@ En `/admin#admin-reports`: métricas del período, citas/preguntas/avisos con fi
 ## Actualización v0.32.0
 
 [Catálogo aprobado, regreso desde otra aplicación y reserva por hora exacta](docs/54-catalogo-voz-agenda.md).
+
+## DOC-STD-20261002 — Navegación documental
+
+Consultar el [mapa documental](docs/00-inicio.md) para encontrar fuentes oficiales, rutas de lectura y reglas de mantenimiento del proyecto.
