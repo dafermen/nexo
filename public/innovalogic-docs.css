@@ -1,0 +1,89 @@
+/**
+ * NEXO · GUÍA DEL MÓDULO: public/innovalogic-docs.css
+ * Tema documental común de InnovaLogic.
+ * Recibe variables de tema, clases y tamaño de pantalla. Define colores, foco, herramientas de lectura y reglas adaptables. Solo afecta la documentación; los permisos siguen en el servidor.
+ * Referencia: docs/codigo/presentacion.md
+ */
+/* InnovaLogic docs v1. Tokens are independent from the application theme. */
+:root {
+  --docs-accent: #2563eb;
+  --docs-accent-hover: #1d4ed8;
+  --docs-highlight: #0ea5e9;
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --surface-muted: #eef2f7;
+  --text: #172033;
+  --muted: #526174;
+  --text-muted: #526174;
+  --line: #dbe3ee;
+  --border: #dbe3ee;
+  --primary: var(--docs-accent);
+  --primary-strong: var(--docs-accent-hover);
+  --primary-soft: #eaf1ff;
+  --focus: var(--docs-accent);
+}
+:root[data-theme='dark'] {
+  --docs-accent: #93b8ff;
+  --docs-accent-hover: #bed4ff;
+  --bg: #0b1220;
+  --surface: #101827;
+  --surface-muted: #1b293c;
+  --text: #edf3fc;
+  --muted: #bcc9db;
+  --text-muted: #bcc9db;
+  --line: #34445b;
+  --border: #34445b;
+  --primary: var(--docs-accent);
+  --primary-strong: var(--docs-accent-hover);
+  --primary-soft: #1c2e50;
+  --focus: var(--docs-accent);
+}
+body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif; }
+.topbar, .docs-topbar { border-top: 3px solid var(--docs-accent); }
+article { max-width: 76ch; margin-inline: auto; line-height: 1.75; overflow-wrap: anywhere; min-width: 0; }
+article :is(h1,h2,h3,h4) { scroll-margin-top: calc(var(--topbar-height, 80px) + 28px); }
+article img { max-width: 100%; height: auto; }
+article img[data-docs-zoom] { cursor: zoom-in; }
+.nav-section summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-weight: 750; color: var(--muted, var(--text-muted)); }
+.nav-section summary::before { content: '›'; margin-right: 8px; }
+.nav-section[open] > summary::before { transform: rotate(90deg); }
+.docs-reading-paths { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; margin: 16px 0 28px; }
+.docs-reading-paths a { border: 1px solid var(--border, var(--line)); border-radius: 12px; padding: 16px; background: var(--surface); color: var(--primary-strong); text-decoration: none; }
+.docs-reading-paths strong, .docs-reading-paths span { display: block; }
+.docs-reading-paths span { margin-top: 8px; font-size: 14px; color: var(--text-muted, var(--muted)); }
+.docs-code-block { min-width: 0; margin-block: 20px; }
+.docs-code-block pre { margin-top: 4px; }
+.docs-code-copy, .docs-image-dialog button { min-height: 44px; border: 1px solid var(--border, var(--line)); border-radius: 8px; padding: 8px 14px; background: var(--surface); color: var(--primary-strong); cursor: pointer; font: inherit; }
+.docs-reading-status { margin-left: 10px; font-size: 14px; }
+.docs-image-dialog { border: 1px solid var(--border, var(--line)); border-radius: 14px; padding: 16px; background: var(--surface); color: var(--text); max-width: 96vw; max-height: 94vh; }
+.docs-image-dialog::backdrop { background: rgb(0 0 0 / 75%); }
+.docs-image-dialog img { display: block; max-width: 90vw; max-height: 78vh; object-fit: contain; }
+.docs-image-dialog button { display: block; margin: 0 0 12px auto; }
+:is(a,button,summary,input,[tabindex]):focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+@media (max-width: 700px) { .docs-reading-paths { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { *,*::before,*::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; } }
+
+:root, :root[data-theme='dark'] { --docs-green: var(--primary-strong); --docs-muted: var(--muted); --docs-border: var(--border); --lime: var(--primary-soft); }
+body { background: var(--bg); color: var(--text); }
+.docs-header { position: sticky; top: 0; z-index: 20; height: 72px; border-top: 3px solid var(--docs-accent); background: var(--surface); }
+.brand, .brand small, .header-actions a, .document, .document :is(h1,h2,h3), .hero h1, .section-heading h2 { color: var(--text); }
+.brand .brand-dot, .hero h1 em, .document a, .toc a, .card-icon, .doc-card .card-foot, .document-top>a { color: var(--primary-strong); }
+.sidebar { background: var(--surface); }
+.sidebar nav a { color: var(--muted); }
+.sidebar nav a.active, .sidebar nav a:hover, .document blockquote, .document th { background: var(--primary-soft); color: var(--primary-strong); }
+.doc-card, .phase, .task, .search-box, .icon-button, .doc-tools button, .filters button, .stat { background: var(--surface); color: var(--text); border-color: var(--border); }
+.document pre { background: #101827; color: #edf3fc; }
+.document code { background: var(--surface-muted); color: var(--text); font-size: .88em; }
+.document pre code { background: none; color: inherit; }
+.doc-card p, .task p, .phase p, .section-heading p, .nav-label, .eyebrow, .document-meta, .sidebar-note p, .sidebar-bottom, .docs-footer { color: var(--muted); }
+.document { font-size: 16px; line-height: 1.75; }
+.doc-card p, .task p, .phase p, .sidebar nav a, .toc { font-size: 14px; }
+.doc-tools button, .filters button { font-size: 14px; }
+.toc { top: 96px; }
+#search { color: var(--text); font-size: 15px; }
+.docs-page-pager { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.docs-page-pager a { padding: 14px; border: 1px solid var(--border); border-radius: 10px; color: var(--primary-strong); }
+#docs-theme { min-height: 44px; padding: 8px 12px; background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 8px; }
+@media(max-width:720px) { .header-actions { gap: 8px; } .header-actions>a[href='/'] { display: inline; font-size: 12px; } .brand { font-size: 22px; } .brand>span:first-child { display: none; } }
+
+.document { width: 100%; }

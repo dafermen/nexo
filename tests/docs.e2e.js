@@ -24,7 +24,7 @@ const server=createApp({config:{provider:'demo',center:schoolCenter,sessionTtlMs
 server.listen(0,'127.0.0.1');await once(server,'listening');const base='http://127.0.0.1:'+server.address().port;
 const browser=await chromium.launch({headless:true,...(process.env.BROWSER_CHANNEL?{channel:process.env.BROWSER_CHANNEL}:{})});
 try{
- const context=await browser.newContext({viewport:{width:1440,height:1000},acceptDownloads:true}),admin=await context.newPage();await admin.goto(base+'/admin');
+ const context=await browser.newContext({viewport:{width:1440,height:1000},acceptDownloads:true,permissions:["clipboard-read","clipboard-write"]}),admin=await context.newPage();await admin.goto(base+'/admin');
  const opened=context.waitForEvent('page');await admin.locator('#documentation-link').click();const page=await opened;const errors=[],requests=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>requests.push(r.url()));await page.waitForSelector('body[data-ready="true"]');assert.match(page.url(),/\/docs/);assert.equal(await page.locator('.doc-card').count(),10);assert.equal(await page.locator('.learning-grid .doc-card').count(),4);assert.equal(await page.evaluate(()=>window.opener===null),true);
  const shot=process.env.SCREENSHOT_DIR;if(shot){mkdirSync(shot,{recursive:true});await page.screenshot({path:join(shot,'documentacion-inicio.png'),fullPage:true});}
  // Recorrido educativo real: portada -> mapa -> ficha del servidor -> manual junior.
@@ -37,6 +37,9 @@ try{
  await page.locator('.document').getByRole('link',{name:'manual junior',exact:true}).first().click();
  await page.waitForFunction(()=>document.querySelector('.document h1')?.textContent==='Manual del desarrollador junior');
  assert.match(await page.locator('.document').innerText(),/Semilla|semilla/);
+ await page.locator('.docs-code-copy').first().click();assert.equal((await page.evaluate(()=>navigator.clipboard.readText())).replaceAll('\r\n','\n'),(await page.locator('.document pre').first().textContent()).replaceAll('\r\n','\n'));
+ await page.locator('#docs-theme').click();assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
+
  await page.locator('[data-category="Aprender el código"]').click();
  await page.waitForFunction(()=>document.querySelector('#view h1')?.textContent==='Aprender el código');
  assert.equal(await page.locator('.doc-card').count(),10);

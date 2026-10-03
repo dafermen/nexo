@@ -11,6 +11,7 @@
  */
 
 import {renderDocument} from './docs-renderer.js';
+import './docs-reading-tools.js';
 
 const $=selector=>document.querySelector(selector);
 const node=(tag,text,className)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(className)n.className=className;return n;};
@@ -34,6 +35,8 @@ function home(){
   const fragment=document.createDocumentFragment(),hero=node('section',undefined,'hero'),intro=node('div');
   intro.append(node('p','BIBLIOTECA DEL PROYECTO','eyebrow'));const title=node('h1','Todo Nexo. ');title.append(node('em','Un solo lugar.'));intro.append(title,node('p','Entienda cómo funciona, aprenda a desarrollarlo y descubra el siguiente paso. Toda la documentación de este proyecto, conectada.'));
   hero.append(intro,node('div','N','hero-icon'));fragment.append(hero);
+  const paths=node('nav',undefined,'docs-reading-paths');paths.setAttribute('aria-label','Recorridos de lectura');
+  for(const [prefix,title,description] of [['00-','Conocer el producto','Propósito y funciones.'],['24-','Aprender a usarlo','Uso y administración.'],['23-','Explorar el desarrollo','Código, arquitectura y pruebas.']]) {const doc=catalog.documents.find(d=>d.path.startsWith('docs/'+prefix));if(doc){const a=link('','#doc='+doc.id);a.append(node('strong',title),node('span',description));paths.append(a);}}fragment.append(paths);
   const stats=node('div',undefined,'stats');
   for(const [value,label] of [[catalog.documents.length,'Documentos'],[catalog.status.phases.length,'Fases'],[catalog.status.tasks.filter(t=>t.status==='completed').length,'Tareas realizadas'],[catalog.status.tasks.filter(t=>t.status!=='completed').length,'Por completar']]){const s=node('div',undefined,'stat');s.append(node('strong',value),node('span',label));stats.append(s);}fragment.append(stats);
   fragment.append(section('Aprenda cómo está construido','Código explicado para estudiantes: módulos, recorridos, datos y ejercicios. Comience por el Manual del desarrollador junior en las guías de abajo.'));
@@ -84,7 +87,10 @@ async function readDocument(id,heading,version){
   const layout=node('div',undefined,'doc-layout'),article=node('article',undefined,'document'),toc=node('nav',undefined,'toc');toc.setAttribute('aria-label','En este documento');toc.append(node('strong','EN ESTE DOCUMENTO'));
   const rendered=renderDocument(result.text,{path:doc.path,documents:catalog.documents,assets:catalog.assets});article.append(rendered.fragment);
   for(const h of rendered.headings.filter(h=>h.depth===2||h.depth===3)){const a=link(h.text,'#doc='+id+'&heading='+encodeURIComponent(h.id));if(h.depth===3)a.className='nested';toc.append(a);}
-  layout.append(article,toc);fragment.append(layout);$('#view').replaceChildren(fragment);document.title=doc.title+' · Nexo';
+  layout.append(article,toc);fragment.append(layout);
+  const pager=node('nav',undefined,'docs-page-pager');pager.setAttribute('aria-label','Anterior y siguiente');const index=catalog.documents.indexOf(doc);
+  for(const [entry,label] of [[catalog.documents[index-1],'Anterior'],[catalog.documents[index+1],'Siguiente']])if(entry)pager.append(link(label+': '+entry.title,'#doc='+entry.id));fragment.append(pager);
+  $('#view').replaceChildren(fragment);window.InnovaLogicDocs.enhance(article);document.title=doc.title+' · Nexo';
   if(heading){const target=article.querySelector('#'+CSS.escape(heading));target?.scrollIntoView({block:'start'});}
 }
 function paramsForRoute(){const raw=location.hash.slice(1);return ['home','tasks','library',''].includes(raw)?new URLSearchParams({view:raw||'home'}):new URLSearchParams(raw);}
@@ -119,3 +125,9 @@ $('#search').oninput=()=>{clearTimeout(searchTimer);searchTimer=setTimeout(searc
 $('#menu-toggle').onclick=()=>{$('#menu-toggle').setAttribute('aria-expanded',String(document.body.classList.toggle('nav-open')));};
 document.addEventListener('keydown',event=>{if(event.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){event.preventDefault();$('#search').focus();}if(event.key==='Escape'){document.body.classList.remove('nav-open');$('#menu-toggle').setAttribute('aria-expanded','false');}});
 window.addEventListener('hashchange',()=>{if(location.hash==='#main'){$('#main').focus();return;}clearTimeout(searchTimer);route();});load();
+
+// Theme belongs to the documentation, not to the kiosk or administration UI.
+let docsTheme;try{docsTheme=localStorage.getItem('nexo-docs-theme');}catch{}
+function setDocsTheme(value){document.documentElement.dataset.theme=value;$('#docs-theme').textContent=value==='dark'?'Tema claro':'Tema oscuro';$('#docs-theme').setAttribute('aria-pressed',String(value==='dark'));try{localStorage.setItem('nexo-docs-theme',value);}catch{}}
+setDocsTheme(['light','dark'].includes(docsTheme)?docsTheme:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+$('#docs-theme').onclick=()=>setDocsTheme(document.documentElement.dataset.theme==='dark'?'light':'dark');
