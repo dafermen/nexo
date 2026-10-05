@@ -22,6 +22,7 @@ const {chromium}=createRequire(import.meta.url)(process.env.PLAYWRIGHT_MODULE||'
 const repository=createRepository(':memory:');
 const server=createApp({config:{provider:'demo',center:schoolCenter,sessionTtlMs:300000},repository,ai:{reply(){throw new Error('Unexpected paid provider');}},localTts:{status:()=>({available:false}),stop(){},close(){}},liveAvatar:{async close(){}}});
 server.listen(0,'127.0.0.1');await once(server,'listening');const base='http://127.0.0.1:'+server.address().port;
+const catalog=await(await fetch(base+'/api/docs/catalog')).json();
 const browser=await chromium.launch({headless:true,...(process.env.BROWSER_CHANNEL?{channel:process.env.BROWSER_CHANNEL}:{})});
 try{
  const context=await browser.newContext({viewport:{width:1440,height:1000},acceptDownloads:true,permissions:["clipboard-read","clipboard-write"]}),admin=await context.newPage();await admin.goto(base+'/admin');
@@ -42,7 +43,7 @@ try{
 
  await page.locator('[data-category="Aprender el código"]').click();
  await page.waitForFunction(()=>document.querySelector('#view h1')?.textContent==='Aprender el código');
- assert.equal(await page.locator('.doc-card').count(),10);
+ assert.deepEqual((await page.locator('.doc-card').evaluateAll(nodes=>nodes.map(a=>a.getAttribute('href')))).sort(),catalog.documents.filter(d=>d.category==='Aprender el código').map(d=>'#doc='+d.id).sort());
  await page.locator('#search').fill('git clone https://github.com/dafermen/nexo.git');await page.waitForFunction(()=>document.querySelector('#view h1')?.textContent==='Resultados de búsqueda');await page.waitForFunction(()=>document.querySelectorAll('.doc-card').length===1);assert.match(await page.locator('.doc-card').innerText(),/GitHub/i);await page.locator('.doc-card').click();await page.waitForSelector('.document h1');assert.match(await page.locator('.document h1').innerText(),/GitHub/i);
  await page.locator('.toc a').first().click();await page.waitForSelector('.document h1');assert.ok(page.url().includes('heading='));
  await page.evaluate(()=>window.print=()=>{window.printRequested=true;});await page.getByRole('button',{name:'Imprimir / PDF'}).click();assert.equal(await page.evaluate(()=>window.printRequested),true);
@@ -50,7 +51,7 @@ try{
  if(shot)await page.screenshot({path:join(shot,'documentacion-manual.png'),fullPage:true});
  await page.locator('[data-nav=tasks]').click();await page.waitForSelector('.phase');assert.equal(await page.locator('.phase').count(),10);await page.getByRole('button',{name:'Pendientes',exact:true}).click();assert.ok(await page.locator('.task').count()>0);assert.equal(await page.locator('.task .pill.completed').count(),0);if(shot)await page.screenshot({path:join(shot,'documentacion-tareas.png'),fullPage:true});
  await page.locator('[data-nav=library]').click();await page.waitForSelector('.doc-card');const count=await page.locator('.doc-card').count();assert.ok(count>=30);await page.locator('[data-category="Licencias"]').click();await page.waitForFunction(()=>document.querySelector('#view h1')?.textContent==='Licencias');assert.equal(await page.locator('.doc-card').count(),7);
- const catalog=await(await fetch(base+'/api/docs/catalog')).json();
+
  await page.goto(base+'/docs#doc='+catalog.documents.find(d=>d.path==='docs/03-arquitectura.md').id);await page.waitForSelector('.document');assert.match(await page.locator('#view .notice').innerText(),/evolución/);
  // Parse every Nexo document: supported internal documentation links must resolve.
  const audit=await page.evaluate(async catalog=>{
