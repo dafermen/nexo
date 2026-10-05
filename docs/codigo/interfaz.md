@@ -600,3 +600,10 @@ Editor privado de hasta diez profesores. Recibe reglas, servicios y request aute
 ## public/booking-transfers.js
 
 Asistente por lotes de hasta diez citas seleccionadas. Vista previa, pausa opcional, motivos y resultados. epoch invalida respuestas tras logout; incertidumbre se resuelve desde detalle de agenda. Consulte [Reasignación](../52-deshabilitar-y-reasignar-profesores.md).
+
+
+## public/docs-reading-tools.js
+
+Controles de lectura: copia de código y ampliación de imágenes.
+
+Recibe el contenedor documental; añade controles accesibles sin modificar el contenido canónico. No hace peticiones externas ni cambia permisos. Gestiona eventos y diálogos en el navegador.

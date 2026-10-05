@@ -208,3 +208,10 @@ Variables de tema reutilizadas en páginas.
 - **Entra:** Ancho y estado del formulario.
 - **Sale:** Reglas visuales y de foco.
 - **Estado y efectos:** No cambia la autorización.
+
+
+## public/innovalogic-docs.css
+
+Tema documental común de InnovaLogic.
+
+Recibe variables de tema, clases y tamaño de pantalla. Define colores, foco, herramientas de lectura y reglas adaptables. Solo afecta la documentación; los permisos siguen en el servidor.
