@@ -1,6 +1,6 @@
 # Nexo · Kiosco conversacional para un centro de atención
 
-## Versión actual: 0.34.1
+## Versión actual: 0.35.0
 
 Editor visual de preguntas frecuentes con categorías, búsqueda, vista previa y precios del catálogo. Piloto web con voz, video, agenda por profesor y administración protegida.
 
@@ -256,3 +256,7 @@ En `/admin#admin-reports`: métricas del período, citas/preguntas/avisos con fi
 ## DOC-STD-20261002 — Navegación documental
 
 Consultar el [mapa documental](docs/00-inicio.md) para encontrar fuentes oficiales, rutas de lectura y reglas de mantenimiento del proyecto.
+
+### Temas del kiosco
+
+Seleccione Nexo o Método Mogollón en Configuración → Experiencia. [Guía de temas](docs/57-temas-visuales.md).

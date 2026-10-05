@@ -1,0 +1,59 @@
+/**
+ * NEXO · GUÍA DEL MÓDULO: public/kiosk-themes.css
+ * Entrada: body[data-theme], configurado por la API del negocio.
+ * Salida: identidad visual del kiosco; no controla reservas, IA ni avatar.
+ * Nexo conserva su CSS original. Solo el tema metodomogollon activa las variantes.
+ * Los estados de disponibilidad y peligro conservan sus colores semánticos.
+ * Referencia: docs/57-temas-visuales.md.
+ */
+.nexo-brand{display:flex;align-items:center;gap:10px}
+.mogollon-brand{display:none}
+body[data-theme="metodomogollon"]{--lime:#ffd329;--ink:#272727;--paper:#fffaf0;--line:#ddd3b8;background:#101722}
+body[data-theme="metodomogollon"] .nexo-brand{display:none}
+body[data-theme="metodomogollon"] .mogollon-brand{display:flex;flex-direction:column;text-align:center;gap:0;line-height:1;letter-spacing:1px;color:#fff}
+.mogollon-brand>span{font-size:10px;font-weight:400;letter-spacing:3px}
+.mogollon-brand strong{font-size:23px;font-weight:800;letter-spacing:-.7px;color:#ffd329}
+.mogollon-brand small{font-size:9px;font-weight:500;letter-spacing:5px;margin-top:2px}
+body[data-theme="metodomogollon"] .agent-panel{background:radial-gradient(ellipse at 42% 48%,#36435655,transparent 68%),linear-gradient(150deg,#182231,#0b1018);color:#fff7dd}
+body[data-theme="metodomogollon"] .agent-panel::before{background-image:linear-gradient(#ffd32905 1px,transparent 1px),linear-gradient(90deg,#ffd32905 1px,transparent 1px);background-size:48px 48px}
+body[data-theme="metodomogollon"] .agent-intro p,
+body[data-theme="metodomogollon"] .home-utilities,
+body[data-theme="metodomogollon"] .home-utilities button{color:#eee9dc}
+body[data-theme="metodomogollon"] .orbit{border-color:#ffd32926;box-shadow:none}
+body[data-theme="metodomogollon"] .waveform i{background:#ffd329}
+body[data-theme="metodomogollon"] .avatar-caption{background:#111925e8;border-color:#ffd32955}
+body[data-theme="metodomogollon"] .online-pill{background:#ffd3290a;border-color:#ffd32944}
+body[data-theme="metodomogollon"] .language-picker{background:#111a27e6;border-color:#ffd32944}
+body[data-theme="metodomogollon"] .language-picker button[aria-pressed="true"]{background:#ffd329;color:#151515;border-color:#ffd329}
+body[data-theme="metodomogollon"] .language-picker button[aria-pressed="false"]{color:#fff5d9;border-color:#ffffff44;background:#ffffff08}
+body[data-theme="metodomogollon"] .primary,
+body[data-theme="metodomogollon"] .start-button:not(.video-choice):not(.new-conversation),
+body[data-theme="metodomogollon"] .send-button{background:#ffd329;color:#191919}
+body[data-theme="metodomogollon"]:not(.video-first) .home-shortcuts button{background:#ffd329;color:#171717;border-color:#ffd329;font-weight:650}
+body[data-theme="metodomogollon"]:not(.video-first) .call-choices .video-choice,
+body[data-theme="metodomogollon"]:not(.video-first) .call-choices .new-conversation{background:#ffffff08;color:#fff4ce;border-color:#c5a94d}
+body[data-theme="metodomogollon"] .modal,
+body[data-theme="metodomogollon"] .home-panel{background:#fffcf4;border-color:#d4c59a}
+body[data-theme="metodomogollon"] .modal p,
+body[data-theme="metodomogollon"] .modal .muted,
+body[data-theme="metodomogollon"] .eyebrow,
+body[data-theme="metodomogollon"] .text-button,
+body[data-theme="metodomogollon"] .close-button{color:#615b4e}
+body[data-theme="metodomogollon"] .service-icon,
+body[data-theme="metodomogollon"] .home-panel-close,
+body[data-theme="metodomogollon"] .resource-link{background:#fff0b5;color:#29251a;border-color:#d8bf64}
+body[data-theme="metodomogollon"] .tab.active{color:#322b10;border-color:#b88608}
+body[data-theme="metodomogollon"] .service-card{border-color:#e0d4b3;background:#fffdf6}
+body[data-theme="metodomogollon"] :is(button,a,input,select,textarea):focus-visible{outline-color:#bf8b00}
+body[data-theme="metodomogollon"] .agent-panel :is(button,a):focus-visible{outline-color:#ffe66b}
+body[data-theme="metodomogollon"].video-first .agent-panel{background:radial-gradient(ellipse at 50% 45%,#374354,#182231 48%,#0b1018)}
+body[data-theme="metodomogollon"] .call-dock{background:#131c29ed}
+body[data-theme="metodomogollon"] .call-button.call-primary,
+body[data-theme="metodomogollon"] .call-button[aria-pressed="true"]#call-mic,
+body[data-theme="metodomogollon"] .call-button[aria-expanded="true"]{background:#ffd329;color:#171717}
+/* Mantener espacio entre la marca, el estado y el botón de pantalla completa. */
+@media(max-width:480px){
+ body[data-theme="metodomogollon"]:not(.video-first) .agent-top{display:none}
+ .mogollon-brand strong{font-size:21px}
+}
+@media(prefers-reduced-motion:reduce){body[data-theme="metodomogollon"] *{scroll-behavior:auto}}

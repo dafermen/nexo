@@ -72,3 +72,13 @@ test('teclado táctil opcional conserva configuración anterior y valida boolean
  defaults.experience.touchKeyboard='yes';assert.throws(()=>validateSettings(defaults),e=>e.status===400);
  const f=await fixture(t),state=await f.get();state.configuration.experience.touchKeyboard=true;assert.equal((await f.save(state)).status,200);assert.equal((await f.get()).configuration.experience.touchKeyboard,true);assert.equal((await f.request('/api/config')).data.center.experience.touchKeyboard,true);
 });
+
+test('temas permitidos, compatibilidad con formulario antiguo y aislamiento del catálogo',async t=>{
+ const defaults=settingsDefaults(schoolCenter);delete defaults.experience.theme;assert.equal(validateSettings(defaults).experience.theme,'nexo');
+ defaults.experience.theme='custom.css';assert.throws(()=>validateSettings(defaults),e=>e.status===400);
+ const f=await fixture(t),state=await f.get();assert.equal(state.configuration.experience.theme,'nexo');
+ state.configuration.experience.theme='metodomogollon';assert.equal((await f.save(state)).status,200);
+ const updated=await f.get();assert.equal((await f.request('/api/config')).data.center.experience.theme,'metodomogollon');assert.deepEqual(updated.services,state.services);assert.deepEqual(updated.configuration.booking,state.configuration.booking);
+ delete updated.configuration.experience.theme;assert.equal((await f.save(updated)).status,200);assert.equal((await f.get()).configuration.experience.theme,'metodomogollon');
+ const restored=await f.get();restored.configuration.experience.theme='nexo';assert.equal((await f.save(restored)).status,200);assert.equal((await f.request('/api/config')).data.center.experience.theme,'nexo');assert.equal(f.calls.length,0);
+});

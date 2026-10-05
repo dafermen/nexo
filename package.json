@@ -1,6 +1,6 @@
 {
   "name": "kiosco-nexo",
-  "version": "0.34.1",
+  "version": "0.35.0",
   "private": true,
   "type": "module",
   "description": "Kiosco conversacional modular para centros de atenciÃ³n",
@@ -43,5 +43,5 @@
   "dependencies": {
     "nodemailer": "10.0.10"
   },
-  "releaseDate": "2026-09-27"
+  "releaseDate": "2026-10-05"
 }

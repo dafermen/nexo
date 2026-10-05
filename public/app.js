@@ -750,6 +750,9 @@ function renderCenter(){
  const c=config.center,e=c.experience||{};
  renderResources($('school-resources'));
  document.body.dataset.accent=e.accent||'lime';
+ document.body.dataset.theme=e.theme==='metodomogollon'?'metodomogollon':'nexo';
+ document.querySelector('meta[name="theme-color"]').content=e.theme==='metodomogollon'?'#101722':'#f5f5ef';
+ document.querySelector('.header .brand').setAttribute('aria-label',e.theme==='metodomogollon'?'Método Mogollón, inicio':'Nexo, inicio');
  $('agent-heading').replaceChildren(document.createTextNode('Hola, soy '+(c.assistantName||'Nexo')),element('span','','.'));
  $('avatar').setAttribute('aria-label',(c.assistantName||'Nexo')+', asistente virtual');
  $('messages').setAttribute('aria-label','Conversación con '+(c.assistantName||'Nexo'));

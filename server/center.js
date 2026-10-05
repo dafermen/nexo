@@ -90,7 +90,7 @@ export function validateService(input, prior, currency) {
 export function centerRepository(repository, center, config={}) {
   if (!center) return repository;
   repository.ensureCenterSettings({ profile: {name:center.name,weeklyHours:defaultHours}, services: isSchool(center) ? schoolServices.map(s => ({...s,modality:null,requirements:null})) : [], configuration:settingsDefaults(center,config), configurationRevision:0 });
-  const state = () => {const saved=repository.readCenterSettings();return {...saved,configuration:saved.configuration?{...saved.configuration,business:{practiceUrl:'',...saved.configuration.business},experience:{touchKeyboard:false,...saved.configuration.experience}}:settingsDefaults(center,config),configurationRevision:saved.configurationRevision||0};};
+  const state = () => {const saved=repository.readCenterSettings();return {...saved,configuration:saved.configuration?{...saved.configuration,business:{practiceUrl:'',...saved.configuration.business},experience:{theme:'nexo',touchKeyboard:false,...saved.configuration.experience}}:settingsDefaults(center,config),configurationRevision:saved.configurationRevision||0};};
   const getCenter = () => {
     const {profile,services,configuration:settings,configurationRevision} = state();
     const groups = [];
@@ -116,7 +116,7 @@ export function centerRepository(repository, center, config={}) {
      */
     saveConfiguration(revision,input){
       if(!input||Object.keys(input).some(k=>!['profile','configuration'].includes(k)))throw new HttpError(400,'Campos no permitidos.');
-      const profile=validateProfile(input.profile),configuration=validateSettings({...input.configuration,business:{practiceUrl:state().configuration.business.practiceUrl,...input.configuration?.business}});
+      const profile=validateProfile(input.profile),configuration=validateSettings({...input.configuration,experience:{theme:state().configuration.experience.theme,...input.configuration?.experience},business:{practiceUrl:state().configuration.business.practiceUrl,...input.configuration?.business}});
       if(configuration.assistant.knowledgeMode==='custom'){
         try{parseFaq(configuration.assistant.knowledgeText);}catch(error){throw new HttpError(400,'Respuestas propias: '+error.message);}
       }

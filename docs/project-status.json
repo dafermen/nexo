@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-09-27",
-  "version": "0.34.1",
+  "updatedAt": "2026-10-05",
+  "version": "0.35.0",
   "summary": "Contenido aprobado del curso de cinco horas y libro, campos comerciales editables, preguntas por etapas y carga versionada que conserva cambios posteriores.",
   "phases": [
     {
@@ -713,6 +713,18 @@
       "evidence": {
         "path": "docs/56-curso-libro-contenido.md",
         "label": "Contenido, mantenimiento y pruebas"
+      }
+    },
+    {
+      "id": "NEXO-54",
+      "phaseId": "interfaz",
+      "title": "Temas Nexo y Método Mogollón",
+      "status": "completed",
+      "priority": "P2",
+      "description": "Selector administrativo, vista previa, persistencia SQLite y compatibilidad con instalaciones existentes. Valor inicial desde .env reservado para etapa posterior.",
+      "evidence": {
+        "path": "docs/57-temas-visuales.md",
+        "label": "Temas, mantenimiento y pruebas"
       }
     }
   ]

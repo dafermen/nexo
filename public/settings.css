@@ -20,3 +20,6 @@ body{background:#f6f7f1;color:#293d31}.settings-header{padding:22px 36px;backgro
 
 /* Calendarios por profesor: controles agrupados y adaptación al ancho disponible. */
 .booking-config{border:0;padding:0;margin:0;min-width:0}.instructor-row{border:1px solid #d6dec9;border-radius:12px;padding:16px;margin:16px 0;display:grid;gap:14px;min-width:0}.instructor-row label{display:flex;flex-direction:column;gap:8px}.instructor-row .check-row{flex-direction:row}.instructor-row input,.instructor-row select{max-width:100%;min-width:0}.instructor-row select{width:100%}#booking-instructors[hidden]{display:none}
+
+/* Vista previa aislada: el tema del kiosco no cambia el formulario administrativo. */
+#preview-theme{display:block;font-size:17px;margin-bottom:18px}.preview #preview-card[data-theme=metodomogollon]{background:linear-gradient(150deg,#182231,#0b1018)!important;color:#fff5db}.preview #preview-card[data-theme=metodomogollon] #preview-theme,.preview #preview-card[data-theme=metodomogollon] small{color:#ffd329}.preview #preview-card[data-theme=metodomogollon] .preview-orb{color:#ffd329;border-color:#ffd32966;background:#ffd32915}

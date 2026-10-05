@@ -24,7 +24,17 @@ const server=createApp({repository:repo,config:{provider:'demo',center:schoolCen
 const browser=await chromium.launch({headless:true,...(process.env.BROWSER_CHANNEL?{channel:process.env.BROWSER_CHANNEL}:{})});
 try{
  const context=await browser.newContext({viewport:{width:1440,height:1050}}),page=await context.newPage(),kiosk=await context.newPage(),errors=[];for(const p of [page,kiosk])p.on('pageerror',e=>errors.push(e.message));
- await kiosk.goto(base);await kiosk.waitForSelector('.service-card',{state:'attached'});await page.goto(base+'/admin');await page.locator('#settings-link').click();assert.match(page.url(),/settings/);await page.locator('#token').fill(adminToken);await page.locator('#login button').click();await page.waitForSelector('#dashboard:not([hidden])');assert.equal(await page.locator('#sections button').count(),6);assert.equal(await page.locator('#token').inputValue(),'');
+ await kiosk.goto(base);await kiosk.waitForSelector('.service-card',{state:'attached'});await page.goto(base+'/admin');await page.locator('#settings-link').click();assert.match(page.url(),/settings/);await page.locator('#token').fill(adminToken);await page.locator('#login button').click();await page.waitForSelector('#dashboard:not([hidden])').catch(async error=>{console.error(await page.locator('#error').innerText(),errors);throw error;});assert.equal(await page.locator('#sections button').count(),6);assert.equal(await page.locator('#token').inputValue(),'');
+ // El selector se previsualiza sin guardar y publica solo por el formulario protegido.
+ for(const theme of ['metodomogollon','nexo']){
+  await page.locator('[data-section-button="experience"]').click();
+  await page.locator('[name="experience.theme"]').selectOption(theme);
+  assert.equal(await page.locator('#preview-card').getAttribute('data-theme'),theme);
+  const previous=await kiosk.locator('body').getAttribute('data-theme');assert.notEqual(previous,theme);
+  const saved=page.waitForResponse(r=>r.url().endsWith('/api/admin/configuration')&&r.request().method()==='PUT');await page.locator('#save').click();assert.equal((await saved).status(),200);
+  await kiosk.evaluate(()=>window.dispatchEvent(new Event('focus')));await kiosk.waitForFunction(theme=>document.body.dataset.theme===theme,theme);
+ }
+ await page.locator('[data-section-button="business"]').click();
  const shot=process.env.SCREENSHOT_DIR;if(shot){mkdirSync(shot,{recursive:true});await page.screenshot({path:join(shot,'configuracion-negocio.png'),fullPage:true});}
  await page.locator('[name="profile.name"]').fill('Brisa · Limpieza');await page.locator('[name="business.type"]').selectOption('general');await page.locator('[name="business.description"]').fill('Servicios de limpieza para hogares y oficinas.');await page.locator('[name="business.timezone"]').selectOption('America/Bogota');await page.locator('[name="business.currency"]').selectOption('COP');await page.locator('[name="business.phone"]').fill('555-0100');
  await page.locator('[data-section-button="assistant"]').click();await page.locator('[name="assistant.name"]').fill('Luna');await page.locator('[name="assistant.addressStyle"]').selectOption('tu');await page.locator('[name="assistant.welcome"]').fill('Hola, soy {asistente} de {negocio}. ¿Qué quieres consultar?');await page.locator('[name="assistant.topics"]').fill('limpieza, oficinas, hogares');assert.match(await page.locator('#preview-greeting').innerText(),/Luna de Brisa/);

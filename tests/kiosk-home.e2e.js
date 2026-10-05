@@ -28,17 +28,22 @@ const browser=await chromium.launch({headless:true,...(process.env.BROWSER_CHANN
 try{
  const page=await browser.newPage({reducedMotion:'reduce'});page.on('pageerror',e=>errors.push(e.message));mkdirSync('.local/kiosk-qa',{recursive:true});
  const sizes=[[390,844],[320,568],[768,1024],[820,1180],[1080,1920],[1920,1080],[1366,768],[1024,600],[844,390]];
+ for(const theme of ['nexo','metodomogollon']){
+ const themed=repo.getCenterSettings();themed.configuration.experience.theme=theme;repo.saveConfiguration(themed.revision,{profile:themed.profile,configuration:themed.configuration});
  for(const [width,height] of sizes){
   await page.setViewportSize({width,height});await page.goto(base);await page.waitForSelector('.service-card',{state:'attached'});await page.locator('.avatar-photo').evaluate(img=>img.decode());
   assert.equal(await page.locator('#home-panel').evaluate(e=>e.open),false);
+  assert.equal(await page.locator('body').getAttribute('data-theme'),theme);
+  assert.equal(await page.locator('.mogollon-brand').isVisible(),theme==='metodomogollon');
   for(const id of ['start','start-video','new-conversation','home-services','home-agenda','home-chat','home-options','fullscreen']){
    const b=await page.locator('#'+id).boundingBox();assert.ok(b&&b.x>=0&&b.y>=0&&b.x+b.width<=width+1&&b.y+b.height<=height+1,`${id} fuera de ${width}x${height}: ${JSON.stringify(b)}`);assert.ok(b.height>=44,`${id} tamaño táctil`);
   }
   assert.ok(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1&&document.documentElement.scrollWidth<=innerWidth+1));
-  if([390,820,1920].includes(width))await page.screenshot({path:`.local/kiosk-qa/home-${width}.png`});
+  if([390,820,1920].includes(width))await page.screenshot({path:`.local/kiosk-qa/home-${theme}-${width}.png`});
   await page.locator('#home-services').click();await page.waitForSelector('.service-card');assert.ok(await page.locator('.service-card').first().isVisible());
   const panel=await page.locator('#home-panel').boundingBox();assert.ok(panel.y>=0&&panel.y+panel.height<=height+1);
   await page.keyboard.press('Escape');assert.equal(await page.locator('#home-panel').evaluate(e=>e.open),false);assert.equal(await page.locator('#home-services').evaluate(e=>document.activeElement===e),true);
+ }
  }
  await page.setViewportSize({width:820,height:1180});await page.locator('#home-agenda').click();assert.equal(await page.locator('#booking-title').innerText(),'Mi cita y horarios');assert.equal(await page.locator('#booking-content > button').count(),3);await page.keyboard.press('Escape');
  await page.setViewportSize({width:390,height:844});await page.locator('#home-chat').click();await page.getByRole('button',{name:'Teclado para Su consulta',exact:true}).click();await page.locator('#touch-keyboard [data-char="h"]').click();await page.getByRole('button',{name:'Listo ✓',exact:true}).click();assert.equal(await page.locator('#message').inputValue(),'h');
