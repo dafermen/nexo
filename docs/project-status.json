@@ -1,7 +1,7 @@
 {
   "updatedAt": "2026-10-05",
-  "version": "0.35.0",
-  "summary": "Contenido aprobado del curso de cinco horas y libro, campos comerciales editables, preguntas por etapas y carga versionada que conserva cambios posteriores.",
+  "version": "0.36.0",
+  "summary": "Tema Método Mogollón con asesora propia, menú lateral, precios del catálogo, acceso a agenda y preparación; adaptación a teléfono, tablet y kiosco, manteniendo el tema Nexo.",
   "phases": [
     {
       "id": "base",
@@ -721,7 +721,7 @@
       "title": "Temas Nexo y Método Mogollón",
       "status": "completed",
       "priority": "P2",
-      "description": "Selector administrativo, vista previa, persistencia SQLite y compatibilidad con instalaciones existentes. Valor inicial desde .env reservado para etapa posterior.",
+      "description": "Selector administrativo, persistencia SQLite y compatibilidad. Versión 0.36.0: distribución inspirada en el cliente, asesora con traje negro, menú de cinco accesos, tres idiomas y llamada de voz verificada. Valor inicial desde .env reservado para etapa posterior.",
       "evidence": {
         "path": "docs/57-temas-visuales.md",
         "label": "Temas, mantenimiento y pruebas"

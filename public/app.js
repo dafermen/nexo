@@ -51,7 +51,7 @@ const homeIdleMs = 60_000;
 let lastActivity = Date.now(), lastTouch = Date.now(), bookingGeneration = 0;
 let liveAvatarConfig = null, avatarDeadline = null, startingCall = false, localSpeaking = false;
 const callView = createCallView();
-const kioskHome=createKioskHome({switchView,onClose:()=>{touchKeyboard.close();stopAudio();},openAgenda:()=>showAgendaMenu()});
+const kioskHome=createKioskHome({switchView,onClose:()=>{touchKeyboard.close();stopAudio();},openAgenda:()=>showAgendaMenu(),openPreparation:()=>{const book=services.find(s=>s.id==='cuaderno-preguntas');if(book)openBooking(book);else kioskHome.open('services');}});
 const languageUI=installLanguageUI(selectLanguage);
 /**
  * selectLanguage: Cierra la sesión anterior y aplica idioma a UI, STT y disponibilidad de voz.
@@ -745,12 +745,16 @@ function renderResources(container){
 function renderCenter(){
  $('home-agenda').disabled=!config?.center?.booking.enabled;
  $('home-agenda').title=config?.center?.booking.enabled?'Reservar, consultar su cita y ver disponibilidad':'Las citas en línea aún no están habilitadas';
+ $('method-agenda').disabled=$('home-agenda').disabled;$('method-agenda').title=$('home-agenda').title;
  touchKeyboard.setEnabled(config?.center?.experience?.touchKeyboard===true);
  if(!config?.center)return;
  const c=config.center,e=c.experience||{};
  renderResources($('school-resources'));
  document.body.dataset.accent=e.accent||'lime';
  document.body.dataset.theme=e.theme==='metodomogollon'?'metodomogollon':'nexo';
+ // Solo cambia la imagen estática; el video mantiene el proveedor y avatar configurados.
+ const photo=document.querySelector('.avatar-photo'),photoPath=e.theme==='metodomogollon'?'/assets/asesora-mogollon-v1.png':'/assets/recepcionista-v1.png';
+ if(photo.getAttribute('src')!==photoPath)photo.src=photoPath;
  document.querySelector('meta[name="theme-color"]').content=e.theme==='metodomogollon'?'#101722':'#f5f5ef';
  document.querySelector('.header .brand').setAttribute('aria-label',e.theme==='metodomogollon'?'Método Mogollón, inicio':'Nexo, inicio');
  $('agent-heading').replaceChildren(document.createTextNode('Hola, soy '+(c.assistantName||'Nexo')),element('span','','.'));

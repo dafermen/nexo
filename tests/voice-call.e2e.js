@@ -17,11 +17,13 @@ import {mkdirSync} from 'node:fs';
 import {join} from 'node:path';
 import {createApp} from '../server/app.js';
 import {createRepository} from '../server/db.js';
-import {schoolCenter} from '../server/center.js';
+import {schoolCenter,centerRepository} from '../server/center.js';
 import {DemoAiProvider} from '../server/providers/ai.js';
 import {pcmToWav} from '../server/providers/local-tts.js';
 const {chromium}=createRequire(import.meta.url)(process.env.PLAYWRIGHT_MODULE||'playwright');
 const repository=createRepository(':memory:');const starts=[],spoken=[];
+const centerRepo=centerRepository(repository,schoolCenter),theme=process.env.TEST_THEME==='metodomogollon'?'metodomogollon':'nexo';
+const settings=centerRepo.getCenterSettings();settings.configuration.experience.theme=theme;centerRepo.saveConfiguration(settings.revision,{profile:settings.profile,configuration:settings.configuration});
 const liveAvatar={status:()=>({mode:'LITE',configured:true,paidEnabled:true,occupied:false,requirements:{key:true,avatar:true},durationSeconds:60}),start:async()=>{starts.push(true);throw new Error('Voice must not start video');},stop:async()=>({stopped:true}),close:async()=>{}};
 const localTts={status:()=>({available:true}),stop(){},close(){},synthesize:async text=>{spoken.push(text);return{audioBase64:pcmToWav(Buffer.alloc(4410)).toString('base64')};}};
 const app=createApp({config:{provider:'demo',center:schoolCenter,avatarProvider:'liveavatar',sessionTtlMs:300000,retentionDays:7},repository,ai:new DemoAiProvider(),liveAvatar,localTts});
@@ -36,6 +38,8 @@ try{
  await page.locator('#start').click();await page.waitForSelector('#welcome-dialog[open]');assert.match(await page.locator('#welcome-detail').innerText(),/no abre una sesión de LiveAvatar/);await page.keyboard.press('Escape');assert.equal(await page.locator('body.voice-call').count(),0);assert.equal(spoken.length,0);
  await page.locator('#start').click();await page.locator('#accept-session').click();await page.waitForSelector('body.voice-call');await page.waitForFunction(()=>document.querySelectorAll('.message.assistant').length===1);await page.waitForTimeout(200);
  assert.equal(starts.length,0);assert.equal(spoken.length,1);assert.equal(await page.locator('#avatar-video').isVisible(),false);assert.equal(await page.locator('.avatar-photo').isVisible(),true);assert.equal(await page.locator('#call-rotate').isVisible(),false);assert.equal(await page.locator('#call-time').isVisible(),false);
+ assert.equal(await page.locator('.method-menu').isVisible(),false);assert.equal(await page.locator('.method-footer').isVisible(),false);
+ assert.match(await page.locator('.avatar-photo').getAttribute('src'),theme==='metodomogollon'?/asesora-mogollon-v1/:/recepcionista-v1/);
  for(const viewport of [{width:1024,height:1366},{width:1366,height:1024},{width:390,height:844},{width:844,height:390}]){
   await page.setViewportSize(viewport);const geometry=await page.evaluate(()=>({overflow:document.documentElement.scrollWidth>innerWidth,buttons:[...document.querySelectorAll('.call-dock button:not([hidden])')].map(el=>{const b=el.getBoundingClientRect();return b.width>=44&&b.height>=44&&b.x>=0&&b.y>=0&&b.right<=innerWidth&&b.bottom<=innerHeight;})}));assert.equal(geometry.overflow,false);assert.ok(geometry.buttons.every(Boolean));
   if(shots)await page.screenshot({path:join(shots,'voz-'+viewport.width+'.png')});
@@ -58,9 +62,14 @@ try{
  assert.equal(await page.locator('#call-mic').isDisabled(),false);
  console.log('✓ Error de conexión termina la escucha y permite reintentar sin abrir video.');
  await page.evaluate(()=>{const now=Date.now.bind(Date);Date.now=()=>now()+46000;});await page.waitForFunction(()=>!document.body.classList.contains('voice-call'));assert.equal(await page.locator('.message').count(),0);
- await page.locator('#start').click();await page.locator('#accept-session').click();await page.waitForSelector('body.voice-call');await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});await page.waitForFunction(()=>!document.body.classList.contains('voice-call'));
+ await page.locator('#start').click();await page.locator('#accept-session').click();await page.waitForSelector('body.voice-call');await page.waitForFunction(()=>document.querySelector('#mic').getAttribute('aria-pressed')==='true');
+ // La voz actual pausa al ocultar y recupera una ausencia breve; no debe cerrarse de inmediato.
+ await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});
+ await page.waitForFunction(()=>document.querySelector('#call-notice').textContent.includes('Llamada en pausa'));assert.equal(await page.locator('body.voice-call').count(),1);assert.equal(await page.locator('#call-mic').getAttribute('aria-pressed'),'false');
+ await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:false});document.dispatchEvent(new Event('visibilitychange'));});await page.waitForFunction(()=>document.querySelector('#mic').getAttribute('aria-pressed')==='true');
+ await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));const now=Date.now.bind(Date);Date.now=()=>now()+46000;Object.defineProperty(document,'hidden',{configurable:true,value:false});document.dispatchEvent(new Event('visibilitychange'));});await page.waitForFunction(()=>!document.body.classList.contains('voice-call'));
  assert.deepEqual(starts,[]);assert.equal(requests.filter(r=>r.url.endsWith('/api/avatar/session')).length,0);assert.equal(requests.filter(r=>r.url.includes('/vendor/livekit')).length,0);
- console.log('✓ Inactividad y abandono cierran la voz; cero solicitudes de sesión o SDK de LiveAvatar.');
+ console.log('✓ Inactividad cierra; ausencia breve pausa y recupera voz. Cero solicitudes de sesión o SDK de LiveAvatar.');
  // No voice installation: explain text fallback and never open paid video.
  await page.route('**/api/config',async route=>{const response=await route.fetch();const cfg=await response.json();cfg.localVoice.available=false;await route.fulfill({json:cfg});});
  await page.goto(base);await page.waitForSelector('.service-card',{state:'attached'});await page.locator('#start').click();assert.match(await page.locator('#notice').innerText(),/voz no está disponible/);assert.equal(await page.locator('body.voice-call').count(),0);assert.deepEqual(starts,[]);assert.deepEqual(errors,[]);

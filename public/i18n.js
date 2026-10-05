@@ -16,6 +16,16 @@ export const validLanguage=value=>typeof value==='string'&&Object.hasOwn(languag
 export let language='es';
 export function setLanguage(value){if(!validLanguage(value))throw Error('Unsupported language');language=value;}
 const rows=`
+¡Hola!|Hello!|Bonjour !
+¿Cómo puedo ayudarle hoy?|How can I help you today?|Comment puis-je vous aider aujourd’hui ?
+Conozca nuestros cursos|Explore our courses|Découvrez nos cours
+Conozca nuestros servicios|Explore our services|Découvrez nos services
+Precios y paquetes|Prices and packages|Tarifs et forfaits
+Agende su clase|Book your lesson|Réservez votre leçon
+Prepárese para el examen|Prepare for your test|Préparez votre examen
+Más información|More information|Plus d’informations
+La mejor ruta para llegar a su destino|The best route to your destination|Le meilleur chemin vers votre destination
+es educándose.|starts with learning.|passe par l’apprentissage.
 Curso de Pre-Licencia de 5 Horas|5-Hour Pre-Licensing Course|Cours préalable au permis de 5 heures
 Libro de Preguntas y Respuestas|Questions and Answers Book|Livre de questions et réponses
 Conocimientos esenciales sobre conducción segura, normas de tránsito, prevención de accidentes, responsabilidades al volante y riesgos del alcohol o las drogas. Forma parte del proceso previo al Road Test en Nueva York.|Essential knowledge about safe driving, traffic rules, accident prevention, responsibilities behind the wheel and the risks of alcohol or drugs. It is part of the process before the Road Test in New York.|Connaissances essentielles sur la conduite sécuritaire, les règles de circulation, la prévention des accidents, les responsabilités au volant et les risques liés à l’alcool ou aux drogues. Il fait partie des étapes précédant l’examen de conduite à New York.

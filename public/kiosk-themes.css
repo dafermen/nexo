@@ -57,3 +57,63 @@ body[data-theme="metodomogollon"] .call-button[aria-expanded="true"]{background:
  .mogollon-brand strong{font-size:21px}
 }
 @media(prefers-reduced-motion:reduce){body[data-theme="metodomogollon"] *{scroll-behavior:auto}}
+
+/* Distribución del tema: imagen y menú comparten el espacio flexible; idiomas y
+   controles tienen filas propias. En llamada estos elementos quedan ocultos. */
+.method-menu,.method-footer{display:none}
+body[data-theme="metodomogollon"] .agent-controls [hidden]{display:none!important}
+body[data-theme="metodomogollon"]:not(.video-first) .agent-panel{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto auto auto;gap:12px 20px;padding:120px clamp(16px,4vw,64px) 18px}
+body[data-theme="metodomogollon"]:not(.video-first) .header{inset:24px 30px auto;height:72px}
+body[data-theme="metodomogollon"]:not(.video-first) .brand{position:absolute;left:50%;transform:translateX(-50%)}
+body[data-theme="metodomogollon"]:not(.video-first) .header-actions{margin-left:auto}
+body[data-theme="metodomogollon"]:not(.video-first) .mogollon-brand>span{font-size:18px;letter-spacing:4px}
+body[data-theme="metodomogollon"]:not(.video-first) .mogollon-brand strong{font-size:clamp(28px,4vw,48px);letter-spacing:-1px}
+body[data-theme="metodomogollon"]:not(.video-first) .mogollon-brand small{font-size:14px;letter-spacing:5px;margin-top:5px}
+body[data-theme="metodomogollon"]:not(.video-first) .agent-top{display:none}
+body[data-theme="metodomogollon"]:not(.video-first) .agent-intro{display:contents}
+body[data-theme="metodomogollon"]:not(.video-first) .agent-intro>h1,body[data-theme="metodomogollon"]:not(.video-first) .agent-intro>p{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden;white-space:nowrap}
+body[data-theme="metodomogollon"]:not(.video-first) .avatar-stage{grid-column:1;grid-row:1;align-self:stretch;width:100%;height:100%;overflow:visible;z-index:1}
+body[data-theme="metodomogollon"]:not(.video-first) .avatar-photo{width:125%;max-width:none;height:100%;object-fit:contain;object-position:center bottom;left:-12%;bottom:0;filter:none;mask-image:linear-gradient(#000 88%,transparent);transform:none}
+body[data-theme="metodomogollon"]:not(.video-first) .orbit{display:none}
+body[data-theme="metodomogollon"]:not(.video-first) .method-menu{display:flex;flex-direction:column;justify-content:center;gap:clamp(8px,1.3vh,18px);grid-column:2;grid-row:1;min-height:0;z-index:2;width:100%;max-width:560px;align-self:stretch}
+.method-greeting{position:relative;display:flex;flex-direction:column;gap:5px;background:#fffdf5;color:#101722;padding:clamp(12px,2vh,26px);border-radius:22px 22px 22px 3px;margin-bottom:8px;box-shadow:0 12px 28px #0002}
+.method-greeting strong{font-size:clamp(28px,4vw,56px);line-height:1.05;letter-spacing:-1px}.method-greeting span{font-size:clamp(15px,2vw,25px);line-height:1.35}
+.method-menu button{display:flex;align-items:center;gap:14px;text-align:left;min-height:clamp(54px,6.7vh,98px);padding:12px 18px;border-radius:16px;background:#ffd329;color:#111722;border:1px solid #ffe477;font-size:clamp(15px,1.8vw,25px);font-weight:700;line-height:1.25;box-shadow:0 5px 0 #9c750026}
+.method-menu button:hover:not(:disabled){background:#ffe268;transform:translateY(-1px)}.method-menu button:disabled{opacity:.5;cursor:not-allowed}
+.method-menu svg{width:30px;height:30px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+body[data-theme="metodomogollon"]:not(.video-first) .language-picker{position:static;grid-column:1/-1;grid-row:2;justify-self:center;margin:0;background:transparent;border:0;gap:12px;z-index:2}
+body[data-theme="metodomogollon"]:not(.video-first) .language-picker button{border:1px solid #ffffff38;border-radius:12px;min-width:110px;min-height:48px}
+body[data-theme="metodomogollon"]:not(.video-first) .agent-controls{grid-column:1/-1;grid-row:3;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;max-width:1000px;align-self:auto;padding:0;z-index:2}
+body[data-theme="metodomogollon"]:not(.video-first) .call-choices,body[data-theme="metodomogollon"]:not(.video-first) .home-shortcuts{display:contents}
+body[data-theme="metodomogollon"]:not(.video-first) :is(#home-services,#home-agenda,.home-utilities,.home-prompt,.waveform){display:none}
+body[data-theme="metodomogollon"]:not(.video-first) .call-choices .start-button,body[data-theme="metodomogollon"]:not(.video-first) #home-chat{min-height:54px!important;flex-direction:row;font-size:clamp(12px,1.1vw,17px);padding:10px!important;background:#ffffff09;border:1px solid #ffffff40;color:#fff5d9;border-radius:12px}
+body[data-theme="metodomogollon"]:not(.video-first) #start{border-color:#ffd329;color:#ffe578}
+body[data-theme="metodomogollon"]:not(.video-first) .home-notice{grid-column:1/-1}
+body[data-theme="metodomogollon"]:not(.video-first) .method-footer{display:flex;grid-column:1/-1;grid-row:4;flex-direction:column;align-items:center;pointer-events:none;min-height:0}
+.method-footer img{width:min(700px,100%);height:clamp(40px,7vh,90px);object-fit:fill;opacity:.85}.method-footer p{margin:6px 0 0;text-align:center;font-size:clamp(13px,1.4vw,20px);color:#fff5d9}.method-footer strong{color:#ffd329}
+body[data-theme="metodomogollon"] .home-panel .service-price{display:block;white-space:normal;max-width:110px}
+body[data-theme="metodomogollon"] .home-panel[data-catalog-mode="prices"] .service-price{font-weight:750;font-size:18px;color:#624900}
+@media(max-width:600px){
+ body[data-theme="metodomogollon"]:not(.video-first) .agent-panel{padding:94px 12px 10px;gap:8px;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)}
+ body[data-theme="metodomogollon"]:not(.video-first) .header{inset:16px 16px auto;height:62px}
+ body[data-theme="metodomogollon"]:not(.video-first) .mogollon-brand>span{font-size:12px}body[data-theme="metodomogollon"]:not(.video-first) .mogollon-brand strong{font-size:28px}body[data-theme="metodomogollon"]:not(.video-first) .mogollon-brand small{font-size:10px}
+ .method-menu button{min-height:48px;gap:8px;padding:10px;border-radius:12px;font-size:14px}.method-menu svg{width:23px;height:23px}.method-greeting{padding:12px;border-radius:16px 16px 16px 3px;margin:0}.method-greeting strong{font-size:29px}.method-greeting span{font-size:14px}
+ body[data-theme="metodomogollon"]:not(.video-first) .avatar-photo{width:155%;left:-28%;object-position:center bottom}
+ body[data-theme="metodomogollon"]:not(.video-first) .language-picker{gap:6px;padding:0}body[data-theme="metodomogollon"]:not(.video-first) .language-picker button{min-width:84px;padding:8px 12px;min-height:44px}
+ body[data-theme="metodomogollon"]:not(.video-first) .agent-controls{gap:6px}body[data-theme="metodomogollon"]:not(.video-first) .call-choices .start-button,body[data-theme="metodomogollon"]:not(.video-first) #home-chat{flex-direction:column;min-height:64px!important;font-size:11px;padding:6px 3px!important;gap:4px}
+ .method-footer p{font-size:11px}.method-footer img{height:42px}
+}
+@media(max-height:720px){
+ body[data-theme="metodomogollon"]:not(.video-first) .method-footer{display:none}
+ body[data-theme="metodomogollon"]:not(.video-first) .agent-panel{grid-template-rows:minmax(0,1fr) auto auto;padding-top:82px;gap:8px}
+ body[data-theme="metodomogollon"]:not(.video-first) .header{top:12px;height:54px}
+ body[data-theme="metodomogollon"]:not(.video-first) .mogollon-brand>span{font-size:11px}body[data-theme="metodomogollon"]:not(.video-first) .mogollon-brand strong{font-size:27px}body[data-theme="metodomogollon"]:not(.video-first) .mogollon-brand small{font-size:10px}
+ body[data-theme="metodomogollon"]:not(.video-first) .method-menu{gap:6px}.method-menu button{min-height:44px;padding:8px;font-size:13px}.method-greeting{padding:10px;margin:0}.method-greeting strong{font-size:24px}.method-greeting span{font-size:13px}
+}
+@media(max-height:440px) and (orientation:landscape){
+ body[data-theme="metodomogollon"]:not(.video-first) .agent-panel{padding:66px 20px 8px;grid-template-columns:34% minmax(0,1fr);gap:6px 20px}
+ body[data-theme="metodomogollon"]:not(.video-first) .method-menu{display:grid;grid-template-columns:1fr 1fr;align-content:center;gap:6px}.method-greeting{grid-column:1/-1;flex-direction:row;align-items:center;gap:12px;padding:8px}
+ .method-menu button{font-size:12px;min-height:44px}.method-menu svg{width:22px;height:22px}
+ body[data-theme="metodomogollon"]:not(.video-first) .language-picker button{min-height:44px;padding:6px 14px}
+ body[data-theme="metodomogollon"]:not(.video-first) .call-choices .start-button,body[data-theme="metodomogollon"]:not(.video-first) #home-chat{min-height:44px!important;padding:6px!important}
+}
