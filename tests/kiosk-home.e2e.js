@@ -31,6 +31,22 @@ try{
  const sizes=[[390,844],[320,568],[768,1024],[820,1180],[1080,1920],[1920,1080],[1366,768],[1024,600],[844,390]];
  for(const theme of ['nexo','metodomogollon']){
  const themed=repo.getCenterSettings();themed.configuration.experience.theme=theme;repo.saveConfiguration(themed.revision,{profile:themed.profile,configuration:themed.configuration});
+ // Bloquear configuración reproduce la primera visita con una red lenta. El HTML
+ // debe traer el tema y pedir únicamente su retrato antes de recibir esta API.
+ const early=await browser.newPage({viewport:{width:820,height:1180}}),portraits=[];
+ let releaseConfig;const pendingConfig=new Promise(resolve=>{releaseConfig=resolve;});
+ await early.route('**/api/config',async route=>{await pendingConfig;await route.continue();});
+ early.on('request',r=>{if(/recepcionista-v1|asesora-mogollon-v1/.test(r.url()))portraits.push(new URL(r.url()).pathname);});
+ try{
+  const response=await early.goto(base,{waitUntil:'domcontentloaded'});
+  assert.match(response.headers()['cache-control'],/no-store/);
+  await early.locator('.avatar-photo').evaluate(img=>img.decode());
+  assert.equal(await early.locator('body').getAttribute('data-theme'),theme);
+  assert.equal(await early.locator('.mogollon-brand').isVisible(),theme==='metodomogollon');
+  assert.deepEqual(portraits,[theme==='metodomogollon'?'/assets/asesora-mogollon-v1.png':'/assets/recepcionista-v1.png']);
+  if(theme==='metodomogollon')assert.equal(await early.locator('body').evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(16, 23, 34)');
+  for(const path of ['/','/index.html']){const res=await fetch(base+path);const html=await res.text();assert.match(html,new RegExp(`<body data-theme="${theme}"`));assert.match(res.headers.get('cache-control'),/no-store/);}
+ }finally{releaseConfig();await early.waitForSelector('.service-card',{state:'attached'});await early.close();}
  for(const [width,height] of sizes){
   await page.setViewportSize({width,height});await page.goto(base);await page.waitForSelector('.service-card',{state:'attached'});await page.locator('.avatar-photo').evaluate(img=>img.decode());
   assert.equal(await page.locator('#home-panel').evaluate(e=>e.open),false);

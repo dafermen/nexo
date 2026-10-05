@@ -1,4 +1,4 @@
-# Temas visuales del kiosco · v0.36.0
+# Temas visuales del kiosco · v0.36.1
 
 ## Para el administrador
 
@@ -35,6 +35,12 @@ Instrucción final de generación: retrato fotográfico de una asesora adulta, c
 Para reemplazarla, guarde una nueva imagen versionada con transparencia y cambie la ruta permitida en `renderCenter()` de `public/app.js`. Revise el inicio, la llamada por voz y el cambio de tema. No cambie credenciales ni el ID de LiveAvatar para reemplazar una imagen estática. Para una pantalla física de 55 pulgadas queda pendiente comprobar nitidez y altura de los controles a distancia real.
 
 La selección administrativa permanece protegida. El visitante no puede cambiar la identidad de toda la instalación. Los colores de ocupado, error y colgar conservan su significado.
+
+### Inicio sin destello de otro tema (0.36.1)
+
+El servidor prepara el HTML inicial con el tema, acento y retrato guardados en SQLite. Así, Método Mogollón no muestra primero el fondo verde o la asesora de Nexo mientras espera la configuración. Tanto `/` como `/index.html` entregan la selección vigente con `Cache-Control: no-store`; no se depende de una preferencia antigua en el navegador. Solo se insertan valores de listas permitidas, sin texto libre ni credenciales. JavaScript continúa actualizando el tema cuando cambia la configuración durante el uso.
+
+La prueba de navegador retiene la respuesta de `/api/config` y comprueba el tema visible y la única imagen solicitada antes de liberar la respuesta, para ambos temas.
 
 ## Para el desarrollador junior
 

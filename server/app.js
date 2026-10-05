@@ -645,6 +645,17 @@ export function createApp({ config, repository, ai, calendar = null, bookingMail
       if (!filePath.startsWith(resolve(webRoot) + sep) || !mime[extname(filePath)]) throw new HttpError(404, 'Archivo no encontrado.');
       let contents;
       try { const physicalPath=await realpath(filePath);const physicalRoot=await realpath(webRoot);if(!physicalPath.startsWith(physicalRoot+sep))throw new Error();contents = await readFile(physicalPath); } catch { throw new HttpError(404, 'Archivo no encontrado.'); }
+      // La primera pintura no debe depender de /api/config: enviamos tema e imagen
+      // desde SQLite en el HTML, incluso con red lenta o JavaScript sin iniciar.
+      // Solo insertamos valores de listas locales; nunca texto libre ni secretos.
+      if (filePath === resolve(webRoot, 'index.html')) {
+        const experience=runtime()?.experience,theme=experience?.theme==='metodomogollon'?'metodomogollon':'nexo';
+        const accent=['lime','blue','violet'].includes(experience?.accent)?experience.accent:'lime';
+        contents=contents.toString('utf8').replace('<body>',`<body data-theme="${theme}" data-accent="${accent}">`);
+        if(theme==='metodomogollon')contents=contents.replace('content="#f5f5ef"','content="#101722"').replace('src="/assets/recepcionista-v1.png"','src="/assets/asesora-mogollon-v1.png"');
+        // Una nueva visita debe leer la selección vigente, no un HTML de otro tema.
+        res.setHeader('Cache-Control','no-store');
+      }
       res.writeHead(200, { 'Content-Type': mime[extname(filePath)] }); res.end(req.method === 'HEAD' ? undefined : contents);
     } catch (error) {
       if (res.destroyed || res.headersSent) return;
