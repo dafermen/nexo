@@ -1,5 +1,7 @@
 # Interpretación de consultas con OpenAI
 
+**Evolución v0.38.0:** [Conversación con contexto](58-conversacion-contextual.md). El intérprete recibe hasta tres intercambios recientes, comprende inclusiones/condiciones y puede dirigir orientación o agenda. Una intención indirecta puede consumir dos consultas del mismo presupuesto. Las restricciones de una única consulta descritas abajo corresponden a la versión inicial.
+
 Versión 0.10.0 · 18 de septiembre de 2026
 
 ## Objetivo

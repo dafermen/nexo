@@ -232,11 +232,11 @@ async function sendMessage(text) {
     const result = await api.request('/api/chat', { method: 'POST', body: { message: text,channel:callView.active?callView.mode:messageChannel }, signal: chatAbort.signal });
     if (epoch !== generation) return;
     const reply=addMessage('assistant',result.text);conversationStarted=true;
-    if(result.agenda?.options?.length){const choices=element('div','agenda-options');for(const option of result.agenda.options){const button=element('button','secondary',option.label);button.type='button';button.onclick=()=>{if(epoch!==generation)return;const service=services.find(s=>s.id===result.agenda.serviceId);if(service)openBooking(service,{preferredSlot:option.slot});};choices.append(button);}reply.append(choices);if(callView.active)callView.openPanel();}
+    if(result.agenda?.options?.length){const choices=element('div','agenda-options');for(const option of result.agenda.options){const button=element('button','secondary',option.label);button.type='button';button.onclick=()=>{if(epoch!==generation)return;const service=services.find(s=>s.id===result.agenda.serviceId);if(service)openBooking(service,{preferredSlot:option.slot,preferredInstructor:result.agenda.instructorId});};choices.append(button);}reply.append(choices);if(callView.active)callView.openPanel();}
 
     if(result.catalogOnly)autoConversation.pause();
     renderBusy(false); avatar.setState('idle');
-    if(result.agenda?.selectedSlot){const service=services.find(s=>s.id===result.agenda.serviceId);if(service)openBooking(service,{preferredSlot:result.agenda.selectedSlot});}
+    if(result.agenda?.selectedSlot){const service=services.find(s=>s.id===result.agenda.serviceId);if(service)openBooking(service,{preferredSlot:result.agenda.selectedSlot,preferredInstructor:result.agenda.instructorId});}
     else if(callView.connected&&callView.mode==='voice'&&result.bookingAction)openCallAgenda(result.bookingAction);else speak(result.text);
     if (result.catalogOnly) { if (callView.active) callView.openPanel(); switchView('services'); }
   } catch (error) {
@@ -314,10 +314,10 @@ function renderServices() {
 /**
  * openBooking: Construye selección de día/hora, datos, revisión y confirmación; bookingGeneration
  * protege respuestas de modales cerrados.
- * Entrada (firma real): service, {availabilityOnly=false,preferredSlot=null}={}.
+ * Entrada (firma real): service, {availabilityOnly=false,preferredSlot=null,preferredInstructor=null}={}.
  * Salida: Interfaz de reserva; la creación real sucede únicamente al confirmar el formulario.
  */
-async function openBooking(service, {availabilityOnly=false,preferredSlot=null}={}) {
+async function openBooking(service, {availabilityOnly=false,preferredSlot=null,preferredInstructor=null}={}) {
   pauseCallForBooking();
   const realBooking=!!(config.center?.booking.enabled&&config.center.booking.serviceIds?.includes(service.id));
   if (config.center && !realBooking) {
@@ -347,7 +347,7 @@ async function openBooking(service, {availabilityOnly=false,preferredSlot=null}=
   const container = $('booking-content'); container.replaceChildren(element('p', '', 'Cargando horarios…'));
   $('booking-title').textContent = availabilityOnly?'Disponibilidad de citas.':'Reserve su turno.'; $('booking-dialog').showModal();
   const alive = () => bookingId === bookingGeneration && epoch === generation && $('booking-dialog').open;
-  const draft = { service, slot: null, instructorId: null, customerName: '', email: '', consent: false, requestId: crypto.randomUUID() };
+  const draft = { service, slot: null, instructorId: preferredInstructor, customerName: '', email: '', consent: false, requestId: crypto.randomUUID() };
   let slots = [],instructors=[];
   const readSlots=data=>{instructors=data.instructors||[];slots=data.schedule||data.slots.map(slot=>({slot,available:true,reason:null}));};
   const showError = error => { if (!alive()) return; const old = container.querySelector('.notice'); old?.remove(); container.append(element('p', 'notice', error.message)); };
@@ -447,7 +447,7 @@ async function openBooking(service, {availabilityOnly=false,preferredSlot=null}=
     });
     actions.append(back, confirm); container.append(actions);
   }
-  try { readSlots(await api.request(`/api/services/${service.id}/slots`));if(!alive())return;if(preferredSlot&&slots.some(s=>s.slot===preferredSlot&&s.available)){draft.slot=preferredSlot;details();}else{chooseSlot();if(preferredSlot)showError({message:'Ese horario ya no está disponible. Elija otra opción.'});} } catch (error) { if (alive()) { container.replaceChildren(); showError(error); } }
+  try { readSlots(await api.request(`/api/services/${service.id}/slots`));if(!alive())return;if(preferredSlot&&slots.some(s=>s.slot===preferredSlot&&s.available&&(!preferredInstructor||s.instructorIds?.includes(preferredInstructor)))){draft.slot=preferredSlot;details();}else{chooseSlot();if(preferredSlot)showError({message:'Ese horario ya no está disponible. Elija otra opción.'});} } catch (error) { if (alive()) { container.replaceChildren(); showError(error); } }
 }
 /**
  * pauseCallForBooking: Pausa escucha mientras el visitante introduce datos en pantalla.

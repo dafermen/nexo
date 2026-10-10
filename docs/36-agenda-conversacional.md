@@ -1,4 +1,6 @@
-# Agenda conversacional y memoria de la atención — v0.20.0
+# Agenda conversacional y memoria de la atención — v0.38.0
+
+La evolución actual permite seleccionar profesor por voz/texto y conservarlo al cambiar fecha u hora. Consulte [conversación contextual](58-conversacion-contextual.md) para contratos, pruebas y límites vigentes. Los ejemplos iniciales siguientes siguen siendo válidos.
 
 ## Uso del visitante
 
@@ -22,7 +24,7 @@ Si falta servicio o fecha, pregunta. Servicios no reservables no heredan otra cl
 
 ## Memoria y privacidad
 
-En memoria del servidor y por sesión se conservan servicio, fecha, franja, umbral horario, aclaración pendiente y hasta tres opciones. Se descarta al terminar, reiniciar o caducar la atención; no se comparte entre personas ni constituye una reserva. «No quiero reservar» u «Olvídelo» abandonan la búsqueda, sin cancelar citas existentes.
+En memoria del servidor y por sesión se conservan servicio, profesor, fecha, franja, hora exacta/umbral horario, aclaración pendiente y hasta tres opciones. Se descarta al terminar, reiniciar o caducar la atención; no se comparte entre personas ni constituye una reserva. «No quiero reservar» u «Olvídelo» abandonan la búsqueda, sin cancelar citas existentes.
 
 El historial privado existente sigue registrando mensajes/respuestas y consumo. No se solicitan nombre ni correo al modelo: esos datos se escriben en el formulario separado. El intérprete recibe el texto de la consulta, catálogo y contexto de agenda; `store:false` no sustituye las políticas del proveedor.
 
@@ -31,9 +33,9 @@ El historial privado existente sigue registrando mensajes/respuestas y consumo. 
 - `server/agenda-conversation.js`: detección de petición, interpretación local acotada, esquema para interpretación semántica, validación y ejecución de consultas de disponibilidad.
 - `server/app.js`: aplica filtro de temas y restricciones, comparte cuotas de OpenAI y límite de consultas de Calendar, guarda la memoria por sesión y descarta resultados después de cerrar la atención.
 - `BookingService.availability`: única fuente de los horarios ofrecidos. El modelo no genera horarios ni puede llamar a crear/cancelar reservas.
-- `public/app.js`: presenta opciones y abre el formulario existente con `preferredSlot`, que vuelve a validar el horario.
+- `public/app.js`: presenta opciones y abre el formulario existente con `preferredSlot` y `preferredInstructor`, que vuelven a validar horario y profesor.
 
-Las frases claras se resuelven localmente. Las ambiguas pueden usar una única interpretación estructurada de OpenAI (máximo 300 tokens de salida, sujeto al máximo configurado), con los mismos cupos por sesión/día y límite de tamaño de entrada. No se agregan bucles autónomos ni consultas de orientación después de esa interpretación. Si no hay IA/cuota o la respuesta es inválida, se ofrece una aclaración o el catálogo. El modelo y la clave ya configurados se reutilizan.
+Las frases claras se resuelven localmente. Las ambiguas pueden usar una interpretación estructurada de OpenAI (máximo 300 tokens de salida, sujeto al máximo configurado), con los mismos cupos por sesión/día y límite de tamaño de entrada. Una intención indirecta puede necesitar interpretación general y luego interpretación de agenda: dos consultas con presupuesto compartido. No hay bucles autónomos. Si no hay IA/cuota o la respuesta es inválida, se ofrece una aclaración o el catálogo. El modelo y la clave ya configurados se reutilizan.
 
 Esta versión usa el contrato `AiProvider.interpret` existente: recibe un plan validado y ejecuta la consulta en el servidor. No cambia de SDK ni habilita acceso libre del modelo a Calendar. [Referencia oficial: salida estructurada](https://developers.openai.com/api/docs/guides/structured-outputs).
 

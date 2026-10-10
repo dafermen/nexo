@@ -1,7 +1,7 @@
 {
   "updatedAt": "2026-10-10",
-  "version": "0.37.0",
-  "summary": "Retrato del cliente y voz masculina local en español, inglés y francés. Perfil de voz configurable desde .env, con caché separada por modelo y hablante.",
+  "version": "0.38.0",
+  "summary": "Conversación con memoria breve, correcciones y agenda por profesor desde voz o texto. Catálogo y Calendar siguen validando los datos; formulario con profesor preseleccionado y confirmación explícita.",
   "phases": [
     {
       "id": "base",
@@ -737,6 +737,18 @@
       "evidence": {
         "path": "docs/40-biblioteca-audio.md",
         "label": "Perfiles de voz, instalación y caché"
+      }
+    },
+    {
+      "id": "NEXO-56",
+      "phaseId": "voz",
+      "title": "Contexto conversacional y profesor elegido al hablar",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Memoria breve por sesión, correcciones y orientación con cuotas compartidas. Consulta por profesor, conserva fecha/hora y preselecciona formulario tras revalidación. Pruebas de API y navegador con proveedores simulados; evaluación física y de comprensión real separadas.",
+      "evidence": {
+        "path": "docs/58-conversacion-contextual.md",
+        "label": "Flujo, contratos, consumo y pruebas"
       }
     }
   ]

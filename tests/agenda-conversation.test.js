@@ -12,6 +12,10 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {once} from 'node:events';
+import {createApp} from '../server/app.js';
+import {schoolCenter} from '../server/center.js';
+import {instructorsFixture} from './instructors-fixture.js';
 import {agendaCandidate,parseAgenda,resolveAgenda,validateAgenda,buildAgendaRequest} from '../server/agenda-conversation.js';
 const now=Date.parse('2026-09-28T13:00:00Z'),services=[{id:'practice',name:'Clase práctica'},{id:'course',name:'Curso de las 5 horas'}],center={name:'Centro',timezone:'America/New_York',booking:{serviceIds:['practice']}},empty={status:'agenda',serviceId:null,date:null,period:null,after:null,selection:null,clarification:null};
 const slots=['2026-10-02T13:00:00Z','2026-10-02T14:00:00Z','2026-10-02T15:00:00Z','2026-10-02T19:00:00Z','2026-10-02T20:00:00Z','2026-10-02T21:00:00Z'];
@@ -65,4 +69,67 @@ test('fecha sola usa únicamente el servicio reservable; con varios pregunta cu�
  assert.equal((await resolve(parse('¿Hay disponibilidad el viernes?'),{})).agenda.options.length,3);
  const multiple={...center,booking:{serviceIds:['practice','course']}};
  const r=await resolveAgenda({plan:parse('¿Hay disponibilidad el viernes?'),state:{},services,center:multiple,availability:()=>{throw Error('No consultar sin elegir servicio');},now});assert.match(r.text,/Qué servicio/);
+});
+
+const teacherCenter={...center,booking:{...center.booking,instructors:[{id:'hector',name:'Héctor',serviceIds:['practice']},{id:'dario',name:'Darío',serviceIds:['practice']}]}};
+const teacherParse=(message,state={})=>parseAgenda(message,{services,center:teacherCenter,state,now});
+const teacherData={slots,schedule:slots.map((slot,i)=>({slot,available:true,instructorIds:i===0?['dario']:['hector','dario']})),instructors:teacherCenter.booking.instructors};
+const teacherResolve=(plan,state,availability=async()=>teacherData,c=teacherCenter)=>resolveAgenda({plan,state,services,center:c,availability,now});
+
+test('profesor hablado filtra su calendario; no ofrece el cupo de otro profesor',async()=>{
+ const state={};assert.equal(agendaCandidate('Con Héctor el viernes',{},teacherCenter),true);
+ const p=teacherParse('Con Héctor el viernes a las 9 am');assert.equal(p.instructorId,'hector');
+ assert.ok(!(await teacherResolve(p,state)).agenda);
+ const r=await teacherResolve(teacherParse('mejor con Darío',state),state);
+ assert.equal(r.agenda.selectedSlot,slots[0]);assert.equal(r.agenda.instructorId,'dario');assert.equal(state.at,540);assert.equal(state.date,'2026-10-02');
+ assert.match(r.text,/Darío/);assert.match(r.text,/Todavía no está reservada/);
+});
+
+test('cambiar día conserva hora y profesor; cambiar franja borra hora exacta',async()=>{
+ const state={};await teacherResolve(teacherParse('Con Darío el viernes a las 9 am'),state);
+ await teacherResolve(teacherParse('mejor el lunes a la misma hora',state),state);
+ assert.equal(state.date,'2026-09-28');assert.equal(state.at,540);assert.equal(state.instructorId,'dario');
+ await teacherResolve(teacherParse('mejor por la tarde',state),state);assert.equal(state.at,null);assert.equal(state.period,'afternoon');
+ assert.equal(teacherParse('el lunes a la misma hora').clarification,'time');
+ assert.equal(teacherParse('No quiero el lunes, mejor el martes'),null);
+});
+
+test('elección ordinal recuerda hora; profesor ocupado al elegir invalida la opción',async()=>{
+ const state={};await teacherResolve(teacherParse('Con Héctor el viernes por la mañana'),state);
+ assert.equal(state.options[0],slots[1]);
+ const r=await teacherResolve(teacherParse('la segunda',state),state);assert.equal(r.agenda.selectedSlot,slots[2]);assert.equal(state.at,660);
+ const busy={...teacherData,schedule:teacherData.schedule.map(s=>({...s,instructorIds:['dario']}))};
+ assert.ok(!(await teacherResolve({...empty,selection:2},state,async()=>busy)).agenda);assert.deepEqual(state.options,[]);
+});
+
+test('no sustituye profesores desconocidos, pausados ni no habilitados; cualquiera limpia preferencia',async()=>{
+ assert.throws(()=>validateAgenda({...empty,instructorId:'otro'},services,teacherCenter));
+ assert.throws(()=>validateAgenda({...empty,instructorId:'hector',anyInstructor:true},services,teacherCenter));
+ const state={serviceId:'practice',date:'2026-10-02',at:540,instructorId:'hector'};
+ const paused={...teacherCenter,booking:{...teacherCenter.booking,instructors:teacherCenter.booking.instructors.filter(i=>i.id!=='hector')}};
+ assert.ok(!(await teacherResolve(empty,state,async()=>{throw Error('No debe consultar');},paused)).agenda);
+ assert.ok(!(await teacherResolve({...empty,clarification:'instructor'},state)).agenda);
+ assert.ok(!(await teacherResolve({...empty,date:'2026-10-02'},state)).agenda);
+ const r=await teacherResolve(teacherParse('cualquier profesor',state),state);assert.equal(r.agenda.instructorId,null);assert.equal(r.agenda.selectedSlot,slots[0]);
+ const request=buildAgendaRequest({model:'test',message:'with Dario tomorrow',services,center:teacherCenter,state,history:[{user:'con Héctor',assistant:'¿Para qué día?'}],now});
+ assert.ok(request.text.format.schema.properties.instructorId.enum.includes('dario'));assert.ok(!JSON.stringify(request).includes('calendarId'));
+ assert.equal(JSON.parse(request.input[0].content).history.length,1);
+});
+
+test('API conecta intención indirecta con agenda, transmite profesor y comparte cuotas sin crear citas',async t=>{
+ const f=await instructorsFixture({now:Date.now}),calls=[];
+ const settings=f.repo.getCenterSettings();settings.configuration.ai.sessionCalls=2;f.repo.saveConfiguration(settings.revision,{profile:settings.profile,configuration:settings.configuration});
+ const available=await f.bookings.availability('road-test'),slot=available.slots[0],teacher=f.repo.bookingSettings().instructors[0];
+ const parts=Object.fromEntries(new Intl.DateTimeFormat('en',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23',timeZone:'America/New_York'}).formatToParts(new Date(slot)).map(p=>[p.type,p.value]));
+ const date=parts.year+'-'+parts.month+'-'+parts.day,at=Number(parts.hour)*60+Number(parts.minute);
+ const ai={async interpret({preparedRequest}){calls.push(preparedRequest);return {usage:{input_tokens:10,output_tokens:10},interpretation:preparedRequest.text.format.name==='school_intent'?{status:'school',intent:'booking',serviceId:'road-test',facts:[],clarification:null}:{...empty,at,date,serviceId:'road-test',instructorId:teacher.id,anyInstructor:false}};},reply(){throw Error('No debe redactar disponibilidad con IA');}};
+ const app=createApp({repository:f.repo,calendar:f.service,ai,config:{provider:'openai',model:'test',center:schoolCenter,sessionTtlMs:300000,aiLimits:{sessionCalls:2,dailyCalls:10}}});
+ app.listen(0,'127.0.0.1');await once(app,'listening');t.after(async()=>{await new Promise(r=>app.close(r));f.close();});
+ const base='http://127.0.0.1:'+app.address().port;
+ const req=async(path,body,token)=>{const r=await fetch(base+path,{method:'POST',headers:{'Content-Type':'application/json',...(token?{Authorization:'Bearer '+token}:{})},body:JSON.stringify(body)});assert.ok(r.ok);return r.json();};
+ const token=(await req('/api/sessions',{consent:true})).token;
+ const r=await req('/api/chat',{message:'Me gustaría apartar un espacio para practicar',channel:'text'},token);
+ assert.equal(r.agenda.selectedSlot,slot);assert.equal(r.agenda.instructorId,teacher.id);assert.equal(calls.length,2);assert.equal(f.events.size,0);
+ assert.doesNotMatch(JSON.stringify(calls),/@example\.test|calendarId/);
+ const capped=await req('/api/chat',{message:'Con otro instructor pero al mismo rato',channel:'voice'},token);assert.equal(capped.reason,'session_limit');assert.equal(calls.length,2);assert.equal(f.events.size,0);
 });

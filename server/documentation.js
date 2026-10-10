@@ -28,7 +28,7 @@ function category(path){
   if(/(?:00-|README|UBICACION|28-)/.test(path))return 'Empezar';
   if(/(?:23-|24-|26-|27-|29-|30-|31-|32-|33-|34-|17-|21-|45-|46-)/.test(path))return 'Manuales';
   if(/(?:06-|07-|08-|25-)/.test(path))return 'Fases y tareas';
-  if(/(?:18-|19-|20-|22-|16-)/.test(path))return 'Conversación';
+  if(/(?:18-|19-|20-|22-|16-|58-)/.test(path))return 'Conversación';
   if(/(?:01-|02-|03-|04-|05-)/.test(path))return 'Diseño técnico';
   return 'Evolución';
 }

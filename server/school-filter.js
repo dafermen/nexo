@@ -75,7 +75,7 @@ function selectedServices(q,services,school=true) {
 function factContinuation(q) {
   // Reuse a service only for a short fact follow-up. A new, unrecognized object
   // (e.g. an insurance policy) must never inherit another service's price.
-  const words=new Set(('y tambien pero entonces eso ese esa este esta el la los las un una del de para en es son se lo al que cual cuales cuanto cuanto tiempo por favor me usted puede podria decir decirme saber gustaria necesito necesita necesitamos llevar inscribirme inscribirse documentos documentacion requisitos requisito precio precios cuesta cuestan sale salen costo costos vale valor dura duran duracion virtual virtuales presencial presenciales modalidad online linea curso servicio mismo misma price cost duration how long requirements').split(' '));
+  const words=new Set(('y tambien pero entonces eso ese esa este esta el la los las un una del de para en es son se lo al que cual cuales cuanto cuanto tiempo por favor me usted puede podria decir decirme saber gustaria necesito necesita necesitamos llevar inscribirme inscribirse documentos documentacion requisitos requisito precio precios cuesta cuestan sale salen costo costos vale valor dura duran duracion virtual virtuales presencial presenciales modalidad incluye incluyen incluido incluidos inclusiones condiciones politicas online linea curso servicio mismo misma price cost duration how long requirements').split(' '));
   return q.split(' ').every(word=>words.has(word));
 }
 /**
@@ -118,16 +118,20 @@ export function filterSchoolMessage({message,services,center,state,faq=null}) {
   const service=matches.length===1?matches[0]:matches.length?null:(factContinuation(q)||followup.test(q))?contextService:null;
   const journey=isSchool(center)?schoolJourney({q,services,center,state,faq}):null;
   if(journey)return local(journey.text,'approved_guidance',{knowledgeAnswer:true});
+  // Una corrección o comparación no se resuelve con la primera palabra coincidente.
+  if(/\b(en vez|sino|diferencia|comparar|compare|no quiero|no necesito|no me interesa|no es ese)\b/.test(q)||matches.length>1&&/\b(no|mejor|pero)\b/.test(q))return local('¿Qué desea comparar o corregir?','clarify',{interpret:true});
   const facts=[];
   if(/\b(precio|precios|cuesta|cuestan|cuanto cuesta|cuanto sale|cuanto salen|costo|costos|vale|valor|price|cost)\b/.test(q))facts.push('price');
   if(/\b(requisitos|requisito|documentos|documentacion|llevar|que necesito|necesito llevar|requirements)\b/.test(q))facts.push('requirements');
   if(/\b(dura|duran|duracion|cuanto tiempo|duration|how long)\b/.test(q))facts.push('duration');
   if(/\b(virtual|virtuales|presencial|presenciales|modalidad|online|en linea)\b/.test(q))facts.push('modality');
+  if(/\b(incluye|incluyen|incluido|incluidos|inclusiones)\b/.test(q))facts.push('inclusions');
+  if(/\b(condiciones|politicas)\b/.test(q))facts.push('conditions');
   if(/\b(direccion|telefono|contacto|ubicacion|donde estan|donde queda)\b/.test(q)&&Object.values(center.contact||{}).some(Boolean))return local(Object.values(center.contact).filter(Boolean).join(' · '),'contact');
   const known=faq?.lookup({query:q,services,center,state,matchedServiceIds:matches.map(s=>s.id)});
   // A FAQ tie must not discard a recognized service or block catalog facts.
   const awaitingFact=matches.length===1&&!facts.length&&(state.pendingFacts?.length||(/^y (el |la |los |las )?/.test(q)&&state.lastIntent));
-  if(known?.text&&!awaitingFact){if(known.serviceId)state.serviceId=known.serviceId;state.lastIntent=facts.at(-1)||null;state.pendingFacts=null;return local(known.text,'faq',{knowledgeAnswer:true});}
+  if(known?.text&&!awaitingFact&&facts.length<=1){if(known.serviceId)state.serviceId=known.serviceId;state.lastIntent=facts.at(-1)||null;state.pendingFacts=null;return local(known.text,'faq',{knowledgeAnswer:true});}
   const hours=/\b(horario|horarios|abren|abre|cierran|cierra|atienden|atencion|abierto|cerrado|opening hours)\b/.test(q);
   const booking=/\b(reservar|reserva|reservas|reservacion|turno|turnos|cita|citas|cancelar|cancelacion|disponibilidad|agendar|agenda)\b/.test(q);
   const payment=/\b(pagar|pago|pagos|tarjeta|cobrar|cobro|pagado)\b/.test(q);
@@ -142,16 +146,18 @@ export function filterSchoolMessage({message,services,center,state,faq=null}) {
   }
   state.pendingFacts=null;
   if(facts.length) {
-    if(!service){state.pendingFacts=facts;return local([...extras,`¿Sobre qué servicio desea consultar? ${menu}.`].join(' '),'clarify',{interpret:matches.length===0&&!factContinuation(q)});}
+    if(!service){state.pendingFacts=facts;return local([...extras,`¿Sobre qué servicio desea consultar? ${menu}.`].join(' '),'clarify',{interpret:matches.length>1||!factContinuation(q)});}
     const answer=[...extras,service.name+'.'];
     if(facts.includes('price'))answer.push(service.priceCents==null?'Precio pendiente de confirmar con la escuela.':service.priceCents===0?'Este servicio es sin costo.':`Precio: ${(service.priceCents/100).toFixed(2)} ${service.currency}.`);
     if(facts.includes('requirements'))answer.push(service.requirements||'Requisitos pendientes de confirmar con la escuela.');
     if(facts.includes('duration'))answer.push(service.duration==null?'Duración pendiente de confirmar.':`Duración: ${service.duration} minutos.`);
     if(facts.includes('modality'))answer.push(service.modality?`Modalidad: ${service.modality}.`:'Modalidad pendiente de confirmar para este servicio.');
+    if(facts.includes('inclusions'))answer.push(service.inclusions||'Lo que incluye este servicio está pendiente de confirmar con el personal.');
+    if(facts.includes('conditions'))answer.push(service.conditions||'Las condiciones de este servicio están pendientes de confirmar con el personal.');
     state.lastIntent=facts.at(-1);return local(answer.join(' '),'catalog');
   }
   state.lastIntent=null;
-  if(extras.length)return local(extras.join(' '),hours?'hours':booking?'booking':'payment');
+  if(extras.length)return local(extras.join(' '),hours?'hours':booking?'booking':'payment',{interpret:/\b(no|pero|mejor|en vez|diferencia|como|por que)\b/.test(q)});
 
   if(/^(gracias|muchas gracias|muchisimas gracias|gracias nexo|muy bien gracias|ok|entendido|perfecto|adios|hasta luego)$/.test(q))return local('Con gusto. Puede consultar nuestros servicios o finalizar la atención.','courtesy');
   if(/\b(que servicios|cuales servicios|que ofrecen|que cursos|ver opciones|ver servicios)\b/.test(q))return local(`Nuestros servicios publicados: ${menu}. ¿Sobre cuál desea información?`,'catalog');
@@ -159,7 +165,7 @@ export function filterSchoolMessage({message,services,center,state,faq=null}) {
   if(matches.length===1&&!guidance.test(q))return local(`Con gusto. ${service.name}: ${service.description} ¿Desea conocer el precio, los requisitos o la modalidad?`,'catalog',{interpret:!/^((el |la )?(curso de (las )?)?(5|cinco) horas?|road test|route test|clases|clases presenciales y virtuales)$/.test(q)});
   if(known?.ambiguous)return local(contextService
     ? `Sobre ${contextService.name}, ¿desea conocer el precio, los requisitos, la duración o la modalidad?`
-    : `¿Sobre qué servicio desea información? ${menu}.`,'clarify');
+    : `¿Sobre qué servicio desea información? ${menu}.`,'clarify',{interpret:true});
   if((state.deviations||0)>=2)return local(`Puede continuar con el catálogo: ${menu}. Consulte las fichas o pregunte por precio, requisitos, duración y modalidad.`,'restricted',{catalogOnly:true});
   if((guidance.test(q)&&((isSchool(center)?domains.test(q):(center.topics||'').split(',').some(term=>normalize(term)&&(' '+q+' ').includes(' '+normalize(term)+' ')))||matches.length>0))||(service&&followup.test(q)))return {kind:'ai',reason:'school_guidance',serviceId:service?.id||null};
   return local(`¿Su consulta se refiere a un servicio de la escuela? Puede preguntar por ${menu}.`,'clarify',{interpret:true});

@@ -68,7 +68,7 @@ export function eventBusy(event,timeZone){
 
 export class BookingService{
  constructor({repository,calendar,mailer=null,now=Date.now}){this.repo=repository;this.calendar=calendar;this.mailer=mailer;this.now=now;}
- publicStatus(){const rules=this.repo.bookingSettings(),state=this.calendar.status(),multiple=rules.assignment==='instructors';return {enabled:rules.enabled&&state.connected&&!!state.selected&&!state.pendingTests?.length&&(!multiple||rules.instructors?.some(i=>i.active)),serviceIds:rules.serviceIds,chooseInstructor:multiple};}
+ publicStatus(){const rules=this.repo.bookingSettings(),state=this.calendar.status(),multiple=rules.assignment==='instructors';return {enabled:rules.enabled&&state.connected&&!!state.selected&&!state.pendingTests?.length&&(!multiple||rules.instructors?.some(i=>i.active)),serviceIds:rules.serviceIds,chooseInstructor:multiple,instructors:multiple?(rules.instructors||[]).filter(i=>i.active).map(({id,name,serviceIds})=>({id,name,serviceIds})):[]};}
  /**
   * configure: Valida reglas, servicios y permisos antes de habilitar agenda.
   * Entrada (firma real): input.

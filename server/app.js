@@ -39,7 +39,7 @@ import {compileFaq,parseFaq} from './faq.js';
 import {serializeFaq,previewFaq} from './faq-editor.js';
 import {businessText} from './business-settings.js';
 import {createDocumentation} from './documentation.js';
-import {buildIntentRequest,resolveIntent} from './school-intent.js';
+import {buildIntentRequest,resolveIntent,rememberInterpretation} from './school-intent.js';
 import { defaultAiLimits, filterSchoolMessage, schoolDay, requestTopicRisk } from './school-filter.js';
 import { buildAiRequest } from './providers/ai.js';
 import { centerRepository } from './center.js';
@@ -350,7 +350,7 @@ export function createApp({ config, repository, ai, calendar = null, bookingMail
             // anterior si la primera coincidencia local no fue suficientemente fiable.
             const stateBefore=structuredClone(session.schoolState);
             let decision=center ? filterSchoolMessage({message,services,center,state:session.schoolState,faq:activeFaq}) : {kind:'ai'};
-            const guided=agendaCandidate(message,session.agendaState)?null:guideService({message,center,services,state:session.schoolState,decision,faq:activeFaq});
+            const guided=agendaCandidate(message,session.agendaState,center)?null:guideService({message,center,services,state:session.schoolState,decision,faq:activeFaq});
             if(guided)decision=guided;
             const day=schoolDay(new Date(),center?.timezone);
             /**
@@ -369,12 +369,14 @@ export function createApp({ config, repository, ai, calendar = null, bookingMail
               return null;
             };
             let agendaInterpreted=false;
-            if(!guided&&!decision.knowledgeAnswer&&center?.booking.enabled&&!decision.catalogOnly&&(stateBefore.deviations||0)<2&&!requestTopicRisk(message,center)&&!['greeting','courtesy','off_topic','restricted'].includes(decision.reason)&&agendaCandidate(message,session.agendaState)){
+            let agendaAttempted=false;
+            const handleAgenda=async()=>{
+              agendaAttempted=true;
               const agendaState=structuredClone(session.agendaState||{});
               if(!agendaState.serviceId&&stateBefore.serviceId&&center.booking.serviceIds.includes(stateBefore.serviceId))agendaState.serviceId=stateBefore.serviceId;
               let plan=parseAgenda(message,{services,center,state:agendaState});
               if(!plan&&aiEnabled&&settings?.ai.interpretationEnabled!==false&&config.provider==='openai'&&typeof ai.interpret==='function'){
-                const preparedRequest=buildAgendaRequest({model,message:originalMessage,services,center,state:agendaState,maxOutputTokens:Math.min(300,aiLimits.outputTokens)}),blocked=reserveRequest(preparedRequest);
+                const preparedRequest=buildAgendaRequest({model,message:originalMessage,services,center,state:agendaState,history:stateBefore.recentTurns||[],maxOutputTokens:Math.min(300,aiLimits.outputTokens)}),blocked=reserveRequest(preparedRequest);
                 if(blocked)decision=blocked;
                 else try{const interpreted=await ai.interpret({preparedRequest,signal:session.controller.signal});repository.recordAiTokens(day,interpreted.usage);recordUsage(interpreted.usage);plan=interpreted.interpretation;agendaInterpreted=true;}
                 catch(error){if(session.controller.signal.aborted)throw error;}
@@ -387,7 +389,8 @@ export function createApp({ config, repository, ai, calendar = null, bookingMail
                 else if(plan?.status==='other'&&decision.kind==='local')decision={...decision,interpret:false};
                 else decision={kind:'local',reason:'agenda_clarify',text:'Para buscar su cita, indique el servicio, el día y si prefiere mañana o tarde. También puede usar Mi cita y horarios.',interpreted:agendaInterpreted};
               }
-            }
+            };
+            if(!guided&&!decision.knowledgeAnswer&&center?.booking.enabled&&!decision.catalogOnly&&(stateBefore.deviations||0)<2&&!requestTopicRisk(message,center)&&!['greeting','courtesy','off_topic','restricted'].includes(decision.reason)&&agendaCandidate(message,session.agendaState,center))await handleAgenda();
             if(decision.interpret && aiEnabled && settings?.ai.interpretationEnabled!==false && config.provider==='openai' && typeof ai.interpret==='function'){
               session.schoolState=stateBefore;
               if((stateBefore.deviations||0)>=2)decision={kind:'local',reason:'restricted',catalogOnly:true,text:'Puede continuar consultando las fichas de Servicios o acercarse al personal de la escuela.'};
@@ -406,11 +409,13 @@ export function createApp({ config, repository, ai, calendar = null, bookingMail
                 }
               }
             }
+            if(!agendaAttempted&&decision.reason==='intent_booking'&&center?.booking.enabled&&!decision.catalogOnly&&!requestTopicRisk(message,center))await handleAgenda();
             if(!aiEnabled&&decision.kind!=='local')decision={kind:'local',reason:'ai_disabled',text:'Puede consultar nuestros servicios, precios, requisitos y horarios. '+(center?.handoff||'Consulte con el personal para orientación adicional.')};
             if(decision.kind==='local') {
               result={text:decision.text};provider=decision.interpreted?'openai':'local';reason=decision.reason;catalogOnly=!!decision.catalogOnly;
             } else if(center) {
-              const aiMessages=[...session.messages.slice(-4),{role:'user',content:originalMessage}];
+              const contextMessages=(session.schoolState.recentTurns||[]).flatMap(turn=>[{role:'user',content:turn.user},{role:'assistant',content:turn.assistant}]);
+              const aiMessages=[...contextMessages.slice(-4),{role:'user',content:originalMessage}];
               const preparedRequest=buildAiRequest({language:session.language,model,messages:aiMessages,services,center,serviceContext:session.schoolState.serviceId,maxOutputTokens:aiLimits.outputTokens});
               const blocked=reserveRequest(preparedRequest);
               if(blocked){provider='local';reason=blocked.reason;catalogOnly=true;result={text:blocked.text};}
@@ -435,6 +440,7 @@ export function createApp({ config, repository, ai, calendar = null, bookingMail
             // La respuesta visible se adapta al negocio/idioma antes de autorizar su audio.
             // Guardar el turno mide generación; no demuestra que el visitante lo escuchó.
             const replyText=translate(center?businessText(result.text,center):result.text,session.language);
+            if(center)rememberInterpretation(session.schoolState,originalMessage,replyText,reason);
             if(audioLibrary)rememberReusable(session,replyText,reason,currentAudioScope());
             repository.completeConversationTurn(turnId,{text:replyText,provider,reason,serviceId:session.schoolState.serviceId,aiCalls:session.aiCalls-callsBefore,inputTokens,outputTokens,durationMs:Date.now()-started});
             const bookingAction=logChannel(input.channel)==='voice'&&center?.booking.enabled&&!catalogOnly&&['booking','hours'].includes(reason)?bookingIntent(message):null;

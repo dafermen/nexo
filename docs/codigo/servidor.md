@@ -79,6 +79,8 @@ saveKnowledge(id, revision, source)
 
 ## server/agenda-conversation.js
 
+**v0.38.0:** `agendaCandidate` también recibe `center` para reconocer profesores publicados. `buildAgendaRequest` admite `history`, y el plan incorpora `instructorId`/`anyInstructor`. `validateAgenda` recibe `center` para verificar IDs. `resolveAgenda` conserva preferencias y filtra cupos por profesor. [Contrato y ejemplos](../58-conversacion-contextual.md).
+
 Convertir preferencias habladas en una búsqueda verificable de horarios.
 
 - **Entrada:** message, catálogo, center, state y función availability; opcional interpretación estructurada.
@@ -786,6 +788,8 @@ requestTopicRisk(message, center)
 - **filterSchoolMessage:** Prioriza saludos, FAQ y hechos; distingue desvíos claros de ambigüedad y actualiza contexto del servicio. **Salida:** Decisión local o ai, con reason y banderas que app.js procesa.
 
 ## server/school-intent.js
+
+**v0.38.0:** `rememberInterpretation(state, message, answer, reason)` mantiene tres intercambios breves en memoria de sesión y enmascara correos/teléfonos reconocibles. El esquema incluye `inclusions`/`conditions`; `resolveIntent` puede devolver `kind: ai` para orientación, sujeta a otra comprobación de cuota. [Recorrido completo](../58-conversacion-contextual.md).
 
 Interpretar consultas ambiguas mediante un esquema cerrado y resolverlas con datos locales.
 

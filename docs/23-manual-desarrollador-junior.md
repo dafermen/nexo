@@ -1,5 +1,7 @@
 # Manual del desarrollador junior
 
+**Actualización v0.38.0:** siga el [recorrido de conversación con contexto y profesor](58-conversacion-contextual.md) para entender memoria temporal, interpretación validada, cuotas y formulario preseleccionado.
+
 Aprenda a leer, ejecutar y modificar Nexo siguiendo una conversación completa, desde el botón del kiosco hasta SQLite y los proveedores. Esta guía describe el código actual; los documentos históricos 01–15 conservan decisiones de etapas anteriores.
 
 ## 1. Qué está construyendo

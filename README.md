@@ -1,6 +1,8 @@
 # Nexo · Kiosco conversacional para un centro de atención
 
-## Versión actual: 0.37.0
+## Versión actual: 0.38.0
+
+Conversación con contexto breve, correcciones y profesor elegido por voz/texto. [Guía y pruebas](docs/58-conversacion-contextual.md).
 
 Voz masculina local en los tres idiomas. Configuración e instalación: [perfiles de voz](docs/40-biblioteca-audio.md).
 

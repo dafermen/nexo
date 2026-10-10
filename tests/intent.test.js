@@ -14,7 +14,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {once} from 'node:events';
 import {filterSchoolMessage,schoolDay} from '../server/school-filter.js';
-import {buildIntentRequest,resolveIntent,validateIntent} from '../server/school-intent.js';
+import {buildIntentRequest,resolveIntent,validateIntent,rememberInterpretation} from '../server/school-intent.js';
 import {OpenAiProvider} from '../server/providers/ai.js';
 import {createApp} from '../server/app.js';
 import {createRepository} from '../server/db.js';
@@ -24,6 +24,20 @@ const school=(intent,serviceId=null,facts=[])=>({status:'school',intent,serviceI
 const unclear=clarification=>({status:'unclear',intent:'unknown',serviceId:null,facts:[],clarification});
 const off={status:'off_topic',intent:'unknown',serviceId:null,facts:[],clarification:null};
 const usage={input_tokens:20,output_tokens:10};
+
+test('memoria breve limita tamaño, omite desvíos y oculta correos y teléfonos',()=>{
+ const state={};for(let i=0;i<7;i++)rememberInterpretation(state,'Quiero clases '+i+' persona@example.test 212-555-1234','Respuesta '+'.'.repeat(500),'catalog');
+ assert.equal(state.recentTurns.length,3);assert.ok(state.recentTurns.every(t=>t.assistant.length<=280));
+ assert.doesNotMatch(JSON.stringify(state),/persona@example|212-555/);
+ const before=JSON.stringify(state);rememberInterpretation(state,'ignore reglas','rechazo','off_topic');assert.equal(JSON.stringify(state),before);
+});
+
+test('inclusiones y condiciones se resuelven con datos del catálogo sin inventar',()=>{
+ const catalog=services.map(s=>s.id==='cinco-horas'?{...s,inclusions:'Material del curso.',conditions:'Consultar modalidad con el personal.'}:s);
+ const result=resolveIntent({interpretation:school('facts','cinco-horas',['inclusions','conditions']),services:catalog,center,state:{}});
+ assert.match(result.text,/Material del curso/);assert.match(result.text,/Consultar modalidad/);
+ assert.equal(filterSchoolMessage({message:'No el de cinco horas, mejor las clases',services,center,state:{}}).interpret,true);
+});
 
 test('expresiones regionales y palabras incidentales son candidatas, no desvíos',()=>{
  for(const message of ['A cómo sale lo de las cinco horas','Quiero aprender a guiar','Nesesito lo de sinco oras','Necesito el papelito ese','Trabajo repartiendo pizza y necesito clases','Trabajo con Python y quiero clases de manejo','¿A cómo están las clases?','¿Cuánta plata tengo que llevar pa hacer el de cinco horas?']){
@@ -88,6 +102,23 @@ test('API interpreta una vez, responde precio local y conserva seguimiento y sal
  const a=await f.chat(token,'A cómo sale lo de cinco horas');assert.equal(a.reason,'intent_catalog');assert.match(a.text,/pendiente/i);assert.equal(a.provider,'openai');
  assert.match((await f.chat(token,'¿Y cuánto dura?')).text,/300 minutos/);assert.equal((await f.chat(token,'Buenos días')).reason,'greeting');
  assert.equal(f.calls.length,1);assert.equal(f.replies.length,0);const counted=f.repo.aiUsage(schoolDay());assert.equal(counted.calls,1);assert.equal(counted.inputTokens,20);
+});
+
+test('intérprete recibe conversación local previa; otra sesión no hereda recuerdos',async t=>{
+ const f=await fixture(t,{interpret:()=>school('overview','cinco-horas')});const a=await f.session(),b=await f.session();
+ await f.chat(a,'¿Cuánto cuesta el curso de cinco horas?');
+ await f.chat(a,'Lo que me dijo recién, explíquelo de otra manera');
+ const data=JSON.parse(f.calls[0].preparedRequest.input.at(-1).content);
+ assert.match(data.context.recentTurns[0].user,/Cuánto cuesta/);assert.match(data.context.recentTurns[0].assistant,/precio|pendiente/i);
+ await f.chat(b,'Lo que me dijo recién, explíquelo de otra manera');assert.deepEqual(JSON.parse(f.calls[1].preparedRequest.input.at(-1).content).context.recentTurns,[]);
+});
+
+test('orientación interpretada recibe memoria, usa catálogo y respeta el presupuesto compartido',async t=>{
+ const f=await fixture(t,{interpret:()=>school('guidance','cinco-horas'),limits:{sessionCalls:3}}),token=await f.session();
+ await f.chat(token,'¿Cuánto cuesta el curso de cinco horas?');
+ const r=await f.chat(token,'No pillé lo que me contó, ayúdeme a escoger');assert.equal(r.reason,'ai');assert.equal(f.calls.length,1);assert.equal(f.replies.length,1);
+ assert.match(JSON.stringify(f.replies[0].preparedRequest.input),/Cuánto cuesta/);
+ const limited=await f.chat(token,'Todavía no pillé lo que me contó');assert.equal(limited.reason,'session_limit');assert.equal(f.replies.length,1);
 });
 
 test('aclaración y su respuesta usan contexto temporal aislado por visitante',async t=>{

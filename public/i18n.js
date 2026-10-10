@@ -421,6 +421,13 @@ Se abre en otra pestaña. Puede regresar a Nexo al cerrarla.|Opens in another ta
 Nuestro sitio web es {0}. Puede abrirlo desde Ayuda y opciones → Sitio web de la escuela.|Our website is {0}. Open Help and options → School website.|Notre site web est {0}. Ouvrez Aide et options → Site web de l’école.
 Puede acceder al simulador de práctica en {0}. Abra Ayuda y opciones → Practicar examen teórico. Es una herramienta de estudio, no el examen oficial del DMV.|Access the practice simulator at {0}. Open Help and options → Practice the written test. It is a study tool, not the official DMV test.|Accédez au simulateur d’entraînement sur {0}. Ouvrez Aide et options → S’entraîner à l’examen théorique. C’est un outil d’étude, pas l’examen officiel du DMV.
 Enlace pendiente de confirmar con el personal.|Please confirm the link with staff.|Veuillez confirmer le lien auprès du personnel.
+Hay disponibilidad para {0}, {1}. Complete sus datos y revise el profesor en pantalla. Todavía no está reservada.|There is availability for {0}, {1}. Complete your details and review the instructor on screen. It is not booked yet.|Une place est disponible pour {0}, {1}. Saisissez vos coordonnées et vérifiez le moniteur à l’écran. La réservation n’est pas encore confirmée.
+¿Con qué profesor desea la clase? Puede elegir: {0}.|Which instructor would you like? You can choose: {0}.|Avec quel moniteur souhaitez-vous la leçon ? Vous pouvez choisir : {0}.
+Indique el profesor que desea o diga cualquier profesor.|Name your preferred instructor or say any instructor.|Indiquez le moniteur souhaité ou dites n’importe quel moniteur.
+Ese profesor no está habilitado para este servicio. ¿Qué otro profesor prefiere?|That instructor is not available for this service. Which other instructor would you prefer?|Ce moniteur n’est pas disponible pour ce service. Quel autre moniteur préférez-vous ?
+¿Qué desea comparar o corregir?|What would you like to compare or correct?|Que souhaitez-vous comparer ou corriger ?
+Lo que incluye este servicio está pendiente de confirmar con el personal.|Please confirm what this service includes with staff.|Veuillez confirmer auprès du personnel ce que comprend ce service.
+Las condiciones de este servicio están pendientes de confirmar con el personal.|Please confirm the conditions of this service with staff.|Veuillez confirmer les conditions de ce service auprès du personnel.
 `;
 export const translations=rows.trim().split('\n').map(row=>row.split('|'));
 const exact=new Map(translations.map(([es,en,fr])=>[es,{en,fr}]));
