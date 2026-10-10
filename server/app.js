@@ -652,7 +652,7 @@ export function createApp({ config, repository, ai, calendar = null, bookingMail
         const experience=runtime()?.experience,theme=experience?.theme==='metodomogollon'?'metodomogollon':'nexo';
         const accent=['lime','blue','violet'].includes(experience?.accent)?experience.accent:'lime';
         contents=contents.toString('utf8').replace('<body>',`<body data-theme="${theme}" data-accent="${accent}">`);
-        if(theme==='metodomogollon')contents=contents.replace('content="#f5f5ef"','content="#101722"').replace('src="/assets/recepcionista-v1.png"','src="/assets/asesora-mogollon-v1.png"');
+        if(theme==='metodomogollon')contents=contents.replace('content="#f5f5ef"','content="#101722"').replace('src="/assets/recepcionista-v1.png"','src="/assets/hector-mogollon-v1.png"');
         // Una nueva visita debe leer la selección vigente, no un HTML de otro tema.
         res.setHeader('Cache-Control','no-store');
       }

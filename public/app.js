@@ -753,7 +753,7 @@ function renderCenter(){
  document.body.dataset.accent=e.accent||'lime';
  document.body.dataset.theme=e.theme==='metodomogollon'?'metodomogollon':'nexo';
  // Solo cambia la imagen estática; el video mantiene el proveedor y avatar configurados.
- const photo=document.querySelector('.avatar-photo'),photoPath=e.theme==='metodomogollon'?'/assets/asesora-mogollon-v1.png':'/assets/recepcionista-v1.png';
+ const photo=document.querySelector('.avatar-photo'),photoPath=e.theme==='metodomogollon'?'/assets/hector-mogollon-v1.png':'/assets/recepcionista-v1.png';
  if(photo.getAttribute('src')!==photoPath)photo.src=photoPath;
  document.querySelector('meta[name="theme-color"]').content=e.theme==='metodomogollon'?'#101722':'#f5f5ef';
  document.querySelector('.header .brand').setAttribute('aria-label',e.theme==='metodomogollon'?'Método Mogollón, inicio':'Nexo, inicio');

@@ -1,6 +1,6 @@
 # Nexo · Kiosco conversacional para un centro de atención
 
-## Versión actual: 0.36.1
+## Versión actual: 0.36.2
 
 Editor visual de preguntas frecuentes con categorías, búsqueda, vista previa y precios del catálogo. Piloto web con voz, video, agenda por profesor y administración protegida.
 

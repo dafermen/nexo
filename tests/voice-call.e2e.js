@@ -39,7 +39,7 @@ try{
  await page.locator('#start').click();await page.locator('#accept-session').click();await page.waitForSelector('body.voice-call');await page.waitForFunction(()=>document.querySelectorAll('.message.assistant').length===1);await page.waitForTimeout(200);
  assert.equal(starts.length,0);assert.equal(spoken.length,1);assert.equal(await page.locator('#avatar-video').isVisible(),false);assert.equal(await page.locator('.avatar-photo').isVisible(),true);assert.equal(await page.locator('#call-rotate').isVisible(),false);assert.equal(await page.locator('#call-time').isVisible(),false);
  assert.equal(await page.locator('.method-menu').isVisible(),false);assert.equal(await page.locator('.method-footer').isVisible(),false);
- assert.match(await page.locator('.avatar-photo').getAttribute('src'),theme==='metodomogollon'?/asesora-mogollon-v1/:/recepcionista-v1/);
+ assert.match(await page.locator('.avatar-photo').getAttribute('src'),theme==='metodomogollon'?/hector-mogollon-v1/:/recepcionista-v1/);
  for(const viewport of [{width:1024,height:1366},{width:1366,height:1024},{width:390,height:844},{width:844,height:390}]){
   await page.setViewportSize(viewport);const geometry=await page.evaluate(()=>({overflow:document.documentElement.scrollWidth>innerWidth,buttons:[...document.querySelectorAll('.call-dock button:not([hidden])')].map(el=>{const b=el.getBoundingClientRect();return b.width>=44&&b.height>=44&&b.x>=0&&b.y>=0&&b.right<=innerWidth&&b.bottom<=innerHeight;})}));assert.equal(geometry.overflow,false);assert.ok(geometry.buttons.every(Boolean));
   if(shots)await page.screenshot({path:join(shots,'voz-'+viewport.width+'.png')});

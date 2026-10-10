@@ -36,14 +36,14 @@ try{
  const early=await browser.newPage({viewport:{width:820,height:1180}}),portraits=[];
  let releaseConfig;const pendingConfig=new Promise(resolve=>{releaseConfig=resolve;});
  await early.route('**/api/config',async route=>{await pendingConfig;await route.continue();});
- early.on('request',r=>{if(/recepcionista-v1|asesora-mogollon-v1/.test(r.url()))portraits.push(new URL(r.url()).pathname);});
+ early.on('request',r=>{if(/recepcionista-v1|asesora-mogollon-v1|hector-mogollon-v1/.test(r.url()))portraits.push(new URL(r.url()).pathname);});
  try{
   const response=await early.goto(base,{waitUntil:'domcontentloaded'});
   assert.match(response.headers()['cache-control'],/no-store/);
   await early.locator('.avatar-photo').evaluate(img=>img.decode());
   assert.equal(await early.locator('body').getAttribute('data-theme'),theme);
   assert.equal(await early.locator('.mogollon-brand').isVisible(),theme==='metodomogollon');
-  assert.deepEqual(portraits,[theme==='metodomogollon'?'/assets/asesora-mogollon-v1.png':'/assets/recepcionista-v1.png']);
+  assert.deepEqual(portraits,[theme==='metodomogollon'?'/assets/hector-mogollon-v1.png':'/assets/recepcionista-v1.png']);
   if(theme==='metodomogollon')assert.equal(await early.locator('body').evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(16, 23, 34)');
   for(const path of ['/','/index.html']){const res=await fetch(base+path);const html=await res.text();assert.match(html,new RegExp(`<body data-theme="${theme}"`));assert.match(res.headers.get('cache-control'),/no-store/);}
  }finally{releaseConfig();await early.waitForSelector('.service-card',{state:'attached'});await early.close();}
@@ -62,7 +62,7 @@ try{
   await page.locator('#'+servicesButton).click();await page.waitForSelector('.service-card');assert.ok(await page.locator('.service-card').first().isVisible());
   const panel=await page.locator('#home-panel').boundingBox();assert.ok(panel.y>=0&&panel.y+panel.height<=height+1);
   await page.keyboard.press('Escape');assert.equal(await page.locator('#home-panel').evaluate(e=>e.open),false);assert.equal(await page.locator('#'+servicesButton).evaluate(e=>document.activeElement===e),true);
-  assert.match(await page.locator('.avatar-photo').getAttribute('src'),theme==='metodomogollon'?/asesora-mogollon-v1/:/recepcionista-v1/);
+  assert.match(await page.locator('.avatar-photo').getAttribute('src'),theme==='metodomogollon'?/hector-mogollon-v1/:/recepcionista-v1/);
   if(theme==='metodomogollon'){
    await page.locator('#method-prices').click();assert.equal(await page.locator('#home-panel').getAttribute('data-catalog-mode'),'prices');assert.ok(await page.locator('.service-price').first().isVisible());await page.keyboard.press('Escape');
    for(const lang of ['en','fr','es']){await page.locator(`[data-language="${lang}"]`).click();await page.waitForTimeout(120);assert.equal(await page.locator('#method-prices').innerText(),{en:'Prices and packages',fr:'Tarifs et forfaits',es:'Precios y paquetes'}[lang]);for(const id of actions){const b=await page.locator('#'+id).boundingBox();assert.ok(b.y>=0&&b.y+b.height<=height&&b.height>=44,`${lang} ${id}`);assert.ok(await page.locator('#'+id).evaluate(e=>{const b=e.getBoundingClientRect();return e.contains(document.elementFromPoint(b.x+b.width/2,b.y+b.height/2));}),`${lang} ${id} sin solapamiento`);}}

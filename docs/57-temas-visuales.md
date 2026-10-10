@@ -1,4 +1,4 @@
-# Temas visuales del kiosco · v0.36.1
+# Temas visuales del kiosco · v0.36.2
 
 ## Para el administrador
 
@@ -13,11 +13,11 @@ Para volver al diseño anterior elija **Nexo** y guarde. El color de acento Nexo
 
 ## Alcance
 
-El tema cambia la apariencia, no el catálogo, los precios, profesores, reservas, idiomas, voz ni credenciales. Desde 0.36.0 Método Mogollón incluye una distribución propia y una asesora estática con traje negro y pañuelo amarillo. El video conserva el avatar configurado en LiveAvatar: una imagen estática no lo convierte en un avatar animado. Esta entrega no replica el gabinete físico ni sustituye la validación de alcance táctil en el equipo real.
+El tema cambia la apariencia, no el catálogo, los precios, profesores, reservas, idiomas, voz ni credenciales. Desde 0.36.2 Método Mogollón muestra el retrato de la fotografía entregada por el cliente, con polo negro y detalles amarillos, en el inicio y las llamadas por voz. Sustituye la asesora incorporada en 0.36.0. El video conserva el avatar configurado en LiveAvatar: una imagen estática no lo convierte en un avatar animado. Esta entrega no replica el gabinete físico ni sustituye la validación de alcance táctil en el equipo real.
 
 ## Diseño inspirado en el kiosco del cliente
 
-- Marca centrada; asesora a la izquierda y saludo con cinco accesos a la derecha.
+- Marca centrada; retrato a la izquierda y saludo con cinco accesos a la derecha.
 - **Conozca nuestros cursos:** abre el catálogo administrable de servicios.
 - **Precios y paquetes:** abre el mismo catálogo con precios destacados, también en teléfono. No existe una segunda lista de precios que mantener.
 - **Agende su clase:** reutiliza el menú de reserva, consulta y disponibilidad. Si la agenda está deshabilitada, el acceso también lo está.
@@ -28,11 +28,15 @@ El tema cambia la apariencia, no el catálogo, los precios, profesores, reservas
 
 ### Imagen y mantenimiento
 
-La imagen `public/assets/asesora-mogollon-v1.png` es una creación generada inspirada en la referencia, no una extracción del rostro original del cliente. Se creó con la herramienta integrada de generación de imágenes, en formato PNG con transparencia, 1024 × 1536. La imagen anterior continúa en el tema Nexo. El dibujo de ciudad y camino es un SVG propio: `public/assets/mogollon-skyline.svg`.
+La imagen activa es `public/assets/hector-mogollon-v1.png`, PNG transparente de 1024 × 1536. Se adaptó con la herramienta integrada de edición de imágenes a partir de **Escuela Hector Mogollon.jpeg**, entregada por el cliente el 10 de octubre de 2026. Se retiró el fondo blanco y se preparó un encuadre de cabeza a medio muslo. Es una adaptación mediante IA, no un recorte garantizado píxel por píxel del original. El archivo original permanece sin modificar.
 
-Instrucción final de generación: retrato fotográfico de una asesora adulta, cabello oscuro recogido en moño bajo, traje negro, pañuelo amarillo dorado, pendientes discretos; sonrisa natural y mirada ligeramente a la derecha; cuerpo completo desde la cabeza hasta medio muslo, brazos y manos dentro del encuadre; luz suave, fondo transparente, sin texto ni interfaz. Referencia: la asesora dentro del kiosco presentado por el cliente. No se solicitó replicar su identidad exacta.
+La imagen anterior `public/assets/asesora-mogollon-v1.png` se conserva como recurso histórico, pero el tema ya no la solicita. Nexo continúa usando `public/assets/recepcionista-v1.png`. El dibujo de ciudad y camino es un SVG propio: `public/assets/mogollon-skyline.svg`.
 
-Para reemplazarla, guarde una nueva imagen versionada con transparencia y cambie la ruta permitida en `renderCenter()` de `public/app.js`. Revise el inicio, la llamada por voz y el cambio de tema. No cambie credenciales ni el ID de LiveAvatar para reemplazar una imagen estática. Para una pantalla física de 55 pulgadas queda pendiente comprobar nitidez y altura de los controles a distancia real.
+Instrucción final de edición utilizada con la herramienta integrada:
+
+> Use case: background-extraction. Edit target: the supplied photograph. Remove ONLY the white background and ground shadow, producing genuine transparent alpha with clean edges including hair. Crop the composition to the SAME man's head through mid-thigh to make a portrait website asset. Preserve the exact original person, face, identity, expression, hairstyle, skin tone, lighting, crossed-arm pose, clothing, embroidered chest logo and its lettering, belt and proportions. Do not regenerate or beautify the person, change his features, turn his head, change his outfit or add anything. Keep all hair and both arms fully inside the frame with a modest transparent margin, no large empty side margins. Portrait orientation, sharp natural photographic detail. No backdrop, no halo, no checkerboard painted into image, no added text. This will be displayed on a dark navy kiosk background.
+
+Para reemplazarla, guarde una nueva imagen versionada con transparencia y actualice **ambas referencias**: `renderCenter()` de `public/app.js` y la preparación del HTML inicial en `server/app.js`. Así no aparecerá la fotografía anterior mientras carga la configuración. Actualice las rutas esperadas en las pruebas de inicio y voz. Revise el inicio, la llamada por voz y el cambio de tema. No cambie credenciales ni el ID de LiveAvatar para reemplazar una imagen estática. Para una pantalla física de 55 pulgadas queda pendiente comprobar nitidez y altura de los controles a distancia real.
 
 La selección administrativa permanece protegida. El visitante no puede cambiar la identidad de toda la instalación. Los colores de ocupado, error y colgar conservan su significado.
 

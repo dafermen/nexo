@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-10-05",
-  "version": "0.36.1",
-  "summary": "Tema Método Mogollón con asesora propia, menú lateral, precios del catálogo, acceso a agenda y preparación; adaptación a teléfono, tablet y kiosco, manteniendo el tema Nexo.",
+  "updatedAt": "2026-10-10",
+  "version": "0.36.2",
+  "summary": "Tema Método Mogollón con el retrato entregado por el cliente, menú lateral y carga sin destellos. Imagen adaptada para inicio y llamadas por voz; tema Nexo y LiveAvatar conservados.",
   "phases": [
     {
       "id": "base",
@@ -721,7 +721,7 @@
       "title": "Temas Nexo y Método Mogollón",
       "status": "completed",
       "priority": "P2",
-      "description": "Selector administrativo, persistencia SQLite y compatibilidad. Distribución inspirada en el cliente, asesora con traje negro y menú de cinco accesos. Versión 0.36.1: tema y retrato en el HTML inicial, sin destellos del otro tema y con prueba de red lenta. Valor inicial desde .env reservado para etapa posterior.",
+      "description": "Selector administrativo, persistencia SQLite y menú de cinco accesos. Versión 0.36.2: retrato adaptado de la fotografía del cliente en inicio y voz, desde el HTML inicial, sin destellos de imágenes anteriores. Valor inicial desde .env reservado para etapa posterior.",
       "evidence": {
         "path": "docs/57-temas-visuales.md",
         "label": "Temas, mantenimiento y pruebas"
