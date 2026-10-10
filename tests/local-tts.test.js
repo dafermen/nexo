@@ -14,6 +14,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { EventEmitter } from 'node:events';
 import { PassThrough } from 'node:stream';
+import {mkdtemp,writeFile,rm} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {join,resolve,sep} from 'node:path';
+import {readConfig} from '../server/config.js';
 import { LocalTtsService, pcmToWav } from '../server/providers/local-tts.js';
 import { mouthTimeline, mouthBlend, smoothSpeechLevel } from '../public/providers/local-speech.js';
 function fixture() {
@@ -29,13 +33,27 @@ test('PCM local contiene cabecera WAV y duración correctas', () => {
   const wav = pcmToWav(Buffer.alloc(44100)); assert.equal(wav.toString('ascii',0,4),'RIFF');
   assert.equal(wav.readUInt32LE(24),22050); assert.equal(wav.readUInt32LE(40),44100); assert.equal(wav.length,44144);
 });
-test('Piper recibe texto solo por stdin, usa voz femenina y no abre un shell', async () => {
+test('Piper recibe texto solo por stdin, usa voz masculina y no abre un shell', async () => {
   const f=fixture(); const promise=f.service.synthesize('Hola; $(no ejecutar)',{owner:'a'});
   assert.equal(f.args[2].shell,false); assert.equal(f.args[2].windowsHide,true);
-  assert.ok(!f.args[1].includes('Hola; $(no ejecutar)')); assert.equal(f.args[1][3],'1');
+  assert.ok(!f.args[1].includes('Hola; $(no ejecutar)')); assert.equal(f.args[1][3],'0');
   assert.match(f.child.stdin.read().toString(),/Hola; \$\(no ejecutar\)/);
   f.child.stdout.write(Buffer.alloc(4410));f.child.emit('close',0);
   const result=await promise;assert.equal(result.duration,.1);assert.equal(result.provider,'piper-local');
+});
+
+test('perfiles validados separan identidad de caché aunque compartan el modelo español',async()=>{
+ assert.equal(readConfig({}).localTts.voiceProfile,'male');assert.equal(readConfig({PIPER_VOICE_PROFILE:'female'}).localTts.voiceProfile,'female');
+ assert.throws(()=>readConfig({PIPER_VOICE_PROFILE:'otro'}));assert.throws(()=>new LocalTtsService({voiceProfile:'__proto__'}));
+ const root=await mkdtemp(join(tmpdir(),'nexo-voice-profile-'));
+ try{
+  const engine=join(root,'piper');await writeFile(engine,'test engine');
+  const names=['es_ES-sharvard-medium','en_US-bryce-medium','fr_FR-upmc-medium','en_US-ljspeech-high','fr_FR-siwis-medium'];
+  for(const name of names){await writeFile(join(root,name+'.onnx'),'test model '+name);await writeFile(join(root,name+'.onnx.json'),'{}');}
+  const male=new LocalTtsService({executable:engine,voicesDirectory:root}),female=new LocalTtsService({executable:engine,voicesDirectory:root,voiceProfile:'female'});
+  for(const language of ['es','en','fr']){const a=await male.cacheIdentity(language),b=await female.cacheIdentity(language);assert.notDeepEqual(a,b);assert.equal(male.status(language).voiceProfile,'male');}
+  const a=await male.cacheIdentity('es'),b=await female.cacheIdentity('es');assert.equal(a.modelHash,b.modelHash);assert.equal(a.speaker,'0');assert.equal(b.speaker,'1');
+ }finally{assert.ok(resolve(root).startsWith(resolve(tmpdir())+sep));await rm(root,{recursive:true,force:true});}
 });
 test('cancelar voz mata el proceso, descarta resultado tardío y aísla propietario', async () => {
   const f=fixture(), controller=new AbortController();

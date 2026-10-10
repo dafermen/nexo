@@ -83,7 +83,9 @@ export function readConfig(env = process.env, {installationPath}={}) {
     if(conversationRetentionDays<1||conversationRetentionDays>30)throw new Error('El piloto requiere retención de conversaciones entre 1 y 30 días.');
   }
   if(env.PIPER_EXECUTABLE&&!env.PIPER_ENGINE_VERSION)throw new Error('PIPER_ENGINE_VERSION es obligatorio con un ejecutable personalizado.');
-  const localTts={...(env.PIPER_EXECUTABLE?{executable:resolve(env.PIPER_EXECUTABLE)}:{}),...(env.PIPER_VOICES_DIR?{voicesDirectory:resolve(env.PIPER_VOICES_DIR)}:{}),engineVersion:env.PIPER_ENGINE_VERSION||'bundled'};
+  const voiceProfile=env.PIPER_VOICE_PROFILE||'male';
+  if(!['male','female'].includes(voiceProfile))throw new Error('PIPER_VOICE_PROFILE debe ser male o female.');
+  const localTts={...(env.PIPER_EXECUTABLE?{executable:resolve(env.PIPER_EXECUTABLE)}:{}),...(env.PIPER_VOICES_DIR?{voicesDirectory:resolve(env.PIPER_VOICES_DIR)}:{}),engineVersion:env.PIPER_ENGINE_VERSION||'bundled',voiceProfile};
   return {
     deploymentMode,pilotPrivateEnabled,pilotPasswordHash,videoDailyLimit,maxActiveSessions,localTts,
     googleCalendar,audioCache,

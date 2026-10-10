@@ -1,4 +1,22 @@
-# Biblioteca de audio — v0.24.0
+# Biblioteca de audio y perfiles de voz — v0.37.0
+
+## Elegir la voz
+
+Desde v0.37.0 la voz predeterminada es masculina en español, inglés y francés. En `.env`, `PIPER_VOICE_PROFILE=male` selecciona ese perfil y `PIPER_VOICE_PROFILE=female` conserva las voces anteriores. Reinicie Nexo después de cambiarlo. El perfil se aplica a toda la instalación, independientemente del tema visual. No es una imitación de la voz de la persona de la fotografía.
+
+| Idioma | Modelo masculino | Hablante |
+|---|---|---|
+| Español | es_ES-sharvard-medium | 0 (M) |
+| Inglés | en_US-bryce-medium | 0 (Bryce) |
+| Francés | fr_FR-upmc-medium | 1 (Pierre) |
+
+Los tres generan WAV mono a 22.050 Hz. Antes de actualizar una instalación, descargue los modelos: en Windows, después de instalar Piper, ejecute `powershell -ExecutionPolicy Bypass -File scripts/install-multilingual-voices.ps1`; en Linux, `python3 deploy/install-voices.py /opt/nexo/voices`. Los instaladores comprueban SHA256 y conservan los modelos femeninos para permitir volver al perfil anterior. Los modelos no se incluyen en Git ni en el paquete de despliegue.
+
+Fuentes y atribución: [Sharvard / University of Edinburgh, datos CC BY 3.0](https://huggingface.co/rhasspy/piper-voices/blob/main/es/es_ES/sharvard/medium/MODEL_CARD); [Bryce Beattie, datos de dominio público](https://huggingface.co/rhasspy/piper-voices/blob/main/en/en_US/bryce/medium/MODEL_CARD); [UPMC Pierre, datos CC BY-SA 4.0](https://huggingface.co/rhasspy/piper-voices/blob/main/fr/fr_FR/upmc/medium/MODEL_CARD). Las tarjetas identifican los conjuntos de entrenamiento y sus condiciones; conserve estas referencias al distribuir la instalación.
+
+La síntesis continúa siendo local. LiveAvatar LITE recibe este audio; FULL tiene su propia configuración de voz. No hace falta vaciar la biblioteca: modelo y hablante forman parte de la clave y evitan reproducir audios del perfil anterior. La primera petición de cada respuesta con la nueva voz genera otro archivo.
+
+Validación v0.37.0: pruebas de selección y rechazo de perfiles inválidos, hablantes por idioma y separación de caché; síntesis real de los tres idiomas en Windows. Una prueba con Piper real guardó primero una respuesta femenina, cambió a masculina y comprobó que solo se reutilizaba el nuevo audio. La valoración de timbre y acento queda a elección del cliente.
 
 ## Qué hace y qué ahorra
 

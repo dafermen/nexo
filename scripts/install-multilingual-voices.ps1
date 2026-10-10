@@ -16,7 +16,7 @@ if (-not (Test-Path -LiteralPath (Join-Path $nexoProject 'runtime/piper/piper.ex
 }
 $nexoManifest = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'multilingual-voices.json') -Raw | ConvertFrom-Json
 foreach ($voice in $nexoManifest) {
-  if ($voice.file -notmatch '^(en_US-ljspeech-high|fr_FR-siwis-medium)\.onnx(\.json)?$') { throw 'Archivo de voz no permitido.' }
+  if ($voice.file -notmatch '^(en_US-ljspeech-high|fr_FR-siwis-medium|en_US-bryce-medium|fr_FR-upmc-medium)\.onnx(\.json)?$') { throw 'Archivo de voz no permitido.' }
   $nexoTarget = Join-Path $nexoVoices $voice.file
   if ((Test-Path -LiteralPath $nexoTarget) -and (Get-FileHash -LiteralPath $nexoTarget -Algorithm SHA256).Hash -eq $voice.sha256) { continue }
   Invoke-WebRequest -UseBasicParsing -Uri $voice.url -OutFile ($nexoTarget + '.part')

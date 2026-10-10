@@ -18,5 +18,25 @@
     "file": "fr_FR-siwis-medium.onnx.json",
     "url": "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/siwis/medium/fr_FR-siwis-medium.onnx.json",
     "sha256": "39479916c2db192b5ac9764daddd0c744d83e023ad890c6976c0633ae4df8959"
+  },
+  {
+    "file": "en_US-bryce-medium.onnx",
+    "url": "https://huggingface.co/rhasspy/piper-voices/resolve/c10ece1aade47bb51c153c893d14e5bf8e5b7117/en/en_US/bryce/medium/en_US-bryce-medium.onnx",
+    "sha256": "dc9caa6c313199ffb5ac698b6e542fa6cba388aeaf2731e25262e33b9810aef1"
+  },
+  {
+    "file": "en_US-bryce-medium.onnx.json",
+    "url": "https://huggingface.co/rhasspy/piper-voices/resolve/c10ece1aade47bb51c153c893d14e5bf8e5b7117/en/en_US/bryce/medium/en_US-bryce-medium.onnx.json",
+    "sha256": "7ceb1bc4af6d4e41b6d1edbb86c67e91e01eaa71f66db4cd0ae92ac704d415be"
+  },
+  {
+    "file": "fr_FR-upmc-medium.onnx",
+    "url": "https://huggingface.co/rhasspy/piper-voices/resolve/c10ece1aade47bb51c153c893d14e5bf8e5b7117/fr/fr_FR/upmc/medium/fr_FR-upmc-medium.onnx",
+    "sha256": "9abb3800c199148897a9ed64e100d224f3de83579f100044174ad19418f1786f"
+  },
+  {
+    "file": "fr_FR-upmc-medium.onnx.json",
+    "url": "https://huggingface.co/rhasspy/piper-voices/resolve/c10ece1aade47bb51c153c893d14e5bf8e5b7117/fr/fr_FR/upmc/medium/fr_FR-upmc-medium.onnx.json",
+    "sha256": "e8636ec15dfd5d72db37a02cb5320a20f2b8d339f2a0e4337da64c58a33a5868"
   }
 ]

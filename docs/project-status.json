@@ -1,7 +1,7 @@
 {
   "updatedAt": "2026-10-10",
-  "version": "0.36.2",
-  "summary": "Tema Método Mogollón con el retrato entregado por el cliente, menú lateral y carga sin destellos. Imagen adaptada para inicio y llamadas por voz; tema Nexo y LiveAvatar conservados.",
+  "version": "0.37.0",
+  "summary": "Retrato del cliente y voz masculina local en español, inglés y francés. Perfil de voz configurable desde .env, con caché separada por modelo y hablante.",
   "phases": [
     {
       "id": "base",
@@ -725,6 +725,18 @@
       "evidence": {
         "path": "docs/57-temas-visuales.md",
         "label": "Temas, mantenimiento y pruebas"
+      }
+    },
+    {
+      "id": "NEXO-55",
+      "phaseId": "voz",
+      "title": "Voces masculinas y perfil configurable",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Piper masculino ES/EN/FR por defecto; perfil femenino recuperable en .env. Descargas verificadas y caché independiente por hablante. Síntesis real y pruebas automatizadas sin consumo de LiveAvatar.",
+      "evidence": {
+        "path": "docs/40-biblioteca-audio.md",
+        "label": "Perfiles de voz, instalación y caché"
       }
     }
   ]

@@ -20,7 +20,12 @@ import { fileURLToPath } from 'node:url';
 import { HttpError } from '../errors.js';
 
 const executable = fileURLToPath(new URL('../../runtime/piper/piper.exe', import.meta.url));
-const voices = {es:{file:'es_ES-sharvard-medium',speaker:'1',locale:'es-ES'},en:{file:'en_US-ljspeech-high',speaker:'0',locale:'en-US'},fr:{file:'fr_FR-siwis-medium',speaker:'0',locale:'fr-FR'}};
+// Perfiles explícitos y modelos de 22.050 Hz: el número de hablante forma parte de
+// la identidad de caché, incluso cuando dos voces comparten el mismo modelo.
+const profiles = {
+ male:{es:{file:'es_ES-sharvard-medium',speaker:'0',locale:'es-ES'},en:{file:'en_US-bryce-medium',speaker:'0',locale:'en-US'},fr:{file:'fr_FR-upmc-medium',speaker:'1',locale:'fr-FR'}},
+ female:{es:{file:'es_ES-sharvard-medium',speaker:'1',locale:'es-ES'},en:{file:'en_US-ljspeech-high',speaker:'0',locale:'en-US'},fr:{file:'fr_FR-siwis-medium',speaker:'0',locale:'fr-FR'}}
+};
 const voiceSettings={sampleRate:22050,sentenceSilence:'0.18',format:'wav-pcm16-mono',implementation:1};
 const fingerprints=new Map();
 /**
@@ -49,11 +54,12 @@ export function pcmToWav(pcm, sampleRate = 22050) {
   return Buffer.concat([header, pcm]);
 }
 export class LocalTtsService {
-  constructor({ spawnImpl = spawn, available, executable:engine=executable, voicesDirectory=fileURLToPath(new URL('../../runtime/voices/',import.meta.url)), engineVersion='bundled' } = {}) { this.spawn = spawnImpl; this.enabled = available; this.job = null; this.executable=engine; this.voicesDirectory=voicesDirectory; this.engineVersion=engineVersion; }
-  modelPath(language){return join(this.voicesDirectory,voices[language].file+'.onnx');}
+  constructor({ spawnImpl = spawn, available, executable:engine=executable, voicesDirectory=fileURLToPath(new URL('../../runtime/voices/',import.meta.url)), engineVersion='bundled',voiceProfile='male' } = {}) { if(!Object.hasOwn(profiles,voiceProfile))throw new Error('Perfil de voz inválido.');this.voiceProfile=voiceProfile;this.voices=profiles[voiceProfile];this.spawn = spawnImpl; this.enabled = available; this.job = null; this.executable=engine; this.voicesDirectory=voicesDirectory; this.engineVersion=engineVersion; }
+  modelPath(language){return join(this.voicesDirectory,this.voices[language].file+'.onnx');}
   status(language='es') {
+    const voices=this.voices;
     const installed=Object.fromEntries(Object.keys(voices).map(key=>[key,this.enabled ?? (existsSync(this.executable) && existsSync(this.modelPath(key)) && existsSync(this.modelPath(key)+'.json'))]));
-    return {available:installed[language]===true,languages:installed,provider:'piper',language:voices[language]?.locale,local:true};
+    return {available:installed[language]===true,languages:installed,provider:'piper',language:voices[language]?.locale,voiceProfile:this.voiceProfile,local:true};
   }
   /**
    * cacheIdentity: Describe exactamente idioma, modelo, hablante, motor y parámetros de síntesis.
@@ -61,6 +67,7 @@ export class LocalTtsService {
    * Salida: Promise de objeto de identidad o null si esa voz no está disponible.
    */
   async cacheIdentity(language='es'){
+    const voices=this.voices;
     if(!Object.hasOwn(voices,language)||!this.status(language).available)return null;
     const model=this.modelPath(language),[modelHash,configHash,engineHash]=await Promise.all([fingerprint(model),fingerprint(model+'.json'),fingerprint(this.executable)]);
     return {provider:'piper',model:voices[language].file,speaker:voices[language].speaker,locale:voices[language].locale,modelHash,configHash,engineHash,engineVersion:this.engineVersion,...voiceSettings};
@@ -72,6 +79,7 @@ export class LocalTtsService {
    * Salida: Promise<{audioBase64,duration,provider}>; un solo job simultáneo por instancia.
    */
   async synthesize(text, { owner, signal, language='es' } = {}) {
+    const voices=this.voices;
     if(!Object.hasOwn(voices,language))throw new HttpError(400,'Idioma no disponible.');
     const model=this.modelPath(language);
     if (!this.status(language).available) throw new HttpError(503, 'La voz local no está instalada. Ejecuta INSTALAR-VOZ-LOCAL.cmd y reinicia Nexo.');

@@ -69,9 +69,9 @@ test('API conserva idioma de sesión, originales en historial y límites',async 
  assert.ok(JSON.stringify(logs).includes('Combien coûte'));
 });
 test('Piper y reconocimiento eligen el idioma sin mezclar voces',async()=>{
- for(const [language,file] of [['en','en_US-ljspeech-high'],['fr','fr_FR-siwis-medium']]){
+ for(const [language,file] of [['en','en_US-bryce-medium'],['fr','fr_FR-upmc-medium']]){
   let args,child;const tts=new LocalTtsService({available:true,spawnImpl:(...input)=>{args=input;child=new EventEmitter();child.stdin=new PassThrough();child.stdout=new PassThrough();child.stderr=new PassThrough();child.kill=()=>{};return child;}});
-  const work=tts.synthesize('Test',{language});assert.ok(args[1][1].includes(file));assert.equal(args[2].shell,false);child.stdout.write(Buffer.alloc(4410));child.emit('close',0);await work;
+  const work=tts.synthesize('Test',{language});assert.ok(args[1][1].includes(file));assert.equal(args[1][3],language==='fr'?'1':'0');assert.equal(args[2].shell,false);child.stdout.write(Buffer.alloc(4410));child.emit('close',0);await work;
   await assert.rejects(tts.synthesize('Test',{language:'../../unknown'}),e=>e.status===400);
   let recognizer;const stt=new BrowserSttProvider({SpeechRecognition:class{constructor(){recognizer=this;}start(){}abort(){}}});stt.language=language==='en'?'en-US':'fr-FR';stt.start({onPartial(){},onFinal(){},onError(){},onEnd(){}});assert.equal(recognizer.lang,stt.language);stt.stop();
  }

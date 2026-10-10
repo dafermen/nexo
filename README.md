@@ -1,6 +1,8 @@
 # Nexo · Kiosco conversacional para un centro de atención
 
-## Versión actual: 0.36.2
+## Versión actual: 0.37.0
+
+Voz masculina local en los tres idiomas. Configuración e instalación: [perfiles de voz](docs/40-biblioteca-audio.md).
 
 Editor visual de preguntas frecuentes con categorías, búsqueda, vista previa y precios del catálogo. Piloto web con voz, video, agenda por profesor y administración protegida.
 
@@ -103,7 +105,7 @@ En una PC nueva ejecute npm ci antes de arrancar: instala Nodemailer para el cor
 - Inicio con todas sus opciones y [vista de llamada a pantalla completa](docs/15-vista-llamada.md) al conectar. Iconos para voz, texto, encuadre y colgar; vuelve al inicio y limpia la conversación al terminar el minuto.
 
 - Retrato de espera y asesora LiveAvatar bajo demanda; el modelo 3D anterior queda como alternativa opcional.
-- Conversación por texto, historial visible y respuestas de voz femenina española generadas en la PC con Piper.
+- Conversación por texto, historial visible y respuestas de voz masculina en español, inglés y francés generadas con Piper; perfil femenino opcional en .env.
 - Reconocimiento de voz del navegador, con transcripción editable antes de enviar.
 - Catálogo de tres servicios, cinco días hábiles de horarios y reserva con revisión previa.
 - Comprobante de turno, protección contra reservas duplicadas y persistencia SQLite.

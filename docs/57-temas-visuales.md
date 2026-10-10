@@ -1,4 +1,6 @@
-# Temas visuales del kiosco · v0.36.2
+# Temas visuales del kiosco · v0.37.0
+
+La voz masculina que acompaña al retrato desde v0.37.0 se configura por separado con `PIPER_VOICE_PROFILE` en `.env`. El cambio de tema no cambia la voz. Consulte [perfiles de voz y biblioteca de audio](40-biblioteca-audio.md).
 
 ## Para el administrador
 

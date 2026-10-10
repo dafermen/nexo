@@ -383,6 +383,8 @@ async LiveAvatarService.close()
 
 ## server/providers/local-tts.js
 
+**Perfiles (v0.37.0):** el constructor recibe `voiceProfile` (`male` predeterminado o `female`), además de `executable`, `voicesDirectory` y `engineVersion`. `server/config.js` valida `PIPER_VOICE_PROFILE` al arrancar. `this.voices` selecciona modelo y hablante por idioma; `status()` expone el perfil sin rutas privadas. `cacheIdentity()` incluye el hablante, por lo que cambiar español de 1 a 0 invalida la reutilización aun compartiendo el mismo archivo ONNX. Vea [instalación y atribución de modelos](../40-biblioteca-audio.md).
+
 Convertir texto a voz local Piper y describir su identidad de caché.
 
 - **Entrada:** Texto, owner, language y AbortSignal; rutas locales de ejecutable/modelos.
