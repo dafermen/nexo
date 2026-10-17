@@ -19,8 +19,8 @@ try{
  await page.goto(base+'/publications');await page.locator('#token').fill(key);await page.locator('#login button').click();await page.waitForSelector('#dashboard:not([hidden])');
  await page.locator('#template').click();await page.waitForSelector('#editor:not([hidden])');await page.locator('#service-picker').selectOption('cinco-horas');
  assert.equal(await page.locator('[name=price]').inputValue(),'');assert.equal(await page.locator('[name=publication]').inputValue(),'information');
- await page.locator('[name=description]').fill('Información del curso verificada en prueba.');await page.locator('#faq-editor [name=answer]').fill('Respuesta revisada desde formulario visual.');await page.locator('#save').click();await page.waitForFunction(()=>document.querySelector('#notice').textContent.includes('Borrador guardado'));
- await page.locator('#approve').click();await page.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('Aprobado'));
+ await page.locator('[name=description]').fill('Información del curso verificada en prueba.');await page.locator('#service-editor [name=duration]').fill('75');await page.locator('#service-editor [name=active]').uncheck();await page.locator('#faq-editor [name=answer]').fill('Respuesta revisada desde formulario visual.');await page.locator('#save').click();await page.waitForFunction(()=>document.querySelector('#notice').textContent.includes('Borrador guardado'));
+ assert.match(await page.locator('#diff').textContent(),/Duración en minutos/);assert.match(await page.locator('#diff').textContent(),/Visible en catálogo/);await page.locator('#approve').click();await page.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('Aprobado'));
  await page.locator('#publish').click();await page.waitForFunction(()=>document.querySelector('#notice').textContent.includes('Contenido publicado'));
  assert.equal(repo.readCenterSettings().services.find(s=>s.id==='cinco-horas').description,'Información del curso verificada en prueba.');
  assert.match(repo.readKnowledge('school').source,/Respuesta revisada desde formulario visual/);

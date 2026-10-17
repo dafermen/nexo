@@ -1,4 +1,4 @@
-# Entrega 0.41.0 — Administración y evolución por negocio
+# Entrega 0.41 — Administración y evolución por negocio
 
 17 de octubre de 2026.
 
@@ -39,3 +39,9 @@ Las nuevas tablas son aditivas. No restaurar SQLite completa para revertir conte
 Pagos, caja, créditos, telefonía y SMS no se implementaron. La clave del piloto permanece en el archivo de entorno protegido, fuera de la configuración comercial.
 
 [Uso administrativo](65-administracion-publicaciones.md) · [Recorrido junior](codigo/publicaciones.md) · [Fases](64-fases-multinegocio.md).
+
+## Revisión final 0.41.1
+
+La revisión final refuerza la validación de respuestas propias del perfil general, muestra cambios de duración/visibilidad en la comparación y adapta las pruebas al menú «Más herramientas». La prueba inicial de CI detectó dos recorridos con selectores de la navegación anterior; se corrigieron sin reducir comprobaciones.
+
+**355 pruebas unitarias/API aprobadas localmente.** También pasaron los once recorridos de navegador del flujo CI: acceso, FAQ visual, administración, configuración, kiosco, recepción, expedientes, publicaciones, voz, agenda por voz y documentación. Se repitieron las pruebas afectadas tras la corrección de validación. Los resultados remotos definitivos se consultan en GitHub Actions por commit. La activación de esta revisión conserva el contenido ya publicado y sus versiones recuperables.

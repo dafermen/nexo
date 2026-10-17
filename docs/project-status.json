@@ -1,7 +1,7 @@
 {
   "updatedAt": "2026-10-17",
-  "version": "0.41.0",
-  "summary": "0.41.0 publicada el 17/10/2026: administración por tareas, publicaciones controladas, perfiles, orientación inicial y componentes de paquetes. 354 pruebas aprobadas en Windows y Linux; HTTPS y respaldos comprobados. Políticas, vehículos compartidos y aceptación física pendientes.",
+  "version": "0.41.1",
+  "summary": "Entrega 0.41: administración por tareas, publicaciones controladas, perfiles, orientación inicial y componentes. Contenido publicado; revisión final 0.41.1 con 355 pruebas locales y recorridos de navegador. Políticas, vehículos compartidos y aceptación física pendientes; evidencia de publicación en la guía de entrega.",
   "phases": [
     {
       "id": "base",

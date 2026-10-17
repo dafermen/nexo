@@ -15,7 +15,7 @@ En teléfono las tarjetas se apilan y los botones mantienen su tamaño. La inter
 1. Abra **Contenido y publicaciones** (`/publications`). Propietario y gerente pueden trabajar aquí.
 2. Pulse **Nuevo borrador** para copiar el contenido vigente, o **Preparar manual de Método Mogollón** para generar la propuesta conservadora de los manuales de octubre. Esta última sustituye la base de FAQ completa dentro del borrador; revise su contenido antes de publicar.
 3. Ponga una referencia o motivo. Elija cada servicio y complete descripción, precio, requisitos, horarios y componentes. Un precio vacío significa **por confirmar**; cero significa gratuito.
-4. Edite las preguntas equivalentes, categoría, respuesta y estado mediante formularios. Una respuesta nueva nace pausada. En un negocio con conocimiento de texto propio se utiliza el editor de texto, sin obligarlo a adoptar el formato escolar.
+4. Edite las preguntas equivalentes, categoría, respuesta y estado mediante formularios. Una respuesta nueva nace pausada. Un negocio general también puede editar sus propias FAQ con formularios. Debe habilitar «Respuestas propias» en Configuración; el formato de preguntas/respuestas es común y no obliga a utilizar temas de la escuela.
 5. Pulse **Guardar borrador**. Revise el resumen de diferencias. El kiosco aún conserva el contenido anterior.
 6. Pulse **Aprobar revisión guardada** y después **Publicar revisión aprobada**. Cada acción solicita confirmación. Se cierran conversaciones existentes para que el siguiente visitante use el catálogo nuevo.
 7. Si necesita recuperar contenido, use **Historial recuperable → Recuperar**. Se crea otro borrador: revisar, aprobar y publicar son pasos separados. No se restauran ni eliminan expedientes o reservas.

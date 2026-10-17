@@ -26,7 +26,7 @@ export function createPublicationStore(db){
  const state=()=>{const r=db.prepare('SELECT * FROM center_settings WHERE id=1').get();if(!r)fail(409,'Configure primero el negocio.');return {...JSON.parse(r.document),revision:r.revision};};
  const knowledge=()=>db.prepare("SELECT * FROM knowledge_bases WHERE id='school'").get();
  const payload=()=>{const s=state(),k=knowledge();return {services:s.services,knowledgeSource:s.configuration.assistant.knowledgeMode==='file'?(k?.source||''):s.configuration.assistant.knowledgeText||'',knowledgeMode:s.configuration.assistant.knowledgeMode};};
- const read=id=>{const r=db.prepare('SELECT * FROM catalog_drafts WHERE id=?').get(id);if(!r||r.businessType!==state().configuration.business.type)fail(404,'Borrador no encontrado.');const document=JSON.parse(r.document);return {...r,document,entries:document.knowledgeMode==='file'?parseFaq(document.knowledgeSource):[]};};
+ const read=id=>{const r=db.prepare('SELECT * FROM catalog_drafts WHERE id=?').get(id);if(!r||r.businessType!==state().configuration.business.type)fail(404,'Borrador no encontrado.');const document=JSON.parse(r.document);return {...r,document,entries:document.knowledgeMode!=='none'?parseFaq(document.knowledgeSource):[]};};
  const transaction=fn=>{db.exec('BEGIN IMMEDIATE');try{const r=fn();db.exec('COMMIT');return r;}catch(e){db.exec('ROLLBACK');throw e;}};
  const validate=(input,s)=>{
   if(!input||Object.keys(input).some(k=>!['services','knowledgeSource','knowledgeMode'].includes(k)))fail(400,'Documento inválido.');
@@ -44,7 +44,7 @@ export function createPublicationStore(db){
    return {...clean,components,publication,sourceRef:item.sourceRef?text(item.sourceRef,200):null,contentVersion:(prior.contentVersion||0)+1,active:publication==='withdrawn'?false:clean.active};
   });
   for(const v of services)for(const c of v.components)if(c.serviceId&&!ids.has(c.serviceId))fail(400,'Un componente referencia un servicio inexistente.');
-  const source=text(input.knowledgeSource,4*1024*1024,false);let entries;try{entries=input.knowledgeMode==='file'?parseFaq(source):[];}catch(e){fail(400,e.message);}
+  const source=text(input.knowledgeSource,4*1024*1024,false);let entries;try{entries=input.knowledgeMode!=='none'?parseFaq(source):[];}catch(e){fail(400,e.message);}
   for(const e of entries)if(e.serviceId&&!ids.has(e.serviceId))fail(400,'Una respuesta referencia un servicio inexistente.');
   if(input.knowledgeMode==='custom'&&source.length>8000)fail(400,'Las respuestas propias admiten 8.000 caracteres.');
   return {services,knowledgeSource:source,knowledgeMode:input.knowledgeMode};

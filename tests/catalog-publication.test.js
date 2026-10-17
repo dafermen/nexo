@@ -81,7 +81,7 @@ test('entregas de componentes: límite, reintento, permisos, reverso y clases se
  assert.throws(()=>r.studentComponentReverse(id,row.id,{requestId:randomUUID(),revision:row.revision,reason:'Duplicado'},actor),e=>e.status===409);
 });
 
-test('catálogo general puede publicar instrucciones propias sin formato escolar',t=>{
+test('catálogo general puede publicar sin activar conocimiento escolar',t=>{
  const r=fixture(t,{id:'generic',name:'Taller',businessType:'general'});const o=r.publicationOverview(actor);let d=r.publicationCreate({revision:o.revision,source:'Negocio general',document:o.current},actor);assert.deepEqual(d.entries,[]);d=approve(r,d);publish(r,d);assert.equal(r.publicationOverview(actor).versions.length,2);
 });
 test('HTTP publicación requiere acceso, invalida visitante y prepara derivación sin enviar conversación',async t=>{
@@ -97,4 +97,8 @@ test('HTTP publicación requiere acceso, invalida visitante y prepara derivació
  const fresh=(await http('/api/sessions','POST',{consent:true,language:'es'})).data;
  const answer=await http('/api/chat','POST',{message:'Me interesa el curso de cinco horas',channel:'voice'},fresh.token);assert.equal(answer.status,200);assert.match(answer.data.text,/permiso/);
  const handoff=await http('/api/reception/ticket','GET',undefined,fresh.token);assert.equal(handoff.data.ticket,null);assert.equal(handoff.data.suggestion.category,'five-hours');assert.doesNotMatch(JSON.stringify(handoff.data),/Me interesa/);
+});
+
+test('respuestas propias de negocio general se validan antes de publicar',t=>{
+ const r=fixture(t,{id:'generic',name:'Taller',businessType:'general'}),settings=r.getCenterSettings();settings.configuration.assistant.knowledgeMode='custom';settings.configuration.assistant.knowledgeText='[taller]\npregunta: ¿Hacen reparaciones?\nrespuesta: Consulte los servicios del taller.\n';r.saveConfiguration(settings.revision,{profile:settings.profile,configuration:settings.configuration});let d=create(r);assert.equal(d.entries.length,1);d.document.knowledgeSource='Texto sin estructura';assert.throws(()=>r.publicationSave(d.id,{revision:d.revision,source:d.source,document:d.document},actor),e=>e.status===400);d=r.publicationRead(d.id,actor);d.document.knowledgeSource='[taller]\npregunta: ¿Hacen reparaciones?\nrespuesta: Sí, atendemos reparaciones del hogar.\n';d=r.publicationSave(d.id,{revision:d.revision,source:d.source,document:d.document},actor);publish(r,approve(r,d));assert.match(r.getCenterSettings().configuration.assistant.knowledgeText,/reparaciones del hogar/);
 });

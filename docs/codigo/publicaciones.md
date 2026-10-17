@@ -36,7 +36,7 @@ Estilos de tarjetas, navegación y formularios. Dos columnas pasan a una en pant
 
 ## public/publications.html
 
-Estructura de la página privada, selección de servicios, editor visual de respuestas y botones del ciclo editorial. Los labels vinculan cada entrada con su propósito. Guardar, aprobar y publicar están separados para que la revisión sea explícita. El formato avanzado permite conservar el flujo anterior de archivo de texto.
+Estructura de la página privada, selección de servicios, editor visual de respuestas y botones del ciclo editorial. Los labels vinculan cada entrada con su propósito. Guardar, aprobar y publicar están separados para que la revisión sea explícita. El formato avanzado permite conservar el flujo anterior de archivo de texto. Tanto las FAQ escolares como las respuestas propias se validan con el mismo formato; el modo sin conocimiento desactiva su edición.
 
 ## public/publications.js
 
