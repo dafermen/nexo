@@ -45,3 +45,9 @@ Pagos, caja, créditos, telefonía y SMS no se implementaron. La clave del pilot
 La revisión final refuerza la validación de respuestas propias del perfil general, muestra cambios de duración/visibilidad en la comparación y adapta las pruebas al menú «Más herramientas». La prueba inicial de CI detectó dos recorridos con selectores de la navegación anterior; se corrigieron sin reducir comprobaciones.
 
 **355 pruebas unitarias/API aprobadas localmente.** También pasaron los once recorridos de navegador del flujo CI: acceso, FAQ visual, administración, configuración, kiosco, recepción, expedientes, publicaciones, voz, agenda por voz y documentación. Se repitieron las pruebas afectadas tras la corrección de validación. Los resultados remotos definitivos se consultan en GitHub Actions por commit. La activación de esta revisión conserva el contenido ya publicado y sus versiones recuperables.
+
+### Cierre de validación y publicación
+
+La **0.41.1 está activa en el VPS**. Las 355 pruebas pasaron también en el servidor Linux y se verificaron HTTPS, archivos, catálogo y protección de APIs. Se preservó el contenido publicado anteriormente; no se reaplicó la propuesta ni se tocaron reservas existentes. Los respaldos cifrados previo/posterior de esta revisión fueron copiados a la PC y comparados por SHA256.
+
+El código quedó en `dafermen/nexo`, commit `5b74b58709d766039877c96418ebce76d80196d4`. [GitHub Actions: validación del código 0.41.1](https://github.com/dafermen/nexo/actions/runs/39078991334) terminó **correctamente**: pruebas en Ubuntu y Windows y batería de navegador. La documentación posterior mantiene su propia revisión; la evidencia anterior identifica exactamente el código validado.

@@ -1,7 +1,7 @@
 {
   "updatedAt": "2026-10-17",
   "version": "0.41.1",
-  "summary": "Entrega 0.41: administración por tareas, publicaciones controladas, perfiles, orientación inicial y componentes. Contenido publicado; revisión final 0.41.1 con 355 pruebas locales y recorridos de navegador. Políticas, vehículos compartidos y aceptación física pendientes; evidencia de publicación en la guía de entrega.",
+  "summary": "0.41.1 publicada: administración por tareas, publicaciones controladas, perfiles, procesos iniciales y componentes. 355 pruebas Windows/Linux y navegador aprobados; GitHub/CI y HTTPS verificados. Políticas, vehículos compartidos, restauración cifrada y aceptación física pendientes.",
   "phases": [
     {
       "id": "base",
@@ -1059,7 +1059,7 @@
       "title": "Validar y publicar la evolución por negocio",
       "status": "partial",
       "priority": "P1",
-      "description": "354 pruebas aprobadas Windows/Linux, navegador, HTTPS y respaldos cifrados con copia local. Pendientes aceptación física, recursos conjuntos y CI remoto.",
+      "description": "0.41.1 publicada y comprobada: 355 pruebas Windows/VPS Linux, navegador local y GitHub CI. Respaldos cifrados copiados y firmas verificadas; pendientes restauración real, aceptación física y recursos conjuntos.",
       "acceptance": "Evidencia local y publicada diferenciada; aceptación y recuperación verificadas.",
       "evidence": {
         "path": "docs/66-entrega-0410.md",

@@ -52,7 +52,7 @@ Cada fase puede producir una entrega pequeña validada; no hay obligación de es
 
 ## Trabajo existente que sigue pendiente
 
-No duplicar las tareas del tablero: aceptación física de recepción (NEXO-60), identidad/retención de expedientes (NEXO-64), presentación de sala (NEXO-65), copia externa automática de respaldos y publicación/CI de los cambios todavía no enviados a GitHub. La evidencia de CI de versiones anteriores no acredita una nueva entrega.
+No duplicar las tareas del tablero: aceptación física de recepción (NEXO-60), identidad/retención de expedientes (NEXO-64), presentación de sala (NEXO-65), copia externa automática de respaldos. El código 0.41.1 ya se publicó en GitHub y su CI pasó, según la guía de entrega. La evidencia de CI de versiones anteriores no acredita una nueva entrega.
 
 ## Documentación por entrega
 
@@ -75,7 +75,7 @@ Estas pruebas validan documentación, tablero y acceso del portal; no certifican
 | 3 Publicaciones | Borrador, fuente, comparación, aprobación, publicación, retiro, conflictos e historial; componentes e instantáneas. | Editor de traducciones revisadas por idioma; migrar por completo los editores directos anteriores al flujo editorial. |
 | 4 Procesos | Orientación por permiso/experiencia en ES/EN/FR, protección temática y derivación con servicio mínimo editable. | Editor configurable de procesos y más escenarios conversacionales reales. |
 | 5 Escuela | Registro de entregas por componente, cantidades limitadas, idempotencia, reversos auditados y clases separadas. | Vehículos compartidos/Road Test, políticas exactas de adicionales y decisiones normativas/comerciales. |
-| 6 Validación | 354 pruebas unitarias/API; navegador con publicación, expedientes, móvil y agenda por voz simulada. | Aceptación física y validación operativa de recursos, publicación GitHub/CI remoto y respaldo externo automático. |
+| 6 Validación | 355 pruebas unitarias/API en Windows y VPS Linux; navegador local y CI remoto aprobados. | Aceptación física, validación operativa de recursos y respaldo externo automático. |
 
 La pregunta sobre vehículos por profesor sigue abierta. No se deduce que cada calendario tenga un vehículo independiente. Los vencimientos automáticos no se activan sin precisar políticas y límites de fecha. El saldo monetario, cobros y crédito diagnóstico siguen fuera del alcance.
 
