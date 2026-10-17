@@ -10,6 +10,11 @@
  * Ruta de aprendizaje: docs/23-manual-desarrollador-junior.md y docs/41-mapa-codigo-fuente.md.
  */
 
+import {staffCan} from './staff.js';
+import {businessProfile} from './business-profile.js';
+import {currentMogollon} from './mogollon-current.js';
+import {conversationProcess} from './conversation-process.js';
+import {attentionDecision} from './attention.js';
 import {PilotAccess} from './pilot-access.js';
 import packageInfo from '../package.json' with {type:'json'};
 // Metadatos de la versión publicada; no usar la hora de arranque ni datos privados de instalación.
@@ -175,11 +180,12 @@ export function createApp({ config, repository, ai, calendar = null, bookingMail
   const requireAdmin = req => {
     if(adminAuth.mode==='email'){
       if(!adminAuth.authenticated(req))throw new HttpError(401,'Su acceso terminó. Solicite un nuevo código.');
-      return;
+      req.staff=adminAuth.principal(req);return;
     }
     if (!config.adminToken) throw new HttpError(503, 'Administración desactivada. Configura ADMIN_TOKEN en el servidor.');
     const token = (req.headers.authorization || '').replace(/^Bearer /, '');
     if (!timingSafeEqual(Buffer.from(hash(token)), Buffer.from(hash(config.adminToken)))) throw new HttpError(401, 'Credencial de administración incorrecta.');
+    req.staff={email:'local-owner',role:'owner',name:'Propietario local'};
   };
   const server = createServer(async (req, res) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -242,7 +248,7 @@ export function createApp({ config, repository, ai, calendar = null, bookingMail
             res.setHeader('Set-Cookie',adminAuth.cookie(token,authority.protocol==='https:'));return json(res,200,{authenticated:true});
           }
           if(req.method==='GET'&&path==='/api/auth/session'){
-            if(!adminAuth.authenticated(req))throw new HttpError(401,'Acceso no disponible.');return json(res,200,{authenticated:true});
+            if(!adminAuth.authenticated(req))throw new HttpError(401,'Acceso no disponible.');return json(res,200,{authenticated:true,staff:adminAuth.principal(req)});
           }
           if(req.method==='POST'&&path==='/api/auth/logout'){
             adminAuth.logout(req);res.setHeader('Set-Cookie',adminAuth.cookie('',authority.protocol==='https:'));return json(res,200,{ended:true});
@@ -295,6 +301,13 @@ export function createApp({ config, repository, ai, calendar = null, bookingMail
           const { token } = getSession(req); return json(res, 200, await liveAvatar.stop(token));
         }
         if (req.method === 'GET' && path === '/api/config') return json(res, 200, { release:releaseInfo, pilot:!!pilot, avatarProvider: config.avatarProvider || 'liveavatar', localVoice: localTts.status(), provider: config.provider, demo: config.provider === 'demo'||!aiEnabled, aiEnabled, sessionTtlMs: sessionTtl(), retentionDays: config.retentionDays, conversationLogging:{enabled:true,retentionDays:config.conversationRetentionDays||0}, center: getCenter(), centerName: getCenter()?.name || 'Centro de atención', timezone: getCenter()?.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone });
+        if(path==='/api/reception/board'&&req.method==='GET')return json(res,200,repository.receptionBoard(repository.receptionDay(getCenter()?.timezone)));
+        if(path==='/api/reception/ticket'){
+          const {token,session}=getSession(req),day=repository.receptionDay(getCenter()?.timezone);
+          if(req.method==='GET'){const service=repository.listServices().find(s=>s.id===session.schoolState.serviceId);const category=service?.id==='cinco-horas'?'five-hours':service?.id==='road-test'?'road-test':service?.id==='cuaderno-preguntas'?'permit':'other';return json(res,200,{ticket:repository.receptionMine(hash(token),day),school:businessProfile(getCenter()).school,suggestion:service?{category,note:service.name.slice(0,120)}:null});}
+          if(req.method==='POST'){rateLimit(req,'reception-join',5);return json(res,201,{ticket:repository.receptionJoin(await body(req),hash(token),day,session.language)});}
+          if(req.method==='DELETE')return json(res,200,repository.receptionCancel(hash(token),day));
+        }
         if (req.method === 'GET' && path === '/api/services') return json(res, 200, repository.listServices());
         if (req.method === 'GET' && path.match(/^\/api\/services\/[^/]+\/slots$/)) {
           const serviceId = path.split('/')[3];
@@ -349,8 +362,10 @@ export function createApp({ config, repository, ai, calendar = null, bookingMail
             // El filtro puede mutar contexto; la copia permite interpretar desde el estado
             // anterior si la primera coincidencia local no fue suficientemente fiable.
             const stateBefore=structuredClone(session.schoolState);
-            let decision=center ? filterSchoolMessage({message,services,center,state:session.schoolState,faq:activeFaq}) : {kind:'ai'};
-            const guided=agendaCandidate(message,session.agendaState,center)?null:guideService({message,center,services,state:session.schoolState,decision,faq:activeFaq});
+            const attention=center?attentionDecision(originalMessage,session.language,center):null;
+            const process=attention?null:conversationProcess({message:originalMessage,language:session.language,center,services,state:session.schoolState});
+            let decision=attention||process||(center ? filterSchoolMessage({message,services,center,state:session.schoolState,faq:activeFaq}) : {kind:'ai'});
+            const guided=(attention||process)?null:agendaCandidate(message,session.agendaState,center)?null:guideService({message,center,services,state:session.schoolState,decision,faq:activeFaq});
             if(guided)decision=guided;
             const day=schoolDay(new Date(),center?.timezone);
             /**
@@ -444,7 +459,7 @@ export function createApp({ config, repository, ai, calendar = null, bookingMail
             if(audioLibrary)rememberReusable(session,replyText,reason,currentAudioScope());
             repository.completeConversationTurn(turnId,{text:replyText,provider,reason,serviceId:session.schoolState.serviceId,aiCalls:session.aiCalls-callsBefore,inputTokens,outputTokens,durationMs:Date.now()-started});
             const bookingAction=logChannel(input.channel)==='voice'&&center?.booking.enabled&&!catalogOnly&&['booking','hours'].includes(reason)?bookingIntent(message):null;
-            return json(res, 200, {text:replyText,provider,reason,catalogOnly,...(bookingAction?{bookingAction}:{}),...(decision.agenda?{agenda:decision.agenda}:{})});
+            return json(res, 200, {text:replyText,provider,reason,catalogOnly,...(bookingAction?{bookingAction}:{}),...(decision.agenda?{agenda:decision.agenda}:{}),...(decision.reception?{reception:true}:{})});
           } catch(error) {
             repository.completeConversationTurn(turnId,{outcome:session.controller?.signal.aborted?'cancelled':'error',reason:session.controller?.signal.aborted?'cancelled':'response_error',aiCalls:session.aiCalls-callsBefore,inputTokens,outputTokens,durationMs:Date.now()-started});
             throw error;
@@ -474,7 +489,85 @@ export function createApp({ config, repository, ai, calendar = null, bookingMail
           return json(res, 201, { id: appointment.id, serviceName: appointment.serviceName, slot: appointment.slot, priceCents: appointment.priceCents, currency: appointment.currency, status: appointment.status });
         }
         if (path.startsWith('/api/admin/')) {
-          rateLimit(req, 'admin', 60); requireAdmin(req);
+          rateLimit(req, 'admin', 90); requireAdmin(req);
+          if(!staffCan(req.staff?.role,path,req.method))throw new HttpError(403,'Su cargo no tiene permiso para esta función.');
+          if((path.startsWith('/api/admin/students')||path.startsWith('/api/admin/school-groups'))&&!businessProfile(getCenter()).school)throw new HttpError(409,'El módulo escolar no está habilitado para este negocio.');
+          if(path==='/api/admin/publications'){
+            if(req.method==='GET')return json(res,200,{...repository.publicationOverview(req.staff),profile:businessProfile(getCenter())});
+            if(req.method==='POST')return json(res,201,repository.publicationCreate(await body(req,5*1024*1024),req.staff));
+            throw new HttpError(405,'Método no permitido.');
+          }
+          if(path==='/api/admin/publications/template'&&req.method==='POST'){
+            if(!businessProfile(getCenter()).school||getCenter()?.currency!=='USD')throw new HttpError(409,'Esta propuesta pertenece a la escuela y requiere catálogo en USD.');
+            const overview=repository.publicationOverview(req.staff);
+            return json(res,200,{document:currentMogollon(overview.current),revision:overview.revision,source:'MM-03 a MM-08 · 17/10/2026. Revisión de catálogo y sustitución de FAQ históricas.'});
+          }
+          const publicationMatch=path.match(/^\/api\/admin\/publications\/([a-f0-9-]{36})(?:\/(approve|publish|restore))?$/);
+          if(publicationMatch){
+            const [,id,action]=publicationMatch;
+            if(!action&&req.method==='GET')return json(res,200,repository.publicationRead(id,req.staff));
+            if(!action&&req.method==='PUT')return json(res,200,repository.publicationSave(id,await body(req,5*1024*1024),req.staff));
+            if(action&&req.method==='POST'){
+              const input=await body(req);
+              const result=action==='approve'?repository.publicationApprove(id,input,req.staff):action==='restore'?repository.publicationRestore(id,input,req.staff):repository.publicationPublish(id,input,req.staff);
+              if(action==='publish'){
+                await faq?.refresh?.();
+                const active=[...sessions.entries()];for(const [,s] of active){repository.endConversation(s.logId,'content_published');s.controller?.abort();}sessions.clear();
+                await Promise.allSettled(active.map(async([token])=>{localTts.stop?.(token);await liveAvatar.stop?.(token);}));
+              }
+              return json(res,200,result);
+            }
+            throw new HttpError(405,'Método no permitido.');
+          }
+          if(path==='/api/admin/content-releases'&&req.method==='GET')return json(res,200,{items:repository.contentReleaseNotes()});
+          if(path==='/api/admin/me'&&req.method==='GET')return json(res,200,req.staff);
+          if(path==='/api/admin/students/options'&&req.method==='GET')return json(res,200,{services:repository.listServices(true).map(({id,name,active})=>({id,name,active})),instructors:(repository.bookingSettings().instructors||[]).filter(i=>req.staff.role!=='instructor'||i.id===req.staff.instructorId).map(({id,name,active})=>({id,name,active})),timezone:getCenter()?.timezone||'America/New_York'});
+          if(path==='/api/admin/students'){
+            if(req.method==='GET')return json(res,200,repository.studentList(Object.fromEntries(url.searchParams),req.staff));
+            if(req.method==='PUT')return json(res,200,repository.studentSave(await body(req),req.staff,repository.bookingSettings().instructors||[]));
+          }
+          const studentRoute=path.match(/^\/api\/admin\/students\/([a-f0-9-]{36})(?:\/(verify|services|lessons|components|diagnostics|group-requests)(?:\/([a-f0-9-]{36}))?)?$/i);
+          if(studentRoute){
+            const [,id,section,itemId]=studentRoute;
+            if(!section&&req.method==='GET')return json(res,200,repository.studentDetail(id,req.staff));
+            if(req.method==='POST'){
+              const input=await body(req);
+              if(section==='verify')return json(res,200,repository.studentVerify(id,input,req.staff));
+              if(section==='services'&&!itemId)return json(res,200,repository.studentAssign(id,input,req.staff,repository.listServices(true).find(s=>s.id===input.serviceId),repository.listServices(true).find(s=>s.id===(input.fulfillmentServiceId||input.serviceId))));
+              if(section==='services'&&itemId)return json(res,200,repository.studentServiceState(id,itemId,input,req.staff));
+              if(section==='lessons'&&!itemId)return json(res,200,repository.studentLesson(id,input,req.staff,input.bookingCode?repository.bookingByCode(input.bookingCode):null));
+              if(section==='lessons'&&itemId)return json(res,200,repository.studentReverse(id,itemId,input,req.staff));
+              if(section==='components'&&!itemId)return json(res,200,repository.studentComponent(id,input,req.staff));
+              if(section==='components'&&itemId)return json(res,200,repository.studentComponentReverse(id,itemId,input,req.staff));
+              if(section==='diagnostics')return json(res,200,repository.studentDiagnostic(id,input,req.staff));
+              if(section==='group-requests')return json(res,200,repository.schoolGroupRequest(id,input,req.staff));
+            }
+          }
+          const groupRoster=path.match(/^\/api\/admin\/school-groups\/([a-f0-9-]{36})$/i);
+          if(groupRoster&&req.method==='GET')return json(res,200,repository.schoolGroupRoster(groupRoster[1],req.staff));
+          if(path==='/api/admin/school-groups'){
+            if(req.method==='GET')return json(res,200,repository.schoolGroups(req.staff));
+            if(req.method==='PUT'){const input=await body(req);return json(res,200,repository.schoolGroupSave(input,req.staff,repository.listServices(true).find(s=>s.id===input.serviceId)));}
+          }
+          if(path==='/api/admin/staff'){
+            if(req.method==='GET')return json(res,200,{items:repository.listStaff(),instructors:(repository.bookingSettings().instructors||[]).map(({id,name,active})=>({id,name,active}))});
+            if(req.method==='PUT'){
+              const input=await body(req);
+              if(input.instructorId&&!(repository.bookingSettings().instructors||[]).some(i=>i.id===input.instructorId))throw new HttpError(400,'Profesor no encontrado.');
+              return json(res,200,{items:repository.saveStaff(input,req.staff.email)});
+            }
+          }
+          if(path.startsWith('/api/admin/reception')){
+            const day=repository.receptionDay(getCenter()?.timezone);
+            if(path==='/api/admin/reception'&&req.method==='GET')return json(res,200,repository.receptionList(day));
+            if(path==='/api/admin/reception/next'&&req.method==='POST')return json(res,200,repository.receptionNext(await body(req),req.staff.email,day));
+            if(path==='/api/admin/reception/desks'&&req.method==='PUT'){
+              if(!['owner','manager'].includes(req.staff.role))throw new HttpError(403,'Solo gerencia puede configurar escritorios.');
+              return json(res,200,repository.receptionDesk(await body(req),req.staff.email));
+            }
+            const match=path.match(/^\/api\/admin\/reception\/tickets\/([^/]+)$/);
+            if(match&&req.method==='PUT')return json(res,200,repository.receptionAction(match[1],await body(req),req.staff,day));
+          }
           if(req.method==='GET'&&['/api/admin/reports','/api/admin/reports/summary','/api/admin/reports/export'].includes(path)){
             const timezone=getCenter()?.timezone||'UTC',filters=reportFilters(url.searchParams,timezone);
             if(path.endsWith('/summary'))return json(res,200,{...repository.reportSummary(filters),from:filters.from,to:filters.to,timezone,services:repository.listServices(true).map(s=>({id:s.id,name:s.name})),mailReady:!!bookingMailer.ready,adminRecipients:adminAuth.emails});
@@ -647,7 +740,7 @@ export function createApp({ config, repository, ai, calendar = null, bookingMail
         throw new HttpError(404, 'Ruta no encontrada.');
       }
       if (!['GET', 'HEAD'].includes(req.method)) throw new HttpError(405, 'Método no permitido.');
-      const filePath = resolve(webRoot, '.' + (path === '/pilot' ? '/pilot.html' : path === '/' ? '/index.html' : path === '/admin' ? '/admin.html' : ['/docs', '/docs/'].includes(path) ? '/docs.html' : path === '/settings' ? '/settings.html' : path === '/knowledge' ? '/knowledge.html' : path === '/reviews' ? '/reviews.html' : path === '/conversations' ? '/conversations.html' : path));
+      const filePath = resolve(webRoot, '.' + (path === '/pilot' ? '/pilot.html' : path === '/' ? '/index.html' : path === '/publications' ? '/publications.html' : path === '/students' ? '/students.html' : path === '/staff' ? '/staff.html' : path === '/lobby' ? '/lobby.html' : path === '/admin' ? '/admin.html' : ['/docs', '/docs/'].includes(path) ? '/docs.html' : path === '/settings' ? '/settings.html' : path === '/knowledge' ? '/knowledge.html' : path === '/reviews' ? '/reviews.html' : path === '/conversations' ? '/conversations.html' : path));
       if (!filePath.startsWith(resolve(webRoot) + sep) || !mime[extname(filePath)]) throw new HttpError(404, 'Archivo no encontrado.');
       let contents;
       try { const physicalPath=await realpath(filePath);const physicalRoot=await realpath(webRoot);if(!physicalPath.startsWith(physicalRoot+sep))throw new Error();contents = await readFile(physicalPath); } catch { throw new HttpError(404, 'Archivo no encontrado.'); }

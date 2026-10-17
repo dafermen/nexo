@@ -1,0 +1,176 @@
+{
+  "id": "mogollon-manual-fases123-20261013-v1",
+  "businessId": "metodomogollon",
+  "approvedAt": "2026-10-13",
+  "source": "Manual unificado del cliente, 08/10/2026; fases 1–3 autorizadas. Pagos y llamadas telefónicas en pausa.",
+  "review": {
+    "approved": [
+      "Contenido comercial del curso y paquete de preparación",
+      "Atención consultiva sin presión",
+      "Recepción presencial sin SMS"
+    ],
+    "pending": [
+      "Normativa ID-44 y reglas por edad/región",
+      "Grupos, idiomas, cupos y políticas finales del curso",
+      "Inventario impreso real"
+    ],
+    "future": [
+      "Pagos y caja",
+      "Llamadas telefónicas",
+      "SMS",
+      "Expedientes",
+      "Evaluación diagnóstica"
+    ]
+  },
+  "services": [
+    {
+      "id": "cinco-horas",
+      "patch": {
+        "name": "Curso de Pre-Licencia de 5 Horas",
+        "priceCents": 8000,
+        "duration": 300,
+        "modality": "Presencial",
+        "description": "Curso presencial previo a la licencia, con contenidos de conducción segura, normas de tránsito, prevención de accidentes y responsabilidades al volante.",
+        "schedule": "Los grupos, horarios e idiomas están pendientes de confirmación. Consulte al personal; no hay cupos del curso reservables desde Nexo todavía.",
+        "requirements": "Contar con Learner Permit válido de Nueva York. Los requisitos específicos de identificación, participación y las alternativas oficiales deben confirmarse con el personal.",
+        "conditions": "Consulte al personal las políticas definitivas, cupos e inscripción. Nexo no cobra ni confirma pagos o asientos de este curso. No se garantiza aprobar el Road Test."
+      }
+    },
+    {
+      "id": "cuaderno-preguntas",
+      "patch": {
+        "name": "Paquete de preparación del permiso",
+        "priceCents": 3500,
+        "description": "Cuaderno impreso de 105 preguntas y respuestas para preparar el examen teórico. Disponible en español, inglés y francés, sujeto a inventario confirmado por el personal.",
+        "inclusions": "Cuaderno impreso + acceso a 20 simulacros de 20 preguntas + asistencia para gestionar una cita DMV por los canales oficiales. No se afirma que las 400 preguntas sean distintas.",
+        "conditions": "Se adquiere únicamente en efectivo en caja y se recoge presencialmente; no hay envíos. Nexo no cobra ni registra pagos o entregas. La disponibilidad de la cita depende del DMV; no incluye tarifas oficiales ni garantiza fecha o aprobación."
+      }
+    }
+  ],
+  "faqs": [
+    {
+      "id": "cinco-horas-detalles",
+      "serviceId": "cinco-horas",
+      "category": "Curso de 5 horas",
+      "active": true,
+      "questions": [
+        "Curso de las 5 horas",
+        "Información sobre el curso de las 5 horas",
+        "Me interesa el curso de las 5 horas",
+        "Estoy interesado en el curso de las 5 horas",
+        "¿Qué es el curso de pre-licencia?"
+      ],
+      "answer": "{{servicio.descripcion}} ¿Desea conocer los requisitos, el precio o los horarios?"
+    },
+    {
+      "id": "cinco-horas-horarios",
+      "serviceId": "cinco-horas",
+      "category": "Curso de 5 horas",
+      "active": true,
+      "questions": [
+        "¿Qué días tienen el curso?",
+        "¿Cuándo se ofrece el curso de las 5 horas?",
+        "Horarios del curso de las 5 horas"
+      ],
+      "answer": "{{servicio.horarios}}"
+    },
+    {
+      "id": "preparacion-paquete",
+      "serviceId": "cuaderno-preguntas",
+      "category": "Paquete de preparación",
+      "active": true,
+      "questions": [
+        "Qué incluye el paquete de preparación"
+      ],
+      "answer": "{{servicio.incluye}}"
+    },
+    {
+      "id": "curso-otra-escuela",
+      "serviceId": "cinco-horas",
+      "category": "Curso de 5 horas",
+      "active": true,
+      "questions": [
+        "Hice las cinco horas en otra escuela",
+        "Ya hice el curso en otra escuela"
+      ],
+      "answer": "Puede continuar su preparación con nosotros. ¿Busca clases prácticas o información para su Road Test?"
+    },
+    {
+      "id": "curso-certificado-perdido",
+      "serviceId": "cinco-horas",
+      "category": "Curso de 5 horas",
+      "active": true,
+      "questions": [
+        "Perdí mi certificado de las cinco horas",
+        "Necesito duplicado del certificado"
+      ],
+      "answer": "Consulte con la entidad donde realizó el curso para revisar la posibilidad de un duplicado. No necesita decidir comprar otro curso antes de confirmar sus alternativas."
+    },
+    {
+      "id": "atencion-limites",
+      "serviceId": null,
+      "category": "Atención y privacidad",
+      "active": true,
+      "questions": [
+        "Me puede devolver la llamada",
+        "Pueden llamarme después"
+      ],
+      "answer": "Las llamadas telefónicas no están integradas en Nexo. Si está en la oficina, puede solicitar atención con un asesor; no se ha programado ninguna llamada."
+    },
+    {
+      "id": "documentacion-pendiente",
+      "serviceId": null,
+      "category": "Información por confirmar",
+      "active": true,
+      "questions": [
+        "Cuántos puntos tiene mi identificación",
+        "Qué documentos necesito para REAL ID"
+      ],
+      "answer": "Los requisitos oficiales deben verificarse con el formulario vigente del DMV y el personal. No envíe fotografías ni números de documentos por este chat."
+    },
+    {
+      "id": "cuaderno-preguntas-precio",
+      "serviceId": "cuaderno-preguntas",
+      "category": "Libro y examen teórico",
+      "active": true,
+      "questions": [
+        "¿Cuánto cuesta el libro?",
+        "Precio del cuaderno"
+      ],
+      "answer": "Precio: {{servicio.precio}}. {{servicio.condiciones}}"
+    },
+    {
+      "id": "libro-idiomas",
+      "serviceId": "cuaderno-preguntas",
+      "category": "Libro y examen teórico",
+      "active": true,
+      "questions": [
+        "¿En qué idiomas está el libro?",
+        "Idiomas del cuaderno"
+      ],
+      "answer": "{{servicio.descripcion}}"
+    },
+    {
+      "id": "preparacion-retiro",
+      "serviceId": "cuaderno-preguntas",
+      "category": "Paquete de preparación",
+      "active": true,
+      "questions": [
+        "Cómo recojo el cuaderno",
+        "Puedo pagar el libro con Zelle",
+        "Puedo comprar el libro con tarjeta"
+      ],
+      "answer": "{{servicio.condiciones}}"
+    },
+    {
+      "id": "preparacion-preguntas",
+      "serviceId": "cuaderno-preguntas",
+      "category": "Paquete de preparación",
+      "active": true,
+      "questions": [
+        "Cuántas preguntas tiene el cuaderno"
+      ],
+      "answer": "{{servicio.descripcion}}"
+    }
+  ]
+}

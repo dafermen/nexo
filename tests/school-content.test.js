@@ -71,3 +71,13 @@ test('recursos públicos parametrizados conservan catálogo y otras conexiones; 
  const old=f.wrapped.getCenterSettings();delete old.configuration.business.practiceUrl;f.wrapped.saveConfiguration(old.revision,{profile:old.profile,configuration:old.configuration});
  assert.equal(f.wrapped.getCenter().contact.practiceUrl,'https://example.org/practice');
 });
+
+
+test('manual unificado sustituye horario y modalidad, conserva otras citas y publica notas de revisión',async t=>{
+ const f=await fixture(t);applyContentUpdate(f.db,bundle,{apply:true});const newBundle=JSON.parse(readFileSync(new URL('../conocimiento/actualizaciones/manual-fases123-20261013.json',import.meta.url),'utf8'));
+ const before=f.repo.readCenterSettings();applyContentUpdate(f.db,newBundle,{apply:true});const services=f.repo.readCenterSettings().services,course=services.find(s=>s.id==='cinco-horas'),book=services.find(s=>s.id==='cuaderno-preguntas');
+ assert.equal(course.modality,'Presencial');assert.doesNotMatch(course.schedule,/Miércoles|Sábado/i);assert.match(course.schedule,/pendientes/);assert.match(book.conditions,/únicamente en efectivo/);assert.match(book.inclusions,/20 simulacros de 20/);assert.match(book.description,/105/);
+ assert.deepEqual(services.filter(s=>!['cinco-horas','cuaderno-preguntas'].includes(s.id)),before.services.filter(s=>!['cinco-horas','cuaderno-preguntas'].includes(s.id)));
+ assert.equal(f.repo.contentReleaseNotes()[0].id,newBundle.id);assert.equal(applyContentUpdate(f.db,newBundle,{apply:true}).alreadyApplied,true);
+ const faq=compileFaq(parseFaq(f.repo.readKnowledge('school').source));const a=filterSchoolMessage({message:'Qué días tienen el curso',services,center:schoolCenter,state:{},faq});assert.match(a.text,/pendientes/);assert.doesNotMatch(a.text,/Miércoles|sábados/);
+});

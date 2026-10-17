@@ -1,5 +1,7 @@
 # 07 · Backlog inicial
 
+**Histórico de la demo.** Para trabajo actual consulte el tablero de fases y el [plan por negocio del 17/10/2026](64-fases-multinegocio.md). No reabrir tareas terminadas a partir de esta lista antigua.
+
 > **Perfil activo: MetodoMogollon (16/09/2026).** Escuela de conducción; trato de usted; atención de lunes a viernes, 08:00–18:00 (Nueva York). Servicios confirmados por el responsable; precios y requisitos pendientes. Google Calendar será la agenda, aún sin conectar. El perfil de la escuela deshabilita las reservas locales y los horarios/precios de ejemplo descritos en la demo original. [Configuración y pendientes](16-metodomogollon.md).
 
 
@@ -113,3 +115,7 @@ NEXO-41: selector Español · English · Français en el inicio, voz y conversac
 ## Piloto Linux — v0.25.0
 
 NEXO-44 completado: preparación del código, acceso privado, voz Linux y despliegue documentado. NEXO-16/17/18 parciales: queda validar el servidor real, sus integraciones y respaldos externos. NEXO-45 pendiente: Capacitor/APK después del piloto web. [Guía](45-despliegue-piloto-linux.md) · [Seguridad](46-seguridad-piloto.md).
+
+## Seguimiento multinegocio 0.41.0
+
+NEXO-67 a NEXO-77 continúan en [el plan vigente](64-fases-multinegocio.md) y `project-status.json`. Nuevos entregables: publicación controlada, componentes históricos y administración por tareas. Permanecen políticas, recursos compartidos, editor de procesos/traducciones y aceptación física.

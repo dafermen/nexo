@@ -10,6 +10,9 @@
  * Ruta de aprendizaje: docs/23-manual-desarrollador-junior.md y docs/41-mapa-codigo-fuente.md.
  */
 
+import {installAdminWorkspace} from './admin-workspace.js';
+const workspace=installAdminWorkspace();
+let staffRole='owner';
 import {installReports} from './admin-reports.js';
 import {installAgenda} from './admin-agenda.js';
 import {installAdminAccess} from './admin-access.js';
@@ -19,7 +22,7 @@ let token='',generation=0,lastActivity=Date.now(),data=null,dirty=false,editor=n
 const money=s=>s.priceCents===null?'Precio por confirmar':s.priceCents===0?'Sin costo':new Intl.NumberFormat('es-US',{style:'currency',currency:s.currency||'USD'}).format(s.priceCents/100);
 function message(id,text=''){ $(id).textContent=text;$(id).hidden=!text; }
 const showError=text=>message('error',text);
-function logout(remote=false){reports.reset();for(const controller of downloads)controller.abort();agenda.reset();generation++;token='';data=null;dirty=false;editor=null;saving=false;$('token').value='';$('login').hidden=false;$('dashboard').hidden=true;$('logout').hidden=true;$('service-dialog').close();$('service-form').reset();$('school-settings').replaceChildren();$('service-admin').replaceChildren();$('appointments').replaceChildren();$('audio-library').open=false;$('audio-library-status').textContent='Abra esta sección para consultar el uso.';$('audio-library-clear').disabled=true;message('saved');message('error');message('editor-error');if(remote)access.logout();else access.reset();}
+function logout(remote=false){workspace.reset();reports.reset();for(const controller of downloads)controller.abort();agenda.reset();generation++;token='';data=null;dirty=false;editor=null;saving=false;$('token').value='';$('login').hidden=false;$('dashboard').hidden=true;$('logout').hidden=true;$('service-dialog').close();$('service-form').reset();$('school-settings').replaceChildren();$('service-admin').replaceChildren();$('appointments').replaceChildren();$('audio-library').open=false;$('audio-library-status').textContent='Abra esta sección para consultar el uso.';$('audio-library-clear').disabled=true;message('saved');message('error');message('editor-error');if(remote)access.logout();else access.reset();}
 async function request(path,options={}){
  const response=await fetch(path,{...options,headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},signal:AbortSignal.timeout(15000)});
  const result=await response.json();
@@ -60,9 +63,10 @@ function openEditor(service){
 }
 function closeEditor(){if(saving||!discard())return;dirty=false;editor=null;$('service-dialog').close();$('service-form').reset();}
 async function load(){
+ try{const me=await request('/api/admin/me');staffRole=me.role;if(!['owner','manager'].includes(me.role)){location.assign('/staff');return;}}catch(e){showError(e.message);return;}
  const epoch=generation;showError('');
  try{
-   const result=await request('/api/admin/overview');if(epoch!==generation||!token)return;data=result;dirty=false;
+   const result=await request('/api/admin/overview');if(epoch!==generation||!token)return;data=result;dirty=false;workspace.update(data,staffRole);
    $('token').value='';$('login').hidden=true;$('dashboard').hidden=false;$('logout').hidden=false;renderSchool(data.centerSettings);$('service-admin').replaceChildren();
    for(const service of data.services){
      const card=node('article');card.className='admin-service';const status=node('span',service.active?'Publicado':'Pausado');status.className=service.active?'status-tag':'status-tag paused';

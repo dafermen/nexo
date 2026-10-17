@@ -12,6 +12,9 @@
  * Ruta de aprendizaje: docs/23-manual-desarrollador-junior.md y docs/41-mapa-codigo-fuente.md.
  */
 
+import {createReceptionStore} from './reception.js';
+import {createPublicationStore} from './catalog-publication.js';
+import {createStudentStore} from './student-store.js';
 import {createAgendaStore} from './admin-agenda.js';
 import {createNotificationStore} from './booking-notifications.js';
 import {createReportStore} from './admin-reports.js';
@@ -83,8 +86,11 @@ export function createRepository(path) {
   for (const s of initialServices) insert.run(s.id, s.name, s.category, s.description, s.duration, s.priceCents, s.currency, s.icon, s.requirements);
   const audit = (action, id) => db.prepare('INSERT INTO audit_events(action,entityId,createdAt) VALUES (?,?,?)').run(action, id, new Date().toISOString());
   const repo = {
+    ...createPublicationStore(db),
     ...createAudioStore(db),
     ...createAdminStore(db),
+    ...createReceptionStore(db),
+    ...createStudentStore(db),
     ...createCalendarStore(db),
     ...createBookingStore(db),
     ...createNotificationStore(db),
@@ -92,6 +98,7 @@ export function createRepository(path) {
     ...createConversationStore(db),
     ...createReviewStore(db),
     ...createReportStore(db),
+    contentReleaseNotes(){return db.prepare("SELECT name FROM sqlite_master WHERE name='content_release_notes'").get()?db.prepare('SELECT * FROM content_release_notes ORDER BY approvedAt DESC').all().map(r=>({...r,review:JSON.parse(r.review)})):[];},
     encryptedBackup: password => encryptedSnapshot(db,password),
     /**
      * reserveAiCall: Incrementa atómicamente el contador diario solo si queda presupuesto.

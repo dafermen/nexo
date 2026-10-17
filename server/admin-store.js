@@ -11,6 +11,10 @@
  * Ruta de aprendizaje: docs/23-manual-desarrollador-junior.md y docs/41-mapa-codigo-fuente.md.
  */
 
+import {HttpError} from './errors.js';
+import {normalizeEmail} from './installation.js';
+import {roles} from './staff.js';
+
 // Authentication records contain verifiers only: never raw codes or session cookies.
 export function createAdminStore(db){
  db.exec(`
@@ -30,6 +34,9 @@ export function createAdminStore(db){
    db.exec('COMMIT;');
   }catch(error){db.exec('ROLLBACK;');throw error;}finally{db.exec('PRAGMA foreign_keys=ON;');}
  }
+ // Idempotent additive migration: existing installation accounts become recovery owners.
+ const columns=new Set(db.prepare('PRAGMA table_info(administrators)').all().map(c=>c.name));
+ for(const [name,type] of Object.entries({role:"TEXT NOT NULL DEFAULT 'owner'",active:'INTEGER NOT NULL DEFAULT 1',managed:'INTEGER NOT NULL DEFAULT 0',name:"TEXT NOT NULL DEFAULT ''",instructorId:"TEXT NOT NULL DEFAULT ''",revision:'INTEGER NOT NULL DEFAULT 1'}))if(!columns.has(name))db.exec('ALTER TABLE administrators ADD COLUMN '+name+' '+type);
  const audit=(action)=>db.prepare('INSERT INTO audit_events(action,entityId,createdAt) VALUES (?,?,?)').run(action,'administrator',new Date().toISOString());
  /**
   * transaction: Agrupa el callback síncrono bajo BEGIN IMMEDIATE; siempre COMMIT o ROLLBACK.
@@ -38,15 +45,36 @@ export function createAdminStore(db){
   */
  const transaction=fn=>{db.exec('BEGIN IMMEDIATE');try{const value=fn();db.exec('COMMIT');return value;}catch(error){db.exec('ROLLBACK');throw error;}};
  return {
+  staffByEmail(email){return db.prepare('SELECT id,email,name,role,active,managed,instructorId,revision FROM administrators WHERE email=? AND active=1').get(email)||null;},
+  staffPrincipal(tokenHash,now){return db.prepare('SELECT a.id,a.email,a.name,a.role,a.instructorId FROM admin_sessions s JOIN administrators a ON a.id=s.adminId WHERE s.tokenHash=? AND s.expiresAt>? AND s.absoluteExpiresAt>? AND a.active=1').get(tokenHash,now,now)||null;},
+  listStaff(){return db.prepare('SELECT id,email,name,role,active,managed,instructorId,revision FROM administrators ORDER BY id').all();},
+  saveStaff(input,actor){return transaction(()=>{
+    const email=normalizeEmail(input.email);
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254||!roles.includes(input.role)||typeof input.active!=='boolean'||typeof input.name!=='string'||!input.name.trim()||input.name.trim().length>80||/[\x00-\x1f\x7f]/.test(input.name)||typeof (input.instructorId??'')!=='string'||(input.instructorId||'').length>100)throw new HttpError(400,'Revise nombre, correo, cargo y estado.');
+    const prior=input.id?db.prepare('SELECT * FROM administrators WHERE id=?').get(input.id):null;
+    if(input.id&&!prior)throw new HttpError(404,'Usuario no encontrado.');
+    if(prior&&(!prior.managed||prior.email===actor))throw new HttpError(409,'No puede modificar su propia cuenta ni los propietarios de instalación desde aquí.');
+    if(prior&&prior.revision!==input.revision)throw new HttpError(409,'El usuario cambió. Actualice el panel.');
+    if(db.prepare('SELECT id FROM administrators WHERE email=? AND id<>?').get(email,prior?.id||0))throw new HttpError(409,'Ese correo ya tiene una cuenta.');
+    if(!prior&&db.prepare('SELECT count(*) n FROM administrators').get().n>=100)throw new HttpError(400,'Máximo 100 cuentas.');
+    if(prior){
+      db.prepare('UPDATE administrators SET email=?,name=?,role=?,active=?,instructorId=?,revision=revision+1,updatedAt=? WHERE id=?').run(email,input.name.trim(),input.role,+input.active,input.role==='instructor'?(input.instructorId||''):'',Date.now(),prior.id);
+      db.prepare('DELETE FROM admin_sessions WHERE adminId=?').run(prior.id);
+      db.prepare('DELETE FROM admin_challenges WHERE adminId=?').run(prior.id);
+    }else db.prepare('INSERT INTO administrators(email,name,role,active,managed,instructorId,updatedAt) VALUES(?,?,?,?,1,?,?)').run(email,input.name.trim(),input.role,+input.active,input.role==='instructor'?(input.instructorId||''):'',Date.now());
+    db.prepare('INSERT INTO audit_events(action,entityId,createdAt) VALUES(?,?,?)').run('staff.updated',JSON.stringify({actor,email,role:input.role,active:input.active}),new Date().toISOString());
+    return this.listStaff();
+  });},
   synchronizeAdministrator(email,now){return this.synchronizeAdministrators(email?[email]:[],now);},
   synchronizeAdministrators(emails,now){return transaction(()=>{
     let changed=false;
-    for(const row of db.prepare('SELECT id,email FROM administrators').all())if(!emails.includes(row.email)){
+    for(const row of db.prepare('SELECT id,email FROM administrators WHERE managed=0').all())if(!emails.includes(row.email)){
       db.prepare('DELETE FROM admin_challenges WHERE adminId=?').run(row.id);
       db.prepare('DELETE FROM admin_sessions WHERE adminId=?').run(row.id);
       db.prepare('DELETE FROM administrators WHERE id=?').run(row.id);changed=true;
     }
     for(const email of emails)if(db.prepare('INSERT OR IGNORE INTO administrators(email,updatedAt) VALUES (?,?)').run(email,now).changes)changed=true;
+    for(const email of emails)db.prepare("UPDATE administrators SET role='owner',active=1,managed=0 WHERE email=?").run(email);
     if(changed)audit('admin.identity.changed');
   });},
   takeAuthLimit(bucket,max,duration,now){return transaction(()=>{
@@ -55,7 +83,7 @@ export function createAdminStore(db){
     db.prepare('INSERT INTO auth_limits VALUES(?,?,?) ON CONFLICT(bucket) DO UPDATE SET count=excluded.count,resetAt=excluded.resetAt').run(bucket,record&&record.resetAt>now?record.count+1:1,record&&record.resetAt>now?record.resetAt:now+duration);return true;
   });},
   createAdminChallenge({id,email,codeHash,salt,now,expiresAt}){return transaction(()=>{
-    const admin=db.prepare('SELECT id FROM administrators WHERE email=?').get(email);
+    const admin=db.prepare('SELECT id FROM administrators WHERE email=? AND active=1').get(email);
     if(!admin)return false;
     db.prepare("UPDATE admin_challenges SET status='superseded',codeHash='',salt='' WHERE adminId=? AND status IN ('pending','sent')").run(admin.id);
     db.prepare("INSERT INTO admin_challenges VALUES (?,?,?,?,0,'pending',?,?)").run(id,admin.id,codeHash,salt,now,expiresAt);audit('admin.code.requested');
@@ -65,7 +93,7 @@ export function createAdminStore(db){
     else db.prepare("UPDATE admin_challenges SET status='failed',codeHash='',salt='' WHERE id=? AND status='pending'").run(id);
     audit(success?'admin.mail.accepted':'admin.mail.failed');
   },
-  claimAdminAttempt(id,now){return db.prepare("UPDATE admin_challenges SET attempts=attempts+1 WHERE id=? AND status='sent' AND expiresAt>? AND attempts<5 RETURNING *").get(id,now);},
+  claimAdminAttempt(id,now){return db.prepare("UPDATE admin_challenges SET attempts=attempts+1 WHERE id=? AND status='sent' AND expiresAt>? AND attempts<5 AND adminId IN (SELECT id FROM administrators WHERE active=1) RETURNING *").get(id,now);},
   failAdminAttempt(id){db.prepare("UPDATE admin_challenges SET status='locked',codeHash='',salt='' WHERE id=? AND status='sent' AND attempts>=5").run(id);audit('admin.code.rejected');},
   /**
    * consumeAdminChallenge: Canjea código vigente por sesión dentro de una única transacción.
@@ -73,11 +101,11 @@ export function createAdminStore(db){
    * Salida: Booleano; un segundo canje no vuelve a crear acceso.
    */
   consumeAdminChallenge({id,tokenHash,now,idleMs,absoluteMs}){return transaction(()=>{
-    const consumed=db.prepare("UPDATE admin_challenges SET status='consumed',codeHash='',salt='' WHERE id=? AND status='sent' AND expiresAt>? AND attempts<=5 RETURNING adminId").get(id,now);
+    const consumed=db.prepare("UPDATE admin_challenges SET status='consumed',codeHash='',salt='' WHERE id=? AND status='sent' AND expiresAt>? AND attempts<=5 AND adminId IN (SELECT id FROM administrators WHERE active=1) RETURNING adminId").get(id,now);
     if(!consumed)return false;
     db.prepare('INSERT INTO admin_sessions VALUES(?,?,?,?,?)').run(tokenHash,consumed.adminId,now,now+idleMs,now+absoluteMs);audit('admin.login');return true;
   });},
-  authenticateAdministrator(tokenHash,now,idleMs){return !!db.prepare('UPDATE admin_sessions SET expiresAt=min(?,absoluteExpiresAt) WHERE tokenHash=? AND expiresAt>? AND absoluteExpiresAt>? RETURNING tokenHash').get(now+idleMs,tokenHash,now,now);},
+  authenticateAdministrator(tokenHash,now,idleMs){return !!db.prepare('UPDATE admin_sessions SET expiresAt=min(?,absoluteExpiresAt) WHERE tokenHash=? AND expiresAt>? AND absoluteExpiresAt>? AND adminId IN (SELECT id FROM administrators WHERE active=1) RETURNING tokenHash').get(now+idleMs,tokenHash,now,now);},
   revokeAdminSession(tokenHash){if(db.prepare('DELETE FROM admin_sessions WHERE tokenHash=?').run(tokenHash).changes)audit('admin.logout');},
   purgeAdministratorData(now){
     db.prepare('DELETE FROM admin_sessions WHERE expiresAt<=? OR absoluteExpiresAt<=?').run(now,now);

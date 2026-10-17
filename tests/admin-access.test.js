@@ -61,7 +61,7 @@ test('dos administradores reciben códigos independientes y retirar uno conserva
 
 test('migra base de administrador único conservando claves foráneas y sesión existente',async t=>{
  const path=join(directory(t),'legacy.sqlite');let repo=createRepository(path);repo.synchronizeAdministrator(email,1000);repo.close();
- const db=new DatabaseSync(path);db.exec('PRAGMA foreign_keys=OFF; BEGIN; CREATE TABLE legacy_administrators(id INTEGER PRIMARY KEY CHECK(id=1),email TEXT NOT NULL UNIQUE,updatedAt INTEGER NOT NULL) STRICT; INSERT INTO legacy_administrators SELECT * FROM administrators; DROP TABLE administrators; ALTER TABLE legacy_administrators RENAME TO administrators; COMMIT;');db.prepare('INSERT INTO admin_sessions VALUES(?,?,?,?,?)').run('a'.repeat(64),1,1000,100000,200000);db.close();
+ const db=new DatabaseSync(path);db.exec('PRAGMA foreign_keys=OFF; BEGIN; CREATE TABLE legacy_administrators(id INTEGER PRIMARY KEY CHECK(id=1),email TEXT NOT NULL UNIQUE,updatedAt INTEGER NOT NULL) STRICT; INSERT INTO legacy_administrators SELECT id,email,updatedAt FROM administrators; DROP TABLE administrators; ALTER TABLE legacy_administrators RENAME TO administrators; COMMIT;');db.prepare('INSERT INTO admin_sessions VALUES(?,?,?,?,?)').run('a'.repeat(64),1,1000,100000,200000);db.close();
  repo=createRepository(path);repo.synchronizeAdministrators([email,'second@example.test'],2000);assert.ok(repo.authenticateAdministrator('a'.repeat(64),3000,1000));repo.close();
  const migrated=new DatabaseSync(path);assert.equal(migrated.prepare('SELECT count(*) n FROM administrators').get().n,2);assert.deepEqual(migrated.prepare('PRAGMA foreign_key_check').all(),[]);migrated.close();
 });

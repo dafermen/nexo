@@ -79,7 +79,7 @@ export function validateService(input, prior, currency) {
   if (input.duration !== null && (!Number.isInteger(input.duration) || input.duration < 1 || input.duration > 1440)) throw new HttpError(400, 'Duración inválida (1 a 1440 minutos).');
   if (![null,'Presencial','Virtual','Presencial y virtual'].includes(input.modality)) throw new HttpError(400, 'Modalidad inválida.');
   if (typeof input.active !== 'boolean') throw new HttpError(400, 'Estado inválido.');
-  return { id: prior?.id || randomUUID(), category: prior?.category || 'SERVICIOS', icon: prior?.icon || 'document', currency, name, description, requirements, ...extra, priceCents: input.priceCents, duration: input.duration, modality: input.modality, active: input.active };
+  return { ...(prior?.publication?{publication:prior.publication,sourceRef:prior.sourceRef||null,components:prior.components||[],contentVersion:prior.contentVersion||1}:{}), id: prior?.id || randomUUID(), category: prior?.category || 'SERVICIOS', icon: prior?.icon || 'document', currency, name, description, requirements, ...extra, priceCents: input.priceCents, duration: input.duration, modality: input.modality, active: input.active };
 }
 /**
  * centerRepository: Decora el repositorio con el perfil comercial persistente; sin center devuelve
@@ -130,7 +130,7 @@ export function centerRepository(repository, center, config={}) {
         return {...old,profile,configuration,services,configurationRevision:(old.configurationRevision||0)+1};
       });
     },
-    listServices: (all=false) => state().services.filter(s=>all || s.active),
+    listServices: (all=false) => state().services.filter(s=>all || (s.active&&s.publication!=='withdrawn')),
     getService: id => state().services.find(s=>s.id===id),
     slots: () => [],
     reserve: () => {throw new HttpError(409,getCenter().booking.message);},

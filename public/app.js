@@ -10,6 +10,7 @@
  * Ruta de aprendizaje: docs/23-manual-desarrollador-junior.md y docs/41-mapa-codigo-fuente.md.
  */
 
+import {installReceptionVisitor} from './reception-visitor.js';
 import {language,languages,translate as t} from './i18n.js';
 import {installLanguageUI} from './language-ui.js';
 import {createTouchKeyboard} from './touch-keyboard.js';
@@ -236,6 +237,7 @@ async function sendMessage(text) {
 
     if(result.catalogOnly)autoConversation.pause();
     renderBusy(false); avatar.setState('idle');
+    if(result.reception){const button=element('button','secondary',t('Atención con un asesor'));button.onclick=()=>receptionVisitor.open();reply.append(button);}
     if(result.agenda?.selectedSlot){const service=services.find(s=>s.id===result.agenda.serviceId);if(service)openBooking(service,{preferredSlot:result.agenda.selectedSlot,preferredInstructor:result.agenda.instructorId});}
     else if(callView.connected&&callView.mode==='voice'&&result.bookingAction)openCallAgenda(result.bookingAction);else speak(result.text);
     if (result.catalogOnly) { if (callView.active) callView.openPanel(); switchView('services'); }
@@ -459,6 +461,10 @@ function pauseCallForBooking(){
   bookingResume ||= {generation,automatic:autoConversation.enabled};
   autoConversation.pause();stopAudio();
 }
+const receptionVisitor=installReceptionVisitor({api,ensureSession,pause:()=>{pauseCallForBooking();stopAudio();bookingGeneration++;$('home-menu').close();},dialog:$('booking-dialog'),content:$('booking-content'),title:$('booking-title'),valid:()=>!!api.token});
+$('home-reception').onclick=()=>receptionVisitor.open();
+$('menu-reception').onclick=()=>receptionVisitor.open();
+setInterval(async()=>{if(document.hidden||callView.active)return;try{const r=await fetch('/api/reception/board',{signal:AbortSignal.timeout(5000)});if(!r.ok)throw Error();const board=await r.json();$('reception-board-line').textContent=board.calls.map(t=>t.code+' → '+t.desk).join(' · ');$('reception-board-line').hidden=!board.calls.length;}catch{$('reception-board-line').hidden=true;}},5000);
 function openCallAgenda(action='menu'){
   if(!callView.connected||busy||startingCall||$('booking-dialog').open)return;
   pauseCallForBooking();
@@ -580,7 +586,7 @@ $('idle-new-conversation').addEventListener('click', startNewConversation);
 $('privacy').addEventListener('click', () => $('privacy-dialog').showModal());
 $('booking-dialog').addEventListener('close', () => {
   if($('booking-dialog').open)return;
-  bookingGeneration++;$('booking-content').replaceChildren();const resume=bookingResume;bookingResume=null;
+  bookingGeneration++;$('booking-content').classList.remove('reception-private');$('booking-content').replaceChildren();const resume=bookingResume;bookingResume=null;
   if(resume?.generation===generation&&resume.automatic&&callView.connected&&api.token&&automaticMode&&!busy){autoConversation.enable();}
 });
 $('fullscreen').addEventListener('click', async () => {

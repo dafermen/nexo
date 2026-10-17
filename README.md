@@ -1,6 +1,16 @@
 # Nexo · Kiosco conversacional para un centro de atención
 
-## Versión actual: 0.38.0
+## Orientación por negocio — 17 de octubre de 2026
+
+Nexo evoluciona hacia una plataforma de atención y gestión reutilizable, con Método Mogollón como primera especialización. [Arquitectura objetivo](docs/62-orientacion-multinegocio.md) · [Consolidación de siete manuales](docs/63-consolidacion-manuales.md) · [Nuevas fases](docs/64-fases-multinegocio.md).
+
+La fase 1 documental está completada; la actualización del catálogo activo y las nuevas funciones siguen pendientes. La versión publicada continúa siendo 0.40.0. El módulo 07 del cliente deja precio, modalidad y horarios de cinco horas pendientes: no reutilizar las condiciones de documentos anteriores como oferta aprobada. Pagos y telefonía permanecen en pausa.
+
+## Versión publicada: 0.40.0
+
+Expedientes privados, seguimiento de clases/paquetes, solicitudes de grupos e informes diagnósticos. [Guía de expedientes y servicios](docs/60-expedientes-servicios.md). Publicada el 13 de octubre de 2026 en el VPS; pagos y telefonía en pausa. [Acta de publicación](docs/61-publicacion-0400.md).
+
+## Antecedentes: 0.38.0
 
 Conversación con contexto breve, correcciones y profesor elegido por voz/texto. [Guía y pruebas](docs/58-conversacion-contextual.md).
 
@@ -14,9 +24,9 @@ Editor visual de preguntas frecuentes con categorías, búsqueda, vista previa y
 
 Repositorio: https://github.com/dafermen/nexo. GitHub Actions comprueba código, documentación y pruebas. [Primera ejecución aprobada](https://github.com/dafermen/nexo/actions/runs/36341650322): 301 pruebas por sistema y recorridos de navegador. Consulte Actions para el resultado de cada cambio. Las secciones por versión siguientes conservan antecedentes del proyecto.
 
-## Contenido comercial aprobado
+## Antecedente de contenido comercial
 
-[Curso de cinco horas y libro: información, horarios y mantenimiento](docs/56-curso-libro-contenido.md). Precios, requisitos, horarios informativos, inclusiones y condiciones se editan en Administración. Las FAQ usan parámetros del catálogo; las cargas de contenido son atómicas y se aplican una sola vez.
+[Curso de cinco horas y libro: información, horarios y mantenimiento](docs/56-curso-libro-contenido.md) conserva la entrega anterior. Sus condiciones deben contrastarse con la [matriz vigente de decisiones](docs/63-consolidacion-manuales.md). Las FAQ usan parámetros del catálogo; las cargas de contenido son atómicas y se aplican una sola vez. Esta revisión documental no aplica una carga nueva a producción.
 
 ## Historial de versiones anteriores
 
@@ -264,3 +274,11 @@ Consultar el [mapa documental](docs/00-inicio.md) para encontrar fuentes oficial
 ### Temas del kiosco
 
 Seleccione Nexo o Método Mogollón en Configuración → Experiencia. [Guía de temas](docs/57-temas-visuales.md).
+
+## Personal y recepción · 0.39.0
+
+[Manual de fases 1, 2 y 3](docs/59-personal-recepcion.md): Administración → Personal y recepción; pantalla pública `/lobby`. Cuentas por cargo, turnos presenciales y contenido del manual. Pagos y llamadas telefónicas siguen en pausa. La publicación de esta entrega se verifica por separado.
+
+## Administración y contenido 0.41.0
+
+[Portada, borradores y componentes](docs/65-administracion-publicaciones.md) · [Validación y publicación](docs/66-entrega-0410.md). El plan por negocio mantiene explícitas las dependencias comerciales y de recursos.

@@ -1,0 +1,13 @@
+/* NEXO · GUÍA DEL MÓDULO: public/reception.css
+ * Tarjetas táctiles y tablero de sala; adapta columnas sin ocultar acciones ni estados.
+ */
+.reception-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:16px}.reception-card{border:1px solid #cdd6c4;border-radius:18px;padding:20px;background:#fff;margin:12px 0}.reception-card h3{margin:0 0 10px}.reception-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.reception-card p{white-space:pre-wrap;overflow-wrap:anywhere}.reception-card button, #next-form button{min-height:48px}.reception-code{font-size:clamp(2rem,5vw,4rem);font-weight:800}#staff-form,#desk-form,#next-form{display:grid;gap:12px;max-width:640px;margin:20px 0}#dashboard>section{margin:32px 0;padding-top:20px;border-top:1px solid #ccd4c6}.lobby{background:#102a24;color:#fff;min-height:100dvh;margin:0;padding:clamp(18px,4vw,64px);font-family:system-ui}.lobby h1{font-size:clamp(1.8rem,4vw,3rem)}.lobby .reception-card{background:#1e3f34;border-color:#597f68}.lobby .reception-code{color:#c9f080}.lobby-status{min-height:2em}.reception-entry{min-height:44px}.reception-inline{font-size:.85rem;padding:5px 10px}.reception-private{max-width:520px}.reception-private label{display:grid;gap:8px;margin:14px 0}.reception-private textarea,.reception-private select{width:100%}.reception-private [type=checkbox]{width:auto}.reception-private .check{display:flex;align-items:center}.reception-private button{margin-top:10px}.reception-private .reception-code{text-align:center}.reception-private p{overflow-wrap:anywhere}
+
+body:not(.video-first) .home-shortcuts{grid-template-columns:repeat(4,minmax(0,1fr))}
+body[data-theme="metodomogollon"]:not(.video-first) #home-reception{display:none}
+.reception-board-line{font-size:12px;line-height:1.2;max-width:100%;overflow-wrap:anywhere;margin:0;grid-column:1/-1}
+
+.reception-board-line{position:fixed;top:8px;left:50%;transform:translateX(-50%);max-width:48%;background:#173c30;color:#fff;padding:6px 10px;border-radius:10px;z-index:6;pointer-events:none}
+
+.booking-modal .reception-code{font-size:clamp(36px,8vw,64px);line-height:1.1;margin:18px 0;font-weight:800;color:#245039}
+#next-form select,#staff-form select,.reception-private select{min-height:48px;border:1px solid #cad4be;border-radius:10px;background:#fafbf6;padding:10px;font:inherit;color:#263d30}

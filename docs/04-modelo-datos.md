@@ -163,3 +163,12 @@ Además del contexto temporal, SQLite conserva `conversations` (identificador al
 ## Biblioteca de audio — v0.24.0
 
 NEXO-42: audio generado reutilizable para respuestas aprobadas, con metadatos SQLite y archivos WAV privados. Administración permite consultar el uso y vaciar audios; presupuesto inicial de 128 MB y caducidad de 30 días. [Alcance, arquitectura, privacidad y pruebas](40-biblioteca-audio.md). La voz actual sigue siendo local; no supone ahorro por sesión de LiveAvatar.
+
+## Catálogo y componentes — 0.41.0
+
+- `catalog_drafts`: UUID, revisión propia, estado draft/approved/published, documento comercial JSON, revisión base de configuración y conocimiento, tipo de negocio, fuente, actor y aprobador.
+- `catalog_versions`: UUID, borrador de origen, documento comercial, actor, fuente, fecha y tipo de negocio. Guarda antes/después de publicar; recuperar crea un borrador.
+- `student_services.catalogSnapshot`: columna aditiva JSON con versión, moneda, precio, componentes y condiciones en el momento de asignar. Las filas antiguas reciben `{}` y no se reescriben como si hubieran contratado condiciones nuevas.
+- `student_component_events`: UUID, expediente, asignación, índice del componente de la instantánea, unidades, motivo, actor, fecha, indicador reversed y revisión. No se elimina el historial. Las clases vinculadas siguen en `student_lessons`.
+
+La idempotencia utiliza `student_operations`; entrega, reserva de requestId y auditoría comparten transacción. No hay tablas de pagos nuevas. [Manual](65-administracion-publicaciones.md) y [contratos](codigo/publicaciones.md).

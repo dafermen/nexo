@@ -1,5 +1,7 @@
 # 03 · Arquitectura técnica
 
+**Antecedente de arquitectura.** Para la evolución aprobada el 17/10/2026 consulte [núcleo común, perfiles y extensiones](62-orientacion-multinegocio.md). La nueva organización es un diseño pendiente de implementación gradual; la entrega publicada 0.40.0 se documenta en [expedientes](60-expedientes-servicios.md) y su [acta](61-publicacion-0400.md). Las referencias siguientes a conexiones pendientes corresponden a la etapa inicial.
+
 > **Filtro escolar activo (v0.7.0).** Consultas frecuentes y desvíos se resuelven localmente; orientación pertinente puede usar OpenAI con cupos de 6 solicitudes por atención y 100 al día. [Reglas, límites y alcance](19-filtro-y-consumo.md).
 
 
@@ -171,3 +173,7 @@ El recorrido predeterminado utiliza `LocalAvatarProvider` (Three.js/GLB) y `Loca
 ## Interpretación semántica v0.10.0
 
 POST /api/chat agrega una ruta opcional de interpretación estructurada entre el filtro local y la respuesta al visitante. school-intent.js define el contrato, validación y resolución; OpenAiProvider.interpret implementa Responses. La salida no contiene texto libre para el visitante, solo intenciones e IDs activos. El servidor consulta el catálogo. Usa el mismo presupuesto, cancelación y sesión que la orientación. [Detalle](22-interpretacion-intencion.md).
+
+## Perfiles y publicación controlada — 0.41.0
+
+`business-profile.js` selecciona capacidades del centro. Los procesos escolares viven en un registro separado y solo reciben catálogo público y memoria de sesión; no expedientes. El perfil general bloquea APIs escolares. La separación entre negocios continúa por instalación/SQLite. `catalog-publication.js` publica catálogo y conocimiento en una transacción con control de revisión. [Recorrido técnico](codigo/publicaciones.md).

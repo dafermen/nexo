@@ -16,8 +16,8 @@ export function installAdminAccess({onAuthenticated,onExpired,onActivity=()=>{}}
  const el=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;};
  const message=text=>{notice.textContent=text;notice.hidden=!text;};
  const panel=el('section');panel.className='email-access';panel.hidden=true;
- const title=el('h2','Entre con su correo'),intro=el('p','Reciba un código temporal en el correo del administrador.');
- const requestForm=el('form'),emailLabel=el('label','Correo administrador'),email=el('input');email.type='email';email.autocomplete='email';email.required=true;email.maxLength=254;email.id='admin-email';emailLabel.append(email);const send=el('button','Recibir código');send.className='primary';send.id='request-admin-code';requestForm.append(emailLabel,send);
+ const title=el('h2','Entre con su correo'),intro=el('p','Reciba un código temporal en el correo autorizado del personal.');
+ const requestForm=el('form'),emailLabel=el('label','Correo del personal'),email=el('input');email.type='email';email.autocomplete='email';email.required=true;email.maxLength=254;email.id='admin-email';emailLabel.append(email);const send=el('button','Recibir código');send.className='primary';send.id='request-admin-code';requestForm.append(emailLabel,send);
  const verifyForm=el('form');verifyForm.hidden=true;const codeLabel=el('label','Código de 8 dígitos'),code=el('input');code.id='admin-code';code.autocomplete='one-time-code';code.inputMode='numeric';code.pattern='[0-9]{8}';code.maxLength=8;code.required=true;codeLabel.append(code);const verify=el('button','Entrar');verify.className='primary';verify.id='verify-admin-code';verifyForm.append(codeLabel,verify);
  const status=el('p');status.id='admin-code-status';status.setAttribute('role','status');const help=el('p','Vence en 10 minutos. Solo puede utilizarse una vez.');help.className='muted';panel.append(title,intro,requestForm,verifyForm,status,help);legacy.after(panel);
  const setup=el('p');setup.className='notice';setup.hidden=true;legacy.before(setup);

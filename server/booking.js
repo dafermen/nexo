@@ -68,7 +68,7 @@ export function eventBusy(event,timeZone){
 
 export class BookingService{
  constructor({repository,calendar,mailer=null,now=Date.now}){this.repo=repository;this.calendar=calendar;this.mailer=mailer;this.now=now;}
- publicStatus(){const rules=this.repo.bookingSettings(),state=this.calendar.status(),multiple=rules.assignment==='instructors';return {enabled:rules.enabled&&state.connected&&!!state.selected&&!state.pendingTests?.length&&(!multiple||rules.instructors?.some(i=>i.active)),serviceIds:rules.serviceIds,chooseInstructor:multiple,instructors:multiple?(rules.instructors||[]).filter(i=>i.active).map(({id,name,serviceIds})=>({id,name,serviceIds})):[]};}
+ publicStatus(){const rules=this.repo.bookingSettings(),state=this.calendar.status(),multiple=rules.assignment==='instructors';const serviceIds=rules.serviceIds.filter(id=>{const s=this.repo.getService(id);return s?.active&&!['information','withdrawn'].includes(s.publication);});return {enabled:rules.enabled&&serviceIds.length>0&&state.connected&&!!state.selected&&!state.pendingTests?.length&&(!multiple||rules.instructors?.some(i=>i.active)),serviceIds,chooseInstructor:multiple,instructors:multiple?(rules.instructors||[]).filter(i=>i.active).map(({id,name,serviceIds})=>({id,name,serviceIds})):[]};}
  /**
   * configure: Valida reglas, servicios y permisos antes de habilitar agenda.
   * Entrada (firma real): input.
@@ -92,7 +92,7 @@ export class BookingService{
   return this.repo.saveBookingSettings(revision,{enabled,serviceIds,horizonDays,noticeMinutes,stepMinutes,assignment,instructors});
  });}
  context(serviceId){const rules=this.repo.bookingSettings(),state=this.calendar.status(),service=this.repo.getService(serviceId),center=this.repo.getCenter();
-  if(!this.publicStatus().enabled||!rules.serviceIds.includes(serviceId)||!service?.active||!service.duration||service.duration>480||!center)throw new HttpError(409,'Este servicio no admite reservas en línea. Consulte al personal.');
+  if(!this.publicStatus().enabled||!rules.serviceIds.includes(serviceId)||!service?.active||['information','withdrawn'].includes(service.publication)||!service.duration||service.duration>480||!center)throw new HttpError(409,'Este servicio no admite reservas en línea. Consulte al personal.');
   const instructors=rules.assignment==='instructors'?rules.instructors.filter(i=>i.active&&i.serviceIds.includes(serviceId)):[{id:null,name:null,calendarId:state.selected.id}];
   if(!instructors.length)throw new HttpError(409,'Este servicio no tiene profesores disponibles para reservar.');
   return {rules,selected:state.selected,service,center,instructors};

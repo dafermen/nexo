@@ -1,5 +1,11 @@
 # Bienvenido a la documentación de Nexo
 
+## Nueva orientación por negocio
+
+[Arquitectura objetivo](62-orientacion-multinegocio.md) · [Manuales consolidados y conflictos](63-consolidacion-manuales.md) · [Plan de seis fases](64-fases-multinegocio.md).
+
+Actualización documental del 17/10/2026. La aplicación publicada sigue en 0.40.0; los cambios del nuevo catálogo todavía no están aplicados. Método Mogollón es la primera especialización de Nexo, con una instalación independiente por negocio.
+
 - [SQLite y acceso administrativo por correo](31-sqlite-acceso-correo.md)
 
 Nexo es el asistente de la Escuela de Conducción «MetodoMogollon». Este portal reúne la documentación del proyecto: operación, desarrollo, decisiones, validaciones y trabajo pendiente.
@@ -120,3 +126,7 @@ Para probar el producto, comenzar por presentación, estado y uso. Para desarrol
 Separar estado vigente, historia y decisiones. Los resultados de pruebas fechados conservan su valor histórico. Este mapa no vuelve a ejecutar todos los comandos documentados ni cierra la aceptación pendiente del producto. Registrar las comprobaciones realmente ejecutadas, su entorno y sus límites antes de publicar.
 
 Actualizar la guía de origen al cambiar comandos, configuración, comportamiento, permisos o despliegue. Mantener enlaces y rutas del portal. Usar capturas reales con datos sintéticos; nunca publicar valores de .env, claves, datos de usuarios ni logs operativos. Un commit local, un commit remoto y un artefacto desplegado son estados diferentes.
+
+## Administración por tareas
+
+[Manual de publicaciones y componentes](65-administracion-publicaciones.md) · [Entrega 0.41.0](66-entrega-0410.md).

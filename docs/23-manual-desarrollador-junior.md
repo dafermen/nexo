@@ -1,5 +1,7 @@
 # Manual del desarrollador junior
 
+**Diseño siguiente, 17/10/2026:** lea la [orientación por negocio](62-orientacion-multinegocio.md), la [matriz de contenido](63-consolidacion-manuales.md) y las [fases](64-fases-multinegocio.md). Distinguen código existente de contratos propuestos; no describen como implementado un motor de procesos o publicación editorial que todavía falta desarrollar.
+
 **Actualización v0.38.0:** siga el [recorrido de conversación con contexto y profesor](58-conversacion-contextual.md) para entender memoria temporal, interpretación validada, cuotas y formulario preseleccionado.
 
 Aprenda a leer, ejecutar y modificar Nexo siguiendo una conversación completa, desde el botón del kiosco hasta SQLite y los proveedores. Esta guía describe el código actual; los documentos históricos 01–15 conservan decisiones de etapas anteriores.
@@ -272,3 +274,15 @@ Consulte la [guía ilustrada del editor visual y GitHub](55-editor-visual-github
 ## Actualizaciones comerciales
 
 La [guía del curso y libro](56-curso-libro-contenido.md) muestra cómo separar datos comerciales, FAQ y código. Evite constantes de precios/horarios en el agente: utilice campos del catálogo y parámetros. Los despliegues no deben volver a sembrar ni sobrescribir SQLite.
+
+## Fases 1, 2 y 3 del manual del cliente
+
+Consulte [Personal y recepción](59-personal-recepcion.md) para conocer permisos, tablas, API, estados, pruebas y límites. Reservas de Calendar y turnos de recepción tienen ciclos de vida separados. La versión 0.39.0 requiere una publicación coordinada de código y contenido.
+
+## Expedientes y servicios — versión 0.40.0
+
+La [guía operativa y técnica](60-expedientes-servicios.md) explica el seguimiento académico privado, las solicitudes de cursos y los informes. La [referencia por archivo](codigo/expedientes.md) detalla entradas, salidas, permisos, transacciones y variables importantes. Un paquete conserva unidades académicas; no sustituye un registro de pago.
+
+## Continuación: perfiles y publicación 0.41.0
+
+Recorra [Publicaciones y perfiles](codigo/publicaciones.md): formulario → API autenticada → borrador SQLite → aprobación → publicación atómica → nueva conversación. Después pruebe asignación de componentes y reversos en una base ficticia. La [guía de administración](65-administracion-publicaciones.md) explica qué ve el personal y qué significa cada botón. Las limitaciones se mantienen en el [plan por fases](64-fases-multinegocio.md).

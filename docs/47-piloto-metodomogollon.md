@@ -1,5 +1,9 @@
 # Piloto de Nexo: MetodoMogollon
 
+## Estado vigente — 13/10/2026
+
+Versión **0.40.0 publicada**: personal, recepción y expedientes/servicios internos. 343 pruebas aprobadas en Linux y Windows, respaldo cifrado previo/posterior y comprobaciones HTTPS. [Acta y pendientes](61-publicacion-0400.md). Las notas fechadas siguientes conservan el historial del piloto.
+
 ## Destino y aislamiento
 
 Dirección principal: https://nexo.metodomogollon.com/ . VPS Ubuntu 24.04 x86_64 existente con Nginx. Nexo usa 127.0.0.1:3300, usuario de servicio propio, Node dedicado y SQLite privado. No se reemplaza el proxy de otras aplicaciones ni se usa el puerto 3000, ya ocupado.

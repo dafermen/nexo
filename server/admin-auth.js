@@ -37,8 +37,8 @@ export class AdminAuth{
   const id=randomBytes(32).toString('hex'),salt=randomBytes(16).toString('hex'),code=String(randomInt(100000000)).padStart(8,'0');
   const codeHash=(await derive(code,salt,64)).toString('hex');
   const recipient=normalizeEmail(email),recipientHash=hash(recipient);
-  const allowed=this.emails.map(address=>timingSafeEqual(Buffer.from(recipientHash),Buffer.from(hash(address)))).some(Boolean);
-  if(allowed&&r.takeAuthLimit('mail:cooldown:'+recipientHash,1,60000,now)&&r.takeAuthLimit('mail:hour:'+recipientHash,5,3600000,now)&&r.takeAuthLimit('mail:day',20,86400000,now)){
+  const allowed=!!r.staffByEmail(recipient);
+  if(allowed&&r.takeAuthLimit('mail:cooldown:'+recipientHash,1,60000,now)&&r.takeAuthLimit('mail:hour:'+recipientHash,5,3600000,now)&&r.takeAuthLimit('mail:recipient-day:'+recipientHash,20,86400000,now)&&r.takeAuthLimit('mail:day',200,86400000,now)){
     r.createAdminChallenge({id,email:recipient,codeHash,salt,now,expiresAt:now+10*60000});
     // The response does not reveal whether an address matches. Codes live only in memory until sent.
     const task=Promise.resolve().then(()=>this.mailer.sendCode({to:recipient,code})).then(()=>r.adminCodeDelivery(id,true),()=>r.adminCodeDelivery(id,false));
@@ -72,6 +72,7 @@ export class AdminAuth{
   */
  authenticated(req){const token=this.token(req);return this.mode==='email'&&!!token&&this.repository.authenticateAdministrator(hash(token),this.now(),idleMs);}
  // Solo después de requireAdmin: nunca tomar el actor del formulario enviado por el cliente.
+ principal(req){const token=this.token(req);return token?this.repository.staffPrincipal(hash(token),this.now()):null;}
  actor(req){const token=this.token(req);return token?this.repository.administratorIdentity(hash(token),this.now())||'Administración':'Acceso local por clave';}
  /**
   * cookie: Construye la cabecera de sesión; con token vacío indica borrado.

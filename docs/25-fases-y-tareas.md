@@ -1,14 +1,22 @@
 # Estado actual, fases y tareas
 
+## Estado al 17 de octubre de 2026
+
+Última publicación documentada: **0.40.0, 13/10/2026**. Personal, recepción, expedientes y seguimiento académico están publicados; la aceptación física continúa pendiente. [Acta](61-publicacion-0400.md).
+
+La nueva orientación reutilizable y la conciliación de siete manuales están documentadas. La fase 1 permanece parcial: terminó el análisis (NEXO-66), pero falta actualizar el contenido activo y cerrar decisiones comerciales. [Plan de fases 1–6](64-fases-multinegocio.md) · [Matriz de decisiones](63-consolidacion-manuales.md).
+
+El tablero `project-status.json` es la referencia de tareas actuales. No se reinicia el trabajo ya completado de Calendar, roles, editor visual o expedientes. Pagos en línea, caja, crédito, telefonía y SMS permanecen en pausa. Las secciones siguientes conservan la evolución histórica; sus tablas iniciales no son el estado vigente.
+
 > **Vigente desde v0.13.0:** las respuestas activas se guardan en SQLite y se editan en Administración → Respuestas frecuentes. El archivo inicial se importa una vez. El acceso admite códigos por correo tras configurar SMTP. [Guía de SQLite y acceso](31-sqlite-acceso-correo.md).
 
 ## Cómo interpretar este estado
 
-Este es el resumen vigente de Nexo. Las evidencias detalladas están en [Validación](08-validacion.md). El [backlog original](07-backlog.md) conserva historia de la demo; sus pendientes iniciales no deben leerse como una lista actualizada.
+Las entregas siguientes muestran la evolución de Nexo. Las evidencias iniciales están en [Validación](08-validacion.md). El [backlog original](07-backlog.md) conserva historia de la demo; sus pendientes iniciales no deben leerse como una lista actualizada.
 
 El tablero visual usa `docs/project-status.json`. Actualice ese archivo cuando cambie el estado de una tarea, y registre la evidencia en el documento relacionado. «Realizada» significa que el alcance concreto indicado se implementó; no significa que todo el proyecto esté listo para producción.
 
-## Fases
+## Fases de las primeras entregas (histórico)
 
 | Fase | Estado | Resultado o siguiente paso |
 |---|---|---|
@@ -37,7 +45,7 @@ El tablero visual usa `docs/project-status.json`. Actualice ese archivo cuando c
 - Interpretación de regionalismos y frases dudosas; aclaraciones sin sanción por incertidumbre del modelo.
 - Portal de documentación con búsqueda, lector y tablero.
 
-## Pendientes prioritarios
+## Pendientes registrados durante la etapa inicial (histórico)
 
 | Prioridad | Trabajo | Criterio para darlo por terminado |
 |---|---|---|
@@ -54,7 +62,7 @@ El tablero visual usa `docs/project-status.json`. Actualice ese archivo cuando c
 | Posterior | Pagos | Proveedor, condiciones y flujo de órdenes; pruebas de duplicados y errores |
 | Posterior | MetaHuman y flota | Infraestructura y costos evaluados después del piloto inicial |
 
-## Siguiente paso propuesto
+## Siguiente paso propuesto durante la etapa inicial (histórico)
 
 Completar la información del catálogo y hacer una atención piloto por voz con preguntas reales. La conexión de Google Calendar ya fue verificada; el siguiente paso es acordar las reglas de disponibilidad y reserva. No hay fechas de entrega comprometidas para estas tareas.
 
@@ -87,3 +95,17 @@ NEXO-43: comentarios de módulo y contratos de funciones centrales, manual junio
 ## Piloto Linux — v0.25.0
 
 NEXO-44 completado: preparación del código, acceso privado, voz Linux y despliegue documentado. NEXO-16/17/18 parciales: queda validar el servidor real, sus integraciones y respaldos externos. NEXO-45 pendiente: Capacitor/APK después del piloto web. [Guía](45-despliegue-piloto-linux.md) · [Seguridad](46-seguridad-piloto.md).
+
+## Fases 1, 2 y 3 del manual del cliente
+
+Consulte [Personal y recepción](59-personal-recepcion.md) para conocer permisos, tablas, API, estados, pruebas y límites. Reservas de Calendar y turnos de recepción tienen ciclos de vida separados. La versión 0.39.0 requiere una publicación coordinada de código y contenido.
+
+## Expedientes y servicios — versión 0.40.0
+
+Publicados en 0.40.0: fichas por cargo/profesor, comprobación humana de identidad, servicios asignados, unidades realizadas/pendientes, reversos, grupos con solicitudes limitadas e informes diagnósticos. [Guía y pendientes](60-expedientes-servicios.md).
+
+Pendientes deliberados: consulta autónoma del expediente con autenticación del alumno, inscripción definitiva ligada al pago, crédito de evaluación y notificaciones de cursos. Pagos y telefonía siguen en pausa. La mejora visual de la pantalla de sala es el siguiente trabajo de interfaz; no se incluye aquí.
+
+## Entrega posterior 0.41.0
+
+Primera implementación del [plan por negocio](64-fases-multinegocio.md): perfiles, publicaciones, procesos iniciales y componentes. [Estado y pruebas](66-entrega-0410.md). El tablero distingue entregado, parcial y pendiente; las políticas sin aprobación no se consideran implementadas.

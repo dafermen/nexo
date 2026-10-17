@@ -1,6 +1,6 @@
 {
   "name": "kiosco-nexo",
-  "version": "0.38.0",
+  "version": "0.41.0",
   "private": true,
   "type": "module",
   "description": "Kiosco conversacional modular para centros de atenciÃ³n",
@@ -38,10 +38,13 @@
     "test:instructors": "node tests/instructors.e2e.js",
     "test:transfers": "node tests/booking-transfers.e2e.js",
     "test:agenda:voice": "node tests/agenda-voice.e2e.js",
-    "test:faq-editor": "node tests/faq-editor.e2e.js"
+    "test:faq-editor": "node tests/faq-editor.e2e.js",
+    "test:reception": "node tests/reception.e2e.js",
+    "test:students": "node tests/students.e2e.js",
+    "test:publications": "node tests/publications.e2e.js"
   },
   "dependencies": {
     "nodemailer": "10.0.10"
   },
-  "releaseDate": "2026-10-10"
+  "releaseDate": "2026-10-17"
 }

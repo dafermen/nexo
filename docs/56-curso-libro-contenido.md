@@ -1,5 +1,7 @@
 # Curso de cinco horas y libro: contenido aprobado y mantenimiento
 
+**Antecedente sustituido parcialmente el 17/10/2026.** El nuevo módulo 07 deja precio, horarios, modalidad e inscripción de cinco horas pendientes; el módulo 05 precisa los cuatro componentes del paquete de US$35 y su simulador web. Consulte la [consolidación vigente](63-consolidacion-manuales.md). No use los importes ni condiciones antiguos de esta guía para una nueva publicación. La retirada del contenido activo está registrada como NEXO-67 y aún no se aplicó.
+
 Versión 0.34.0 · Información entregada por el cliente el 27/09/2026.
 
 ## Qué informa Nexo

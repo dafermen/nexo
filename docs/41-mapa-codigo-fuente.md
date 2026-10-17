@@ -85,3 +85,7 @@ Continúe con el [manual junior](23-manual-desarrollador-junior.md), los [recorr
 - Interfaz revisada en escritorio y móvil; manual comprobado también en el servidor activo, sin desbordamiento de página.
 - Comparación estructural con el código previo: 108 archivos JavaScript conservan exactamente su lógica; los cambios ejecutables existentes corresponden al portal, su categoría y su prueba. También se añadió el validador documental de solo lectura. HTML y CSS conservan reglas/estructura, con comentarios nuevos.
 - Estas comprobaciones no iniciaron llamadas de IA, síntesis ni sesiones pagadas de LiveAvatar.
+
+## Perfiles y publicaciones — 0.41.0
+
+[Referencia de módulos, entradas, salidas y estados](codigo/publicaciones.md). Incluye perfiles, propuesta de manual, publicación transaccional, procesos conversacionales, administración y pruebas.

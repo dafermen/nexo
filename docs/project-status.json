@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-10-10",
-  "version": "0.38.0",
-  "summary": "Conversación con memoria breve, correcciones y agenda por profesor desde voz o texto. Catálogo y Calendar siguen validando los datos; formulario con profesor preseleccionado y confirmación explícita.",
+  "updatedAt": "2026-10-17",
+  "version": "0.41.0",
+  "summary": "0.41.0 publicada el 17/10/2026: administración por tareas, publicaciones controladas, perfiles, orientación inicial y componentes de paquetes. 354 pruebas aprobadas en Windows y Linux; HTTPS y respaldos comprobados. Políticas, vehículos compartidos y aceptación física pendientes.",
   "phases": [
     {
       "id": "base",
@@ -55,13 +55,61 @@
       "id": "futuro",
       "title": "MetaHuman y pagos",
       "status": "pending",
-      "summary": "Segunda etapa sujeta a decisiones, hardware y pruebas."
+      "summary": "Pagos en pausa por decisión del usuario; MetaHuman sujeto a evaluación futura. No forman parte del nuevo plan."
     },
     {
       "id": "configuration",
       "title": "Configuración por negocio",
       "status": "completed",
       "summary": "Identidad, asistente, canales, IA y respuestas configurables por instalación."
+    },
+    {
+      "id": "recepcion",
+      "title": "Recepción y personal",
+      "status": "partial",
+      "summary": "Cola, escritorios y cuentas por cargo publicados en 0.40.0; pendiente aceptación física."
+    },
+    {
+      "id": "expedientes",
+      "title": "Expedientes y servicios académicos",
+      "status": "partial",
+      "summary": "Panel interno implementado; pendientes validación del cliente y autenticación autónoma del estudiante. Inscripción pagada y crédito en pausa."
+    },
+    {
+      "id": "consolidacion",
+      "title": "Fase 1 · Consolidar conocimiento",
+      "status": "partial",
+      "summary": "Análisis documental completado; contenido activo y decisiones por validar."
+    },
+    {
+      "id": "nucleo-negocio",
+      "title": "Fase 2 · Núcleo reutilizable",
+      "status": "partial",
+      "summary": "Primera implementación 0.41.0; consultar tareas y límites de la entrega."
+    },
+    {
+      "id": "publicacion-contenido",
+      "title": "Fase 3 · Catálogo y publicación",
+      "status": "partial",
+      "summary": "Primera implementación 0.41.0; consultar tareas y límites de la entrega."
+    },
+    {
+      "id": "procesos-atencion",
+      "title": "Fase 4 · Procesos conversacionales",
+      "status": "partial",
+      "summary": "Primera implementación 0.41.0; consultar tareas y límites de la entrega."
+    },
+    {
+      "id": "extension-escolar",
+      "title": "Fase 5 · Operación escolar ampliada",
+      "status": "partial",
+      "summary": "Primera implementación 0.41.0; consultar tareas y límites de la entrega."
+    },
+    {
+      "id": "validacion-negocios",
+      "title": "Fase 6 · Validar y publicar",
+      "status": "partial",
+      "summary": "Primera implementación 0.41.0; consultar tareas y límites de la entrega."
     }
   ],
   "tasks": [
@@ -749,6 +797,273 @@
       "evidence": {
         "path": "docs/58-conversacion-contextual.md",
         "label": "Flujo, contratos, consumo y pruebas"
+      }
+    },
+    {
+      "id": "NEXO-57",
+      "title": "Manual del cliente y atención consultiva",
+      "description": "Contenido comercial actualizado por carga única; protocolos ES/EN/FR y registro de aprobado/pendiente/futuro. Normativa y grupos sin confirmar no se activan.",
+      "phaseId": "conocimiento",
+      "status": "completed",
+      "priority": "P1",
+      "evidence": {
+        "path": "docs/59-personal-recepcion.md",
+        "label": "Manual de fases 1, 2 y 3"
+      }
+    },
+    {
+      "id": "NEXO-58",
+      "title": "Usuarios y permisos del personal",
+      "description": "Propietario, gerente, asesor e instructor; autorización HTTP, sesiones revocadas al modificar cuentas, propietarios de recuperación y vínculo opcional al profesor.",
+      "phaseId": "configuration",
+      "status": "completed",
+      "priority": "P1",
+      "evidence": {
+        "path": "docs/59-personal-recepcion.md",
+        "label": "Manual de fases 1, 2 y 3"
+      }
+    },
+    {
+      "id": "NEXO-59",
+      "title": "Recepción con cola y pantalla de sala",
+      "description": "Ficha breve, cola general, llamado manual por escritorio, seguimiento y privacidad; pruebas simuladas sin SMS ni telefonía.",
+      "phaseId": "recepcion",
+      "status": "completed",
+      "priority": "P1",
+      "evidence": {
+        "path": "docs/59-personal-recepcion.md",
+        "label": "Manual de fases 1, 2 y 3"
+      }
+    },
+    {
+      "id": "NEXO-60",
+      "phaseId": "recepcion",
+      "title": "Publicar y validar recepción en el local",
+      "status": "partial",
+      "priority": "P1",
+      "description": "0.40.0 publicada con respaldo y validaciones Linux/HTTPS. Faltan cuentas/escritorios reales y aceptación física del local.",
+      "acceptance": "Publicación coordinada con respaldo, pruebas físicas de personal/sala/kiosco y aceptación del cliente.",
+      "evidence": {
+        "path": "docs/61-publicacion-0400.md",
+        "label": "Acta de publicación y pendientes"
+      }
+    },
+    {
+      "id": "NEXO-61",
+      "title": "Expediente privado por estudiante y profesor",
+      "status": "completed",
+      "description": "Alta, búsqueda paginada, archivo, permisos por registro, comprobación humana de identidad y auditoría; ningún dato del expediente se entrega al chat público.",
+      "phaseId": "expedientes",
+      "priority": "P1",
+      "evidence": {
+        "path": "docs/60-expedientes-servicios.md",
+        "label": "Expedientes, servicios y validación"
+      }
+    },
+    {
+      "id": "NEXO-62",
+      "title": "Servicios asignados y control de clases",
+      "status": "completed",
+      "description": "Unidades académicas por paquete, vínculo explícito con reservas terminadas, registro externo por gerencia y reversos auditados. No acredita pagos.",
+      "phaseId": "expedientes",
+      "priority": "P1",
+      "evidence": {
+        "path": "docs/60-expedientes-servicios.md",
+        "label": "Expedientes, servicios y validación"
+      }
+    },
+    {
+      "id": "NEXO-63",
+      "title": "Grupos, solicitudes e informes diagnósticos",
+      "status": "completed",
+      "description": "Capacidad transaccional, lista de espera, doce competencias, informe final inmutable e impresión. No confirma inscripción pagada ni genera crédito comercial.",
+      "phaseId": "expedientes",
+      "priority": "P1",
+      "evidence": {
+        "path": "docs/60-expedientes-servicios.md",
+        "label": "Expedientes, servicios y validación"
+      }
+    },
+    {
+      "id": "NEXO-64",
+      "title": "Validar expedientes reales y consulta autónoma",
+      "status": "pending",
+      "description": "Acordar retención/eliminación, validar procedimiento de identidad, aceptación del cliente e integración futura de autenticación propia del alumno.",
+      "acceptance": "Acceso del alumno probado sin enumeración ni exposición de datos; políticas y operación aceptadas antes de publicar información personal.",
+      "phaseId": "expedientes",
+      "priority": "P1",
+      "evidence": {
+        "path": "docs/60-expedientes-servicios.md",
+        "label": "Expedientes, servicios y validación"
+      }
+    },
+    {
+      "id": "NEXO-65",
+      "title": "Mejorar presentación de pantalla de sala",
+      "status": "pending",
+      "description": "Trabajo de interfaz posterior solicitado por el usuario: tema Método Mogollón, estado vacío claro, números grandes y ajuste a pantalla.",
+      "acceptance": "Validación visual en monitor y kiosco sin desplazamiento innecesario.",
+      "phaseId": "recepcion",
+      "priority": "P1",
+      "evidence": {
+        "path": "docs/60-expedientes-servicios.md",
+        "label": "Expedientes, servicios y validación"
+      }
+    },
+    {
+      "id": "NEXO-66",
+      "phaseId": "consolidacion",
+      "title": "Consolidar los siete manuales",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Inventario, conflictos y separación de condiciones aprobadas y pendientes. No modifica producción.",
+      "acceptance": "Cada fuente y conflicto tiene tratamiento; matriz y plan enlazados.",
+      "evidence": {
+        "path": "docs/63-consolidacion-manuales.md",
+        "label": "Plan y criterios de aceptación"
+      }
+    },
+    {
+      "id": "NEXO-67",
+      "phaseId": "consolidacion",
+      "title": "Actualizar contenido activo desde la consolidación",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Contenido conservador de los manuales publicado localmente y en VPS con historial recuperable, respaldo y sin reescribir reservas previas.",
+      "acceptance": "Pruebas de matriz, aplicación única, rollback y ausencia de datos retirados en FAQ, traducciones y audio.",
+      "evidence": {
+        "path": "docs/66-entrega-0410.md",
+        "label": "Entrega, evidencia y límites"
+      }
+    },
+    {
+      "id": "NEXO-68",
+      "phaseId": "consolidacion",
+      "title": "Cerrar decisiones comerciales y verificar fuentes oficiales",
+      "status": "pending",
+      "priority": "P1",
+      "description": "Registrar aprobaciones por servicio y reglas normativas; bloquear solo acciones dependientes.",
+      "acceptance": "Fuentes, responsable, fecha y decisiones verificadas; datos pendientes sin promesas.",
+      "evidence": {
+        "path": "docs/64-fases-multinegocio.md",
+        "label": "Plan y criterios de aceptación"
+      }
+    },
+    {
+      "id": "NEXO-69",
+      "phaseId": "nucleo-negocio",
+      "title": "Delimitar núcleo común y extensión escolar",
+      "status": "partial",
+      "priority": "P1",
+      "description": "Perfil y contratos iniciales implementados; bloqueo de rutas escolares en negocio general. Extracción gradual restante.",
+      "acceptance": "Regresión escolar aprobada y migraciones compatibles.",
+      "evidence": {
+        "path": "docs/66-entrega-0410.md",
+        "label": "Entrega, evidencia y límites"
+      }
+    },
+    {
+      "id": "NEXO-70",
+      "phaseId": "nucleo-negocio",
+      "title": "Validar un segundo perfil de negocio aislado",
+      "status": "partial",
+      "priority": "P1",
+      "description": "Dos bases independientes probadas y publicación de perfil general; segunda instalación real pendiente.",
+      "acceptance": "No aparecen datos, condiciones ni preguntas escolares en el perfil general.",
+      "evidence": {
+        "path": "docs/66-entrega-0410.md",
+        "label": "Entrega, evidencia y límites"
+      }
+    },
+    {
+      "id": "NEXO-71",
+      "phaseId": "publicacion-contenido",
+      "title": "Versionar catálogo y componentes de paquetes",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Catálogo versionado con componentes, cantidades, precios pendientes e instantáneas históricas de asignaciones.",
+      "acceptance": "Cambios no alteran asignaciones históricas; pendiente no significa gratuito.",
+      "evidence": {
+        "path": "docs/66-entrega-0410.md",
+        "label": "Entrega, evidencia y límites"
+      }
+    },
+    {
+      "id": "NEXO-72",
+      "phaseId": "publicacion-contenido",
+      "title": "Ampliar aprobación y publicación de conocimiento",
+      "status": "partial",
+      "priority": "P1",
+      "description": "Editor visual, aprobación, publicación, retiro, recuperación y conflictos listos. Traducciones por idioma y cierre de editores directos pendientes.",
+      "acceptance": "Borradores inaccesibles al público; permisos y conflictos de edición probados.",
+      "evidence": {
+        "path": "docs/66-entrega-0410.md",
+        "label": "Entrega, evidencia y límites"
+      }
+    },
+    {
+      "id": "NEXO-73",
+      "phaseId": "procesos-atencion",
+      "title": "Implementar procesos conversacionales configurables",
+      "status": "partial",
+      "priority": "P1",
+      "description": "Procesos iniciales por permiso y experiencia en ES/EN/FR, con estado temporal. Editor configurable de procesos pendiente.",
+      "acceptance": "Correcciones y cambios de tema sin acciones no autorizadas en ES/EN/FR.",
+      "evidence": {
+        "path": "docs/66-entrega-0410.md",
+        "label": "Entrega, evidencia y límites"
+      }
+    },
+    {
+      "id": "NEXO-74",
+      "phaseId": "procesos-atencion",
+      "title": "Dar continuidad a la derivación humana",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Recepción recibe categoría y servicio mínimo editable, sin transcripción completa ni datos de expediente.",
+      "acceptance": "Personal recibe contexto pertinente sin exposición pública ni promesas de telefonía.",
+      "evidence": {
+        "path": "docs/66-entrega-0410.md",
+        "label": "Entrega, evidencia y límites"
+      }
+    },
+    {
+      "id": "NEXO-75",
+      "phaseId": "extension-escolar",
+      "title": "Ampliar componentes y reglas de uso de servicios",
+      "status": "partial",
+      "priority": "P1",
+      "description": "Entregas de componentes con límite, idempotencia, reverso y clases separadas. Reglas de adicionales pendientes de políticas aprobadas.",
+      "acceptance": "Sin doble consumo; condiciones de plazo aprobadas y derechos históricos preservados.",
+      "evidence": {
+        "path": "docs/66-entrega-0410.md",
+        "label": "Entrega, evidencia y límites"
+      }
+    },
+    {
+      "id": "NEXO-76",
+      "phaseId": "extension-escolar",
+      "title": "Coordinar Road Test y recursos necesarios",
+      "status": "pending",
+      "priority": "P1",
+      "description": "Cambios del Road Test derivados al personal. Coordinación de vehículo/profesor pendiente de definir recursos compartidos.",
+      "acceptance": "Sin sobreasignación ni cancelación automática de citas oficiales.",
+      "evidence": {
+        "path": "docs/66-entrega-0410.md",
+        "label": "Entrega, evidencia y límites"
+      }
+    },
+    {
+      "id": "NEXO-77",
+      "phaseId": "validacion-negocios",
+      "title": "Validar y publicar la evolución por negocio",
+      "status": "partial",
+      "priority": "P1",
+      "description": "354 pruebas aprobadas Windows/Linux, navegador, HTTPS y respaldos cifrados con copia local. Pendientes aceptación física, recursos conjuntos y CI remoto.",
+      "acceptance": "Evidencia local y publicada diferenciada; aceptación y recuperación verificadas.",
+      "evidence": {
+        "path": "docs/66-entrega-0410.md",
+        "label": "Entrega, evidencia y límites"
       }
     }
   ]

@@ -1,5 +1,7 @@
 # Configuración de Nexo para distintos negocios
 
+**Lectura vigente:** una instalación por negocio sigue siendo el límite. La [orientación del 17/10/2026](62-orientacion-multinegocio.md) define su ampliación gradual y las [fases](64-fases-multinegocio.md) separan propuestas de funciones existentes. Las secciones iniciales de esta guía describen v0.12: Calendar, idiomas y editor visual se incorporaron después; consulte [Calendar](33-google-calendar.md), [idiomas](39-idiomas.md) y [editor visual](55-editor-visual-github.md).
+
 > **Vigente desde v0.13.0:** las respuestas activas se guardan en SQLite y se editan en Administración → Respuestas frecuentes. El archivo inicial se importa una vez. El acceso admite códigos por correo tras configurar SMTP. [Guía de SQLite y acceso](31-sqlite-acceso-correo.md).
 
 ## Abrir el módulo

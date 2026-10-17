@@ -30,7 +30,7 @@ export function applyContentUpdate(db,bundle,{apply=false}={}){
   if(document.configuration?.assistant.knowledgeMode!=='file')throw Error('La base escolar no está activa.');
   const services=document.services.map(s=>({...s})),entries=parseFaq(knowledge.source);
   for(const change of bundle.services){const target=services.find(s=>s.id===change.id);if(!target)throw Error('Servicio inexistente: '+change.id);
-   const allowed=['name','description','requirements','schedule','inclusions','conditions','priceCents','duration'];
+   const allowed=['name','description','requirements','schedule','inclusions','conditions','priceCents','duration','modality'];
    if(Object.keys(change.patch).some(k=>!allowed.includes(k)))throw Error('Campo comercial no permitido.');
    for(const [key,value] of Object.entries(change.patch)){if(['priceCents','duration'].includes(key)){if(!Number.isSafeInteger(value)||value<0)throw Error('Valor comercial inválido.');}else if(typeof value!=='string'||!value.trim()||value.length>1500)throw Error('Texto comercial inválido.');}
    const merged={...target,...change.patch};
@@ -44,6 +44,8 @@ export function applyContentUpdate(db,bundle,{apply=false}={}){
    db.prepare('UPDATE center_settings SET document=?,revision=revision+1,updatedAt=? WHERE id=1').run(JSON.stringify({...document,services}),now);
    db.prepare("UPDATE knowledge_bases SET source=?,revision=revision+1,updatedAt=? WHERE id='school'").run(source,now);
    db.prepare('INSERT INTO content_updates VALUES(?,?,?)').run(bundle.id,hash,now);
+   db.exec('CREATE TABLE IF NOT EXISTS content_release_notes(id TEXT PRIMARY KEY,source TEXT NOT NULL,approvedAt TEXT,review TEXT NOT NULL) STRICT');
+   db.prepare('INSERT INTO content_release_notes VALUES(?,?,?,?)').run(bundle.id,bundle.source||'',bundle.approvedAt||null,JSON.stringify(bundle.review||{}));
    db.prepare('INSERT INTO audit_events(action,entityId,createdAt) VALUES(?,?,?)').run('content.applied',bundle.id,now);
   }
   db.exec(apply?'COMMIT':'ROLLBACK');
